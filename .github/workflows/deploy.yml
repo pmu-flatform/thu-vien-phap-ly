@@ -27,13 +27,31 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
+
+      - name: Debug - Verify files before build
+        run: |
+          echo "=== Current directory & structure ==="
+          pwd
+          ls -la
+          echo "=== package.json exists? ==="
+          test -f package.json && echo "YES" || echo "NO"
+          echo "=== tailwind.config.js exists? ==="
+          test -f tailwind.config.js && echo "YES" || echo "NO"
+          echo "=== css/input.css exists? ==="
+          test -f css/input.css && echo "YES" || echo "NO"
 
       - name: Install dependencies & Build CSS
         run: |
-          npm ci || npm install
+          echo "=== Running npm install ==="
+          npm install
+          echo "=== Running Tailwind CLI build ==="
           npx tailwindcss -i ./css/input.css -o ./css/style.min.css --minify
+          echo "=== Verify style.min.css output ==="
+          ls -la css/style.min.css
+          echo "=== File size (bytes): ==="
+          wc -c < css/style.min.css
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
