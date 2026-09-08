@@ -654,96 +654,213 @@ const LegalApp = {
   },
 
   /**
-   * Navigation Helper: Scroll to specific Article / Chapter inside Main Viewport
+   * Navigation Helper: Scroll to specific Article / Clause / Point inside Main Viewport
+   * @param {string} fullRef - Chuỗi tham chiếu (vd: "Điều 54", "Khoản 1 Điều 5", "54", "Điểm b Khoản 2 Điều 7")
+   * @param {object} opts  - Tham số tường minh (ưu tiên cao hơn parse từ fullRef)
    */
-  scrollToNode(fullRef) {
-    if (!fullRef) return;
+  scrollToNode(fullRef, opts = {}) {
+    if (!fullRef && !opts.articleNum && !opts.clauseNum && !opts.pointChar) return;
+    const cleanRef = String(fullRef || '').trim();
 
-    // Chuẩn hóa chuỗi tìm kiếm, vd: "Điều 54", "54", "khoản 1 Điều 54"
-    const cleanRef = fullRef.trim();
-    const articleMatch = cleanRef.match(/Điều\s+(\d+)/i) || cleanRef.match(/(\d+)/);
-    const numOnly = articleMatch ? articleMatch[1] : '';
+    const _regEsc = (s) => String(s).replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 
-    // 1. Thử tìm qua các dạng ID phổ biến hoặc data-article-num
-    let targetEl = document.getElementById(`node-${numOnly}`)
-                || document.querySelector(`[data-article-num="${numOnly}"]`)
-                || document.getElementById(`node-${cleanRef.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '')}`)
-                || document.getElementById(`node-Điều-${numOnly}`);
+    // --- BƯỚC 1: Phân tách Điều / Khoản / Điểm ---
+    let articleNum = String(opts.articleNum || '').replace(/[^\da-zđ]/gi, '');
+    let clauseNum  = String(opts.clauseNum  || '').replace(/[^\da-zđ]/gi, '');
+    let pointChar  = String(opts.pointChar  || '').replace(/[^a-zđ]/gi,  '').toLowerCase();
 
-    // 2. Nếu chưa thấy, quét trực tiếp thẻ chứa Điều trong viewport
-    if (!targetEl && numOnly) {
-      const allArticleNodes = document.querySelectorAll('.article-node');
-      for (const el of allArticleNodes) {
-        const text = el.textContent || '';
-        if (new RegExp(`^\\s*\\**\\s*Điều\\s+${numOnly}\\b`, 'i').test(text) || el.id.includes(`_${numOnly}_`) || el.id.endsWith(`_${numOnly}`)) {
-          targetEl = el;
-          break;
+    if (!articleNum) {
+      const mA = cleanRef.match(/Điều\s+(\d+[a-zđ]?)/i);
+      if (mA) articleNum = mA[1];
+    }
+    if (!clauseNum) {
+      const mK = cleanRef.match(/[Kk]hoản\s+(\d+[a-zđ]?)/);
+      if (mK) clauseNum = mK[1];
+    }
+    if (!pointChar) {
+      const mP = cleanRef.match(/Điểm\s+([a-zđ])/i);
+      if (mP) pointChar = mP[1].toLowerCase();
+    }
+
+    // Fallback LEGACY: Nếu chuỗi HOÀN TOÀN là số (vd: "54") => coi là số Điều
+    // **KHÔNG** dùng fallback này cho text hỗn hợp (vd "1. Trường hợp...") để tránh nhầm Khoản -> Điều
+    if (!articleNum && /^\s*\d+[a-zđ]?\s*$/i.test(cleanRef)) {
+      articleNum = cleanRef.trim();
+    }
+
+    // --- BƯỚC 2: Tìm CONTAINER scroll thật ---
+    const findScrollContainer = (fallbackEl) => {
+      return document.getElementById('document-viewport')
+        || document.getElementById('document-content-area')
+        || (fallbackEl && fallbackEl.closest('.overflow-y-auto'))
+        || (fallbackEl && fallbackEl.closest('[id$="-viewport"]'))
+        || (fallbackEl && fallbackEl.closest('[id$="-content-area"]'))
+        || document.scrollingElement;
+    };
+
+    // --- BƯỚC 3: TÌM ARTICLE NODE CHỨA ĐIỀU ---
+    // 🏁 LUÔN KIỂM TRA heading text thực tế (prefix "Điều XBÙI") — KHÔNG TIN TƯƠNG ĐỐI 100%
+    //    class .article-node hay data-article-num vì DATA MARKDOWN có thể tag sai (Mục, Khoản
+    //    bị gắn nhầm thành article-node). Đảm bảo user scroll ĐÚNG Điều, KHÔNG nhầm Mục/Chương.
+    let articleEl = null;
+    const reArticleExact = new RegExp(`^\\s*(?:\\*\\*|__)?\\s*Điều\\s+${_regEsc(articleNum)}\\b`, 'i');
+    const _verifyArticleText = (el) => {
+      const headerText = ((el.querySelector && el.querySelector(':scope > div > span, :scope > div'))?.textContent || el.textContent || '').toString().slice(0, 200);
+      return reArticleExact.test(headerText);
+    };
+
+    if (articleNum) {
+      // Ưu tiên 1: data-article-num + class .article-node  (nhưng VẪN verify text start Điều X)
+      const p1 = document.querySelector(`.article-node[data-article-num="${articleNum}"]`);
+      if (p1 && _verifyArticleText(p1)) articleEl = p1;
+
+      // Ưu tiên 2: Quét TẤT CẢ node có heading bắt đầu bằng "Điều X" (ko quan tâm class)
+      if (!articleEl) {
+        const allNodes = document.querySelectorAll('[id]');
+        for (let i = 0; i < allNodes.length; i++) {
+          const el = allNodes[i];
+          if (_verifyArticleText(el)) { articleEl = el; break; }
         }
+      }
+
+      // Ưu tiên 3: ID node-X / node-Điều-X  (chỉ chấp nhận NẾU text verify OK)
+      if (!articleEl) {
+        const cand = document.getElementById(`node-${articleNum}`)
+                  || document.getElementById(`node-Điều-${articleNum}`);
+        if (cand && _verifyArticleText(cand)) articleEl = cand;
       }
     }
 
-    if (targetEl) {
-      const container = document.getElementById('document-viewport')
-        || document.getElementById('document-content-area')
-        || targetEl.closest('.overflow-y-auto')
-        || targetEl.closest('[id$="-viewport"]')
-        || targetEl.closest('[id$="-content-area"]')
-        || document.scrollingElement;
-      if (container && container !== document.scrollingElement) {
-        const rect = targetEl.getBoundingClientRect();
-        const cRect = container.getBoundingClientRect();
-        const relTop = rect.top - cRect.top;
-        const targetTop = container.scrollTop + relTop - 16;
-        container.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
-      } else {
-        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-      targetEl.classList.add('highlight-target');
-      targetEl.style.transition = 'background-color 0.4s ease';
-      targetEl.style.backgroundColor = 'rgba(245, 158, 11, 0.25)';
-      setTimeout(() => {
-        targetEl.style.backgroundColor = '';
-      }, 2000);
+    // Nếu không Điều, thử tìm node theo ID/text (Chapter/section name, vd "Căn cứ")
+    let sectionEl = null;
+    if (!articleEl) {
+      sectionEl = document.getElementById(`node-${cleanRef.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '')}`)
+                || (cleanRef ? Array.from(document.querySelectorAll('[id]')).find(el => {
+                     const t = (el.textContent || '').trim();
+                     return t === cleanRef || t.startsWith(cleanRef + '.') || t.startsWith(cleanRef + ':');
+                   }) : null);
+    }
+
+    const rootTarget = articleEl || sectionEl;
+
+    // --- BƯỚC 4: TÌM KHOẢN / ĐIỂM con bên trong article (nếu có) ---
+    let innerTarget = null;
+    if (articleEl) {
+      const findClauseOrPoint = (parentEl, kNum, pChar) => {
+        // Chạy text nodes + elements tìm đoạn bắt đầu bằng "X. " hoặc "a) "
+        const walker = document.createTreeWalker(parentEl, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, null);
+        let best = null;
+        let node = walker.nextNode();
+        while (node) {
+          const s = (node.nodeType === 1 ? node.textContent : node.nodeValue || '');
+          // Khoản: "3. " or "3a. "
+          if (kNum) {
+            const reK = new RegExp(`^\\s*(?:\\*\\*|__)?${_regEsc(kNum)}\\s*\\.\\s+`);
+            if (reK.test(s)) { best = (node.nodeType === 1 ? node : node.parentElement); break; }
+          }
+          node = walker.nextNode();
+        }
+        if (best && pChar) {
+          // Tìm Điểm bên trong best (nếu có)
+          const reP = new RegExp(`^\\s*\\(*\\s*${_regEsc(pChar)}\\s*\\)\\s+`, 'i');
+          const walker2 = document.createTreeWalker(best, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, null);
+          let n2 = walker2.nextNode();
+          while (n2) {
+            const s2 = n2.nodeType === 1 ? (n2.textContent || '') : (n2.nodeValue || '');
+            if (reP.test(s2)) { return (n2.nodeType === 1 ? n2 : n2.parentElement); }
+            n2 = walker2.nextNode();
+          }
+        }
+        return best;
+      };
+      innerTarget = findClauseOrPoint(articleEl, clauseNum, pointChar);
+    }
+
+    const finalTarget = innerTarget || rootTarget;
+
+    // --- BƯỚC 5: XÓA highlight cũ (chỉ giữ 1 target duy nhất) ---
+    document.querySelectorAll('.highlight-target').forEach(el => {
+      el.classList.remove('highlight-target');
+      el.style.backgroundColor = '';
+    });
+
+    if (!finalTarget) {
+      const parts = [];
+      if (articleNum) parts.push(`Điều ${articleNum}`);
+      if (clauseNum)  parts.push(`Khoản ${clauseNum}`);
+      if (pointChar)  parts.push(`Điểm ${pointChar}`);
+      console.warn('[scrollToNode] Không tìm thấy vị trí: ' + (cleanRef || parts.join(' - ')));
+      return;
+    }
+
+    // --- BƯỚC 6: SCROLL tới final target ---
+    const container = findScrollContainer(finalTarget);
+    const doHighlight = function(el) {
+      if (!el) return;
+      el.classList.add('highlight-target');
+      el.style.transition = 'background-color 0.4s ease';
+      el.style.backgroundColor = 'rgba(245, 158, 11, 0.25)';
+      setTimeout(function() {
+        el.style.backgroundColor = '';
+      }, 2200);
+    };
+    if (container && container !== document.scrollingElement) {
+      const rect = finalTarget.getBoundingClientRect();
+      const cRect = container.getBoundingClientRect();
+      const relTop = rect.top - cRect.top;
+      const targetTop = container.scrollTop + relTop - 16;
+      container.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+      doHighlight(innerTarget || articleEl || sectionEl);
     } else {
-      console.warn(`Không tìm thấy vị trí của: ${fullRef}`);
+      finalTarget.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+      doHighlight(innerTarget || articleEl || sectionEl);
     }
   },
 
   /**
-   * Navigate to target Document and Article
+   * Navigate to target Document + Article + Clause + Point (new signature with clause/point)
    */
-  async navigateToNode(docCode, articleNum) {
-    const currentDoc = await LegalDB.db.documents.get(this.state.activeDocId);
+  async navigateToNode(docCode, article, clause, point) {
+    const currentDoc = typeof LegalDB !== 'undefined' && LegalDB.db ? await LegalDB.db.documents.get(this.state.activeDocId) : null;
     const cleanTargetCode = (docCode || '').trim();
+    const cleanArt = String(article || '').replace(/[^\da-zđ]/gi, '');
+    const cleanCla = String(clause || '').replace(/[^\da-zđ]/gi, '');
+    const cleanPoi = String(point  || '').replace(/[^a-zđ]/gi,  '').toLowerCase();
 
-    // 1. Nếu dẫn chiếu chính văn bản hiện tại (hoặc không truyền mã VB đích)
-    if (!cleanTargetCode || (currentDoc && currentDoc.code.toLowerCase() === cleanTargetCode.toLowerCase())) {
-      if (articleNum) {
-        this.scrollToNode(`Điều ${articleNum}`);
+    const _scrollHere = () => {
+      if (cleanArt) {
+        this.scrollToNode(
+          (clause ? `Khoản ${clause} ` : '') + (point ? `Điểm ${point} ` : '') + (cleanArt ? `Điều ${cleanArt}` : ''),
+          { articleNum: cleanArt, clauseNum: cleanCla, pointChar: cleanPoi }
+        );
       }
+    };
+
+    // 1. Văn bản hiện tại / không có code đích
+    if (!cleanTargetCode || (currentDoc && (currentDoc.code || '').toLowerCase() === cleanTargetCode.toLowerCase())) {
+      _scrollHere();
       return;
     }
 
-    // 2. Nếu dẫn chiếu sang một văn bản khác trong thư viện
+    // 2. Văn bản khác
+    if (typeof LegalDB === 'undefined' || !LegalDB.db) { _scrollHere(); return; }
     let doc = await LegalDB.db.documents.where('code').equalsIgnoreCase(cleanTargetCode).first();
     if (!doc) {
-      doc = await LegalDB.db.documents.filter(d => 
-        d.code.toLowerCase().includes(cleanTargetCode.toLowerCase()) || 
-        cleanTargetCode.toLowerCase().includes(d.code.toLowerCase())
-      ).first();
+      doc = await LegalDB.db.documents.filter(d => {
+        const a = (d.code || '').toLowerCase();
+        const b = cleanTargetCode.toLowerCase();
+        return a.includes(b) || b.includes(a);
+      }).first();
     }
 
     if (doc) {
       if (String(this.state.activeDocId) !== String(doc.id)) {
         await this.openDocument(doc.id);
       }
-      if (articleNum) {
-        setTimeout(() => {
-          this.scrollToNode(`Điều ${articleNum}`);
-        }, 300);
+      if (cleanArt) {
+        setTimeout(() => _scrollHere(), 300);
       }
     } else {
-      // Văn bản ngoại viện chưa có trong 160 file
       alert(`Văn bản "${cleanTargetCode}" chưa có trong kho văn bản nguồn hiện tại.`);
     }
   },
@@ -1171,15 +1288,30 @@ const LegalApp = {
         e.preventDefault();
         const targetDoc = refTarget.getAttribute('data-target-doc') || '';
         let article = refTarget.getAttribute('data-article') || '';
+        let clause  = refTarget.getAttribute('data-clause')  || '';
+        let point   = refTarget.getAttribute('data-point')   || '';
 
-        // Nếu data-article rỗng, tự động bóc tách số từ nội dung click (vd: "Điều 54" -> "54")
+        // Nếu data-* rỗng, tự động bóc tách từ nội dung click (vd: "Điều 54", "Khoản 1 Điều 5", "Điểm b Khoản 2 Điều 7")
+        const text = refTarget.textContent || '';
         if (!article) {
-          const text = refTarget.textContent || '';
-          const match = text.match(/Điều\s+(\d+)/i) || text.match(/(\d+)/);
-          if (match) article = match[1];
+          const mA = text.match(/Điều\s+(\d+[a-zđ]?)/i);
+          if (mA) article = mA[1];
+        }
+        if (!clause) {
+          const mK = text.match(/[Kk]hoản\s+(\d+[a-zđ]?)/);
+          if (mK) clause = mK[1];
+        }
+        if (!point) {
+          const mP = text.match(/Điểm\s+([a-zđ])/i);
+          if (mP) point = mP[1];
+        }
+        // Last fallback: data-article vẫn rỗng, lấy số đầu tiên (chỉ khi không có keyword Khoản/Điểm)
+        if (!article && !/[Kk]hoản|Điểm/i.test(text)) {
+          const m = text.match(/(\d+[a-zđ]?)/);
+          if (m) article = m[1];
         }
 
-        this.navigateToNode(targetDoc, article);
+        this.navigateToNode(targetDoc, article, clause, point);
       }
     });
   }
