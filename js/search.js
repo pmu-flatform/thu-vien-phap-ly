@@ -29,24 +29,60 @@ const LegalSearch = {
         searchStr: `${d.code} ${d.title} ${d.issuer} ${d.docType}`.toLowerCase()
       }));
 
+      let legacyCount = 0;
       this.nodesIndex = nodes.map(n => {
         const parentDoc = docMap.get(n.docId) || {};
+        // === DUAL-FORMAT FALLBACK (new schema vs legacy rebuild script): ===
+        // New schema fields: n.nodeType (article/chapter/section), n.num (số không prefix), n.fullRef ("Điều 5"/"Chương I"), n.order
+        // Legacy fields      : n.level (dieu/chuong/muc),              n.number ("Điều 5"/"Chương I"),    (no num, no order)
+        const rawNodeType = n.nodeType || n.level;
+        let effNodeType = rawNodeType;
+        if (effNodeType === 'dieu') effNodeType = 'article';
+        else if (effNodeType === 'chuong') effNodeType = 'chapter';
+        else if (effNodeType === 'muc') effNodeType = 'section';
+        else if (!effNodeType) effNodeType = 'article';
+
+        // num: số (sau khi bỏ prefix)
+        let effNum = n.num;
+        if (!effNum && n.number) {
+          const mLegacy = String(n.number).match(/^(Chương|Điều|Mục|Phần|PHẦN)\s*([\w\.\-]+)/i);
+          effNum = mLegacy ? mLegacy[2].toUpperCase() : String(n.number).trim();
+        }
+        if (!effNum) effNum = '';
+
+        // fullRef: "Điều 5" / "Chương I" ...
+        let effFullRef = n.fullRef;
+        if (!effFullRef && n.number) {
+          effFullRef = String(n.number).trim();
+        } else if (!effFullRef && effNum) {
+          if (effNodeType === 'chapter') effFullRef = `Chương ${effNum}`;
+          else if (effNodeType === 'section') effFullRef = `Mục ${effNum}`;
+          else effFullRef = `Điều ${effNum}`;
+        }
+        if (!effFullRef) effFullRef = '';
+
+        if (n.level || n.number || !n.nodeType) legacyCount++;  // stats only
+
+        const effContent = n.content || '';
+        const effTitle = n.title || '';
+        const docCode = parentDoc.code || '';
+        const docTitle = parentDoc.title || '';
         return {
           id: n.id,
           docId: n.docId,
-          docCode: parentDoc.code || '',
-          docTitle: parentDoc.title || '',
-          nodeType: n.nodeType,
-          num: n.num,
-          title: n.title,
-          content: n.content,
-          fullRef: n.fullRef,
-          searchStr: `${parentDoc.code || ''} ${parentDoc.title || ''} ${n.fullRef || ''} ${n.title || ''} ${n.content || ''}`.toLowerCase()
+          docCode: docCode,
+          docTitle: docTitle,
+          nodeType: effNodeType,
+          num: String(effNum),
+          title: effTitle,
+          content: effContent,
+          fullRef: effFullRef,
+          searchStr: `${docCode} ${docTitle} ${effFullRef} ${effTitle} ${effContent}`.toLowerCase()
         };
       });
 
       this.isIndexed = true;
-      console.log(`Indexed ${this.docsIndex.length} documents and ${this.nodesIndex.length} nodes for search.`);
+      console.log(`[LegalSearch] Indexed ${this.docsIndex.length} documents and ${this.nodesIndex.length} nodes. Legacy-schema nodes normalized: ${legacyCount}. Sample[0].fullRef=${this.nodesIndex[0]?.fullRef || '(none)'}. Sample Điều 5: ${(this.nodesIndex.find(n => (n.fullRef || '').toUpperCase() === 'ĐIỀU 5') || {}).fullRef || '(not found - check fallback)'}.`);
     } catch (e) {
       console.error('Error building search index:', e);
     }

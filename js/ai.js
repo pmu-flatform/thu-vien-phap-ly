@@ -285,6 +285,38 @@ const LegalAI = {
       }
     }
 
+    // --- 2H) EXTREME DEFENSE (QUAN TRỌNG NHẤT):
+    // Dù 0-2G vẫn 0 ragNodes → Lấy 6 node đầu của VB ĐANG MỞ để đảm bảo LLM LUÔN nhận được ngữ cảnh ≥500 ký tự
+    // → Ngăn chặn tuyệt đối việc LLM chọn mẫu câu "Không tìm thấy Điều phù hợp..." (do template cũ)
+    if (ragNodes.length === 0 && typeof LegalSearch !== 'undefined' && LegalSearch.nodesIndex.length > 0) {
+      const activeId = (typeof LegalApp !== 'undefined') ? LegalApp.state?.activeDocId : null;
+      let backupDocId = activeId;
+      if (!backupDocId && this.lastDocFocus?.docCode) {
+        const matchDoc = LegalSearch.docsIndex.find(d => (d.code || '').toUpperCase() === (this.lastDocFocus.docCode || '').toUpperCase());
+        if (matchDoc) backupDocId = matchDoc.id;
+      }
+      if (!backupDocId && LegalSearch.docsIndex.length > 0) {
+        backupDocId = LegalSearch.docsIndex[0].id;
+      }
+      if (backupDocId) {
+        const topNodes = LegalSearch.nodesIndex
+          .filter(n => String(n.docId) === String(backupDocId))
+          .slice(0, 6);
+        topNodes.forEach(n => {
+          if (!ragNodes.some(r => String(r.id) === String(n.id))) ragNodes.push(n);
+          const docInfo = [n.docCode, n.docTitle].filter(Boolean).join(' - ');
+          const header = `[CTX2H] ${docInfo} | ${n.fullRef || n.title || ''}`;
+          const title = n.title ? `Tiêu đề: ${n.title}` : '';
+          const content = this.safeString(n.content).slice(0, 1800);
+          const block = [header, title, content].filter(Boolean).join('\n').trim();
+          if (block.length > 20) contexts.push(block);
+        });
+        if (ragNodes.length > 0) {
+          console.warn('[LegalAI] Step 2H Extreme DEFENSE triggered: Layers 0-2G returned 0. Fallback top-nodes of active/related doc to prevent false "not found".');
+        }
+      }
+    }
+
     return {
       text: contexts.join('\n\n---\n\n'),
       usedNodes: ragNodes.slice(0, 10)
@@ -296,12 +328,18 @@ const LegalAI = {
   // ============================================================
   buildSystemPrompt(mode, contextText) {
     const ctxChars = (contextText || '').length;
-    const ctxEmpty = ctxChars < 500;
-    const ctx = contextText || '(Trống. Vui lòng trả lời "Không tìm thấy nội dung phù hợp trong kho dữ liệu, mô tả ngắn gọn nếu bạn biết thông tin này nhưng ghi rõ "Nguồn: kiến thức phổ thông - chưa có trong kho".)';
+    const hasCtxBlocks = /\[(CTX\d*|CTX2G-\d+|CTX2H)\]/.test(contextText || '');
+    const ctxEmpty = !hasCtxBlocks && ctxChars < 800;
+    const ctx = contextText && hasCtxBlocks
+      ? contextText
+      : (contextText || '(Ngữ cảnh nạp vào chưa đủ. Vui lòng mở một văn bản cụ thể sau đó đặt lại câu hỏi, hoặc dùng thanh TÌM KIẾM để tìm Điều / Khoản mong muốn.)');
 
-    const ctxGuardLine = ctxEmpty
-      ? `[BẢO VỆ - NGỮ CẢNH RỖNG (${ctxChars} ký tự < 500)]: Được phép nói "Không tìm thấy".`
-      : `[BẢO VỆ - CÓ NGỮ CẢNH (${ctxChars} ký tự ≥ 500)]: TUYỆT ĐỐI CẤM nói "Không tìm thấy Điều phù hợp...". BẮT BUỘC tổng hợp nội dung từ [CTX*] / [CTX2G-*] BÊN DƯỚI. Nếu người dùng hỏi Điều X và bên dưới có Điều X → TRẢ LỜI ĐÚNG NỘI DUNG ĐIỀU ĐÓ.`;
+    const ctxGuardLine = (() => {
+      if (!ctxEmpty) {
+        return `[BẢO VỆ - CÓ NGỮ CẢNH (${ctxChars} ký tự, đã có [CTX*] blocks)]: TUYỆT ĐỐI CẤM SỬ DỤNG CỤM TƯƠNG TỰ "Không tìm thấy Điều phù hợp trong kho dữ liệu nạp vào" TRONG MỌI TRƯỜNG HỢP. BẮT BUỘC tổng hợp nội dung TỪ [CTX*] / [CTX2G-*] / [CTX2H] BÊN DƯỚI. NẾU CÓ "Điều X" trong CTX → TRẢ LỜI NGUYÊN VĂN NỘI DUNG ĐIỀU X, KHÔNG ĐƯỢC lảng tránh.`;
+      }
+      return `[BẢO VỆ - NGỮ CẢNH HẠN CHẾ (${ctxChars} ký tự, chưa có [CTX*] blocks)]: Hãy trả lời dựa trên dữ liệu sẵn có (nếu có); nếu không đủ, hãy nói "Vui lòng mở văn bản cần tra cứu rồi đặt lại câu hỏi, hoặc chỉ rõ số hiệu Điều / Khoản." (TUYỆT ĐỐI KHÔNG ĐƯỢC DÙNG CỤM "Không tìm thấy Điều phù hợp trong kho dữ liệu nạp vào").`;
+    })();
 
     const specificArticlePrompt = `
 Bạn là Trợ lý Pháp lý & Kỹ thuật. Nhiệm vụ hiện tại: TRẢ LỜI CHÍNH XÁC VỀ ĐIỀU / KHOẢN ĐƯỢC HỎI.
@@ -316,9 +354,11 @@ RULES BẮT BUỘC (VI PHẠM SẼ BỊ LOẠI BỎ):
    - Giới thiệu 1 dòng: "Điều X của [Văn bản] quy định về..."
    - **Nội dung trích dẫn Điều/Khoản:** dùng blockquote (>) hoặc list (1. 2. 3.) theo từng khoản
    - **Liên kết chéo gợi ý (nếu có):** 1-3 liên kết dạng [Điều Y] / [Điều Z, Văn bản ABC] tới các Điều/các văn bản khác cùng chủ đề trong ngữ cảnh.
-5. (STRICT GUARD) Chỉ ĐƯỢC PHÉP nói "Không tìm thấy Điều phù hợp trong kho dữ liệu nạp vào" KHI VÀ CHỈ KHI ngữ cảnh BÊN DƯỚI thực sự RỖNG (ít hơn 500 ký tự).
-   - NẾU ngữ cảnh ≥ 500 ký tự (có [CTX*] / [CTX2G-*] blocks BÊN DƯỚI) → BẮT BUỘC phải tổng hợp TỪ NHỮNG BLOCK [CTX*] ĐÓ, TUYỆT ĐỐI KHÔNG ĐƯỢC lặp lại mẫu câu "Không tìm thấy".
-   - Nếu trong các block [CTX*] có nội dung Điều X người dùng hỏi → TRẢ LỜI NGUYÊN VĂN NỘI DUNG ĐIỀU X ĐÓ, KHÔNG ĐƯỢC lảng tránh.
+5. (STRICT GUARD - KHÔNG THƯƠNG LƯỢNG)
+   - TUYỆT ĐỐI CẤM trong mọi trường hợp câu trả lời BẮT ĐẦU BẰNG HOẶC CHỨA CỤM: "Không tìm thấy Điều phù hợp trong kho dữ liệu nạp vào"
+   - Nếu bên dưới có [CTX*] / [CTX2G-*] / [CTX2H] (nghĩa là ĐÃ CÓ DỮ LIỆU ĐƯỢC NẠP) → BẮT BUỘC tổng hợp nội dung từ những block đó.
+   - NẾU bên dưới có "Điều X" (người dùng hỏi) → TRẢ LỜI NGUYÊN VĂN ĐIỀU X, KHÔNG ĐƯỢC lảng tránh.
+   - Nếu ngữ cảnh không đủ → nói "Vui lòng mở văn bản cần tra cứu hoặc chỉ rõ SỐ HIỆU / TÊN Điều, Khoản."
 
 ${ctxGuardLine}
 

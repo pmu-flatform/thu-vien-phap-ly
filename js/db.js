@@ -225,8 +225,13 @@ async function initDB() {
 
     // 2. Check if full preloaded dataset exists in window.PRELOADED_LEGAL_DATA or /data/preloaded_data.json
     const docCount = await db.documents.count();
-    if (docCount <= 3) {
+    const preloadedDocsCount = (typeof window !== 'undefined' && window.PRELOADED_LEGAL_DATA?.data?.documents?.length) || 0;
+    const fullPreloadedExists = preloadedDocsCount > 10;
+    const dbMatchesPreloaded = fullPreloadedExists && docCount === preloadedDocsCount;
+    const needImport = (docCount <= 3) || (fullPreloadedExists && !dbMatchesPreloaded);
+    if (needImport) {
       if (typeof window !== 'undefined' && window.PRELOADED_LEGAL_DATA && window.PRELOADED_LEGAL_DATA.data) {
+        console.log(`[initDB] Found full preloaded dataset: ${window.PRELOADED_LEGAL_DATA.data.documents.length} documents + ${(window.PRELOADED_LEGAL_DATA.data.document_nodes||[]).length} flat nodes. Current DB has ${docCount} docs. Replacing entire DB (wipe + bulkPut). Sample doc first code: ${window.PRELOADED_LEGAL_DATA.data.documents[0]?.code || 'none'}.`);
         await importFullDatabase(window.PRELOADED_LEGAL_DATA);
         console.log(`Successfully loaded ${window.PRELOADED_LEGAL_DATA.data.documents.length} preloaded documents from window.PRELOADED_LEGAL_DATA!`);
         return;
