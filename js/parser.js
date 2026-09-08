@@ -629,7 +629,7 @@ const LegalParser = {
     // Pattern: "tại khoản 3 Điều 49, khoản 2 và khoản 3 Điều 50, Điều 51 Luật Xây dựng số 135/2025/QH15"
     // Match 1 đoạn chứa nhiều khoản/điều + 1 văn bản cuối cùng.
     // =========================================================================
-    const compoundClauseArticleRegex = /(tại|theo|quy\s*định\s*(?:tại|theo)?|,)\s*((?:[Kk]hoản\s+\d+[a-zđ]?(?:\s*[và,]\s*[Kk]hoản\s+\d+[a-zđ]?)*\s*[ĐđD]iều\s+\d+[a-z]?(?:\s*[và,]\s*[ĐđD]iều\s+\d+[a-z]?)*\s*,\s*)+(?:[ĐđD]iều\s+\d+[a-zđ]?\s+)?(Luật|Nghị\s*định|Thông\s*tư|Quyết\s*định|Quy\s*chuẩn|Tiêu\s*chuẩn)\s*(số\s*)?([0-9]+(?:[\/\-][0-9]+(?:[\/\-](?:QH\d+|NĐ\-CP|TT[\-A-Z0-9]+|QĐ[\-A-Z0-9]+|UBND[\-A-Z0-9]+|VBHN[\-A-Z0-9]+|QCVN|TCVN|[A-Z0-9\-]+))?|QCVN\s*[0-9]+:[0-9]{4}(?:\/[A-Z0-9\-]+)?|TCVN\s*[0-9]+(?::[0-9]{4})?))/gi;
+    const compoundClauseArticleRegex = /(tại|theo|quy\s*định\s*(?:tại|theo)?|,)\s*((?:[Kk]hoản\s+\d+[a-zđ]?(?:\s*[và,]\s*[Kk]hoản\s+\d+[a-zđ]?)*\s*[ĐđD]iều\s+\d+[a-z]?(?:\s*[và,]\s*[ĐđD]iều\s+\d+[a-z]?)*\s*,\s*)+(?:[ĐđD]iều\s+\d+[a-zđ]?\s+)?(Luật|Nghị\s*định|Thông\s*tư|Quyết\s*định|Quy\s*chuẩn|Tiêu\s*chuẩn)(?:\s+(?![Ss]ố\b|[0-9])[A-Za-zÀ-Ỹà-ỹ\s]{1,60}?)?\s*(?:số\s+)?([0-9]+(?:[\/\-][0-9]+(?:[\/\-](?:QH\d+|NĐ\-CP|TT[\-A-Z0-9]+|QĐ[\-A-Z0-9]+|UBND[\-A-Z0-9]+|VBHN[\-A-Z0-9]+|QCVN|TCVN|[A-Z0-9\-]+))?|QCVN\s*[0-9]+:[0-9]{4}(?:\/[A-Z0-9\-]+)?|TCVN\s*[0-9]+(?::[0-9]{4})?))/gi;
 
     escaped = escaped.replace(compoundClauseArticleRegex, (fullMatch, prefix, innerBody, docType, docNumWord, docNum) => {
       const targetDoc = docNum ? String(docNum).replace(/^số\s+/i, '').trim() : '';
@@ -645,7 +645,7 @@ const LegalParser = {
     // LỚP 2 — VĂN BẢN ĐỘC LẬP CÓ LOẠI + SỐ HIỆU (Ưu tiên 2)
     // "Nghị định số 175/2024/NĐ-CP" / "Luật 135/2025/QH15" / "Thông tư số 12/2021/TT-BXD" / "QCVN 18:2021/BXD"
     // =========================================================================
-    const docTypeStandaloneRegex = /(Luật|Bộ\s*Luật|Nghị\s*định|Nghị\s*quyết|Thông\s*tư|Quyết\s*định|Quy\s*chuẩn\s*kỹ\s*thuật|Tiêu\s*chuẩn\s*quốc\s*gia|Pháp\s*lệnh|Quy\s*định)\s*(số\s*)?([0-9]+(?:[\/\-][0-9]+(?:[\/\-](?:QH\d+|NĐ\-CP|TT[\-A-Z0-9]+|QĐ[\-A-Z0-9]+|UBND[\-A-Z0-9]+|VBHN[\-A-Z0-9]+|[A-Z0-9\-]+))?|QCVN\s*[0-9]+:[0-9]{4}(?:\/[A-Z0-9\-]+)?|TCVN\s*[0-9]+(?::[0-9]{4})?))/gi;
+    const docTypeStandaloneRegex = /(Luật|Bộ\s*Luật|Nghị\s*định|Nghị\s*quyết|Thông\s*tư|Quyết\s*định|Quy\s*chuẩn\s*kỹ\s*thuật|Tiêu\s*chuẩn\s*quốc\s*gia|Pháp\s*lệnh|Quy\s*định)(?:\s+(?![Ss]ố\b|[0-9])[A-Za-zÀ-Ỹà-ỹ\s]{1,60}?)?\s*(?:số\s+)?([0-9]+(?:[\/\-][0-9]+(?:[\/\-](?:QH\d+|NĐ\-CP|TT[\-A-Z0-9]+|QĐ[\-A-Z0-9]+|UBND[\-A-Z0-9]+|VBHN[\-A-Z0-9]+|[A-Z0-9\-]+))?|QCVN\s*[0-9]+:[0-9]{4}(?:\/[A-Z0-9\-]+)?|TCVN\s*[0-9]+(?::[0-9]{4})?))/gi;
 
     escaped = escaped.replace(docTypeStandaloneRegex, (fullMatch, docType, numWord, docNum) => {
       const targetDoc = docNum ? String(docNum).replace(/^số\s+/i, '').trim() : '';
@@ -660,7 +660,7 @@ const LegalParser = {
     // Mid : Khoản 3 Điều 17 [Luật/Nghị định ...]
     // Only: Điều 17 (hoặc Điều 17a)
     // =========================================================================
-    const deepLinkRegex = /(?:(Điểm\s+([a-zđ])(?:\.\d+)?)\s*[,và\+\s]*)?(?:(?:[Kk]hoản\s+(\d+[a-zđ]?)(?:\s*[,và\+]\s*[Kk]hoản\s+\d+[a-zđ]?)*)\s*[,]?\s*)?([ĐđD]iều\s+(\d+[a-zđ]?)(?:\s*[,và\+]\s*[ĐđD]iều\s+\d+[a-zđ]?)*)(?:\s+(?:của|theo|tại|trong)\s+)?(?:(Luật|Bộ\s*Luật|Nghị\s*định|Thông\s*tư|Quyết\s*định|Quy\s*chuẩn|Tiêu\s*chuẩn)\s*(số\s*)?([0-9]+(?:[\/\-][0-9]+(?:[\/\-](?:QH\d+|NĐ\-CP|TT[\-A-Z0-9]+|QĐ[\-A-Z0-9]+|UBND[\-A-Z0-9]+|[A-Z0-9\-]+))?|QCVN\s*[0-9]+:[0-9]{4}(?:\/[A-Z0-9\-]+)?|TCVN\s*[0-9]+(?::[0-9]{4})?))?/gi;
+    const deepLinkRegex = /(?:(Điểm\s+([a-zđ])(?:\.\d+)?)\s*[,và\+\s]*)?(?:(?:[Kk]hoản\s+(\d+[a-zđ]?)(?:\s*[,và\+]\s*[Kk]hoản\s+\d+[a-zđ]?)*)\s*[,]?\s*)?([ĐđD]iều\s+(\d+[a-zđ]?)(?:\s*[,và\+]\s*[ĐđD]iều\s+\d+[a-zđ]?)*)(?:\s+(?:của|theo|tại|trong)\s+)?(?:(Luật|Bộ\s*Luật|Nghị\s*định|Thông\s*tư|Quyết\s*định|Quy\s*chuẩn|Tiêu\s*chuẩn)(?:\s+(?![Ss]ố\b|[0-9])[A-Za-zÀ-Ỹà-ỹ\s]{1,60}?)?\s*(?:số\s+)?([0-9]+(?:[\/\-][0-9]+(?:[\/\-](?:QH\d+|NĐ\-CP|TT[\-A-Z0-9]+|QĐ[\-A-Z0-9]+|UBND[\-A-Z0-9]+|[A-Z0-9\-]+))?|QCVN\s*[0-9]+:[0-9]{4}(?:\/[A-Z0-9\-]+)?|TCVN\s*[0-9]+(?::[0-9]{4})?))?/gi;
 
     escaped = escaped.replace(deepLinkRegex, (fullMatch, pointPart, pointChar, clauseNumPart, articlePart, artNumStr, docTypePart, docNumWordPart, docNumPart) => {
       if (!articlePart && !clauseNumPart && !pointPart) return fullMatch;
