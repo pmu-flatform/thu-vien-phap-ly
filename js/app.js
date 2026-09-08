@@ -1073,6 +1073,40 @@ const LegalApp = {
     alert('Đã lưu cài đặt thành công!');
   },
 
+  /**
+   * Reset toàn bộ IndexedDB LegalLibraryDB → Nạp lại 160 văn bản gốc từ window.PRELOADED_LEGAL_DATA
+   * Giữ lại: legal_ai_config (AI keys), legal_theme (dark/light), legal_font_size (px), legal_recent_docs
+   */
+  async resetAndRebuildPreloadedDB() {
+    const confirmed = confirm(
+      '⚠️ XÁC NHẬN RESET TOÀN BỘ DỮ LIỆU GỐC\n\n' +
+      'Thư mục IndexedDB (LegalLibraryDB) sẽ được XÓA HOÀN TOÀN rồi tự động nạp lại 160 văn bản chuẩn từ DATA_MARKDOWN.\n\n' +
+      'ĐƯỢC GIỮ LẠI: Cài đặt AI (API Key), Theme (Sáng/Tối), Font-size, Danh sách mở gần đây.\n\n' +
+      'Bấm OK để tiếp tục (trang sẽ tự động reload sau 1.5s).'
+    );
+    if (!confirmed) return;
+
+    try {
+      // 1. Xóa IndexedDB cũ (tên phải khớp db.js:6 -> new Dexie('LegalLibraryDB'))
+      const dbName = 'LegalLibraryDB';
+      const delReq = indexedDB.deleteDatabase(dbName);
+      let delDone = false;
+      delReq.onsuccess = () => { delDone = true; console.log(`[ResetDB] Đã xóa IndexedDB ${dbName} thành công.`); };
+      delReq.onerror = (e) => console.warn(`[ResetDB] Lỗi khi gọi deleteDatabase ${dbName}:`, e?.target?.error || e);
+      delReq.onblocked = () => console.warn(`[ResetDB] DB blocked, tab khác đang giữ. Sẽ reload anyway.`);
+
+      // 2. Đảm bảo Dexie connection được đóng trước khi reload (nếu có)
+      try { if (typeof LegalDB !== 'undefined' && LegalDB?.db?.close) await LegalDB.db.close(); } catch (_) {}
+      try { if (typeof db !== 'undefined' && db?.close) await db.close(); } catch (_) {}
+
+      // 3. Chờ 1.2s cho async deleteDB onsuccess trigger xong → reload
+      setTimeout(() => { location.reload(); }, 1200);
+    } catch (e) {
+      console.error('[ResetDB] Exception:', e);
+      alert('Lỗi reset: ' + (e?.message || e) + '\nSử dụng cách thủ công: F12 → Application → Clear site data.');
+    }
+  },
+
   setupEventListeners() {
     window.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
