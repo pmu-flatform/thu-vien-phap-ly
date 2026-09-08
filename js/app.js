@@ -275,26 +275,71 @@ const LegalApp = {
       return;
     }
 
-    let tocHtml = '<div class="space-y-1 max-h-64 overflow-y-auto pr-1 text-xs toc-tree">';
-    nodes.forEach(node => {
-      const displayRef = (node.fullRef || '').endsWith('.') ? node.fullRef : `${node.fullRef}.`;
+    // =========================================================================
+    // THƯ MỤC PHÂN CẤP ĐÚNG (Chapter → Điều → Mục/Khoản con)
+    // Quy tắc gom nhóm theo ORDER (indexDB sortBy('order')):
+    //   - node.fullRef starts with "Chương" → Cấp 0 (Chapter)
+    //   - node.fullRef starts with "Điều "   → Cấp 1 (Điều cha: group chứa các Mục con kế tiếp)
+    //   - node.fullRef starts with "Mục "    → Cấp 2 (Mục con: THUỘC Điều CHA gần nhất TRƯỚC đó theo order)
+    //   - node.fullRef starts otherwise      → Cấp 1 hoặc 2 theo context.
+    // ƯU TIÊN 100%: Onclick = scrollToNodeById(${node.id}) (PRIMARY KEY UNIQUE)
+    //              - KO dùng scrollToNode(fullRef text regex) nữa vì regex bao giờ cũng sai.
+    // =========================================================================
+    let lastDieuIdx = -1;   // index của "Điều cha" gần nhất vào mảng tocGroups
+    const tocGroups = [];   // [{type:'chapter'|'dieucha'|'muccon', node, children:[]}]
 
-      if (node.nodeType === 'chapter') {
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
+      const fr = (node.fullRef || '').toString();
+      if (node.nodeType === 'chapter' || /^Chương\s/i.test(fr)) {
+        tocGroups.push({ type: 'chapter', node: node, children: [] });
+        lastDieuIdx = -1;
+      } else if (/^Điều\s+\d/i.test(fr)) {
+        tocGroups.push({ type: 'dieucha', node: node, children: [] });
+        lastDieuIdx = tocGroups.length - 1;
+      } else {
+        if (lastDieuIdx >= 0) {
+          tocGroups[lastDieuIdx].children.push(node);
+        } else {
+          tocGroups.push({ type: 'muccon', node: node, children: [] });
+        }
+      }
+    }
+
+    const _btnCommon = 'w-full text-left truncate flex items-center gap-1.5 transition rounded';
+    const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+    let tocHtml = '<div class="space-y-0.5 max-h-72 overflow-y-auto pr-1 text-xs toc-tree">';
+    tocGroups.forEach(g => {
+      const gNode = g.node;
+      const gFr = (gNode.fullRef || '').toString();
+      const gTitle = (gNode.title || '').toString();
+      if (g.type === 'chapter') {
         tocHtml += `
-          <button onclick="LegalApp.scrollToNode('${node.fullRef}')" 
-            class="w-full text-left font-bold text-[11px] text-amber-400 hover:text-amber-300 pt-2 pb-1 truncate flex items-center gap-1.5 uppercase tracking-wide">
+          <button onclick="LegalApp.scrollToNodeById(${gNode.id})" class="${_btnCommon} font-bold text-[11px] text-amber-400 hover:text-amber-300 pt-2 pb-1 uppercase tracking-wide">
             <i data-lucide="bookmark" class="w-3 h-3 text-amber-400 shrink-0"></i>
-            <span class="truncate">${node.fullRef}: ${node.title}</span>
-          </button>
-        `;
-      } else if (node.nodeType === 'article') {
+            <span class="truncate">${esc(gFr)}${gTitle ? ': ' + esc(gTitle) : ''}</span>
+          </button>`;
+      } else if (g.type === 'dieucha' || g.type === 'muccon') {
+        const isDieu = g.type === 'dieucha';
+        const dispRef = (gFr.endsWith('.') ? gFr : `${gFr}.`);
         tocHtml += `
-          <button onclick="LegalApp.scrollToNode('${node.fullRef}')" 
-            class="w-full text-left text-amber-200/80 hover:text-amber-300 hover:bg-amber-500/10 px-2 py-1 rounded truncate flex items-center gap-1.5 text-[11.5px] transition">
-            <span class="font-bold text-amber-400 shrink-0">${displayRef}</span>
-            <span class="truncate text-gray-300">${node.title}</span>
-          </button>
-        `;
+          <button onclick="LegalApp.scrollToNodeById(${gNode.id})" class="${_btnCommon} ${isDieu ? 'text-amber-200 hover:text-amber-300 hover:bg-amber-500/10 px-2 py-1.5 text-[11.5px] border-l-2 border-amber-500/60' : 'text-gray-200/80 hover:text-amber-200 hover:bg-amber-500/10 px-2 py-1 text-[11px] border-l-2 border-transparent pl-4'}">
+            <span class="font-bold ${isDieu ? 'text-amber-400' : 'text-amber-300/80'} shrink-0">${esc(dispRef)}</span>
+            <span class="truncate ${isDieu ? 'text-gray-300' : 'text-gray-400'}">${esc(gTitle)}</span>
+          </button>`;
+        if (g.children && g.children.length > 0) {
+          g.children.forEach(child => {
+            const cFr = (child.fullRef || '').toString();
+            const cTitle = (child.title || '').toString();
+            const cRef = (cFr.endsWith('.') ? cFr : `${cFr}.`);
+            tocHtml += `
+          <button onclick="LegalApp.scrollToNodeById(${child.id})" class="${_btnCommon} text-gray-200/70 hover:text-amber-200 hover:bg-amber-500/10 px-2 py-1 text-[11px] ml-5 border-l-2 border-gray-700 pl-4">
+            <span class="font-bold text-amber-400/70 shrink-0">${esc(cRef)}</span>
+            <span class="truncate text-gray-400">${esc(cTitle)}</span>
+          </button>`;
+          });
+        }
       }
     });
 
@@ -418,11 +463,17 @@ const LegalApp = {
     if (nodesList.length > 0) {
       for (const node of nodesList) {
         const cleanNodeNum = (node.num || '').replace(/[^0-9]/g, '');
-        const nodeRefId = `node-${cleanNodeNum || (node.fullRef || 'ref').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '')}`;
+        // ======= FIX ROOT CAUSE DUPLICATE ID: dùng PRIMARY KEY node.id (100% UNIQUE) =======
+        // Từng dùng: node-${cleanNodeNum} → BUG (Mục 1 Điều 2 / Điều 1 / Mục 1 Điều 5 đều node-1)
+        // Fix: node-row-{node.id} (PK row id) + fallback node-{id} cho tương thích cũ.
+        // Thêm data-node-id = node.id để TOC onclick match chính xác 1:1 với DOM node.
+        const nodePkId = (node.id !== null && node.id !== undefined) ? String(node.id) : '';
+        const nodeRefId = nodePkId ? `node-row-${nodePkId}` : `node-${cleanNodeNum || (node.fullRef || 'ref').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '')}`;
+        const legacyCompatId = cleanNodeNum ? `node-${cleanNodeNum}` : null;
 
         if (node.nodeType === 'chapter' || node.nodeType === 'section') {
           nodesHtml += `
-            <div id="${nodeRefId}" class="pt-6 pb-2 border-b border-amber-500/20 text-center">
+            <div id="${nodeRefId}" ${legacyCompatId && legacyCompatId !== nodeRefId ? `data-legacy-id="${legacyCompatId}"` : ''} data-node-id="${nodePkId}" data-node-type="${node.nodeType || 'chapter'}" class="pt-6 pb-2 border-b border-amber-500/20 text-center">
               <h3 class="text-xs font-extrabold text-amber-400 uppercase tracking-wider">${node.fullRef}</h3>
               <h2 class="text-base font-bold text-white mt-1 uppercase">${node.title}</h2>
             </div>
@@ -464,7 +515,7 @@ const LegalApp = {
           const hasContentBody = contentHtml.trim().length > 0;
 
           nodesHtml += `
-            <div id="${nodeRefId}" data-article-num="${cleanNodeNum}" class="article-node py-1 relative transition-colors duration-200">
+            <div id="${nodeRefId}" ${legacyCompatId && legacyCompatId !== nodeRefId ? `data-legacy-id="${legacyCompatId}"` : ''} data-node-id="${nodePkId}" data-node-type="article" data-full-ref="${(node.fullRef||'').replace(/"/g,'&quot;')}" data-article-num="${cleanNodeNum}" class="article-node py-1 relative transition-colors duration-200">
               <div class="text-[15px] font-bold text-amber-400 mt-6 mb-2 flex items-center justify-between group">
                 <span>${displayRef} ${node.title}</span>
                 <button onclick="LegalApp.toggleNoteBox('${node.num}')" class="opacity-0 group-hover:opacity-100 text-xs font-normal text-amber-400/80 hover:text-amber-300 transition flex items-center gap-1">
@@ -654,11 +705,59 @@ const LegalApp = {
   },
 
   /**
+   * 🎯 SCROLL CHÍNH XÁC 100%: Dùng PRIMARY KEY UNIQUE từ document_nodes table (row id)
+   * Tương ứng 1:1 với DOM node có id="node-row-${pkId}" (renderDocument line 471)
+   * → KHÔNG PHỤ THUỘC REGEX TEXT NỘI DUNG → Không bao giờ sai ngay trong 1 văn bản.
+   */
+  scrollToNodeById(nodePkId) {
+    if (!nodePkId && nodePkId !== 0) return;
+    const pkStr = String(nodePkId);
+    // Ưu tiên 1: DOM ID chính xác node-row-PK
+    let target = document.getElementById(`node-row-${pkStr}`)
+              || document.querySelector(`[data-node-id="${pkStr}"]`);
+    if (!target) return;
+
+    // Clean all old highlights
+    document.querySelectorAll('.highlight-target').forEach(el => {
+      el.classList.remove('highlight-target');
+      el.style.backgroundColor = '';
+    });
+
+    const container = document.getElementById('document-viewport')
+      || document.getElementById('document-content-area')
+      || (target && target.closest && target.closest('.overflow-y-auto'))
+      || document.scrollingElement;
+
+    const doHighlight = (el) => {
+      if (!el) return;
+      el.classList.add('highlight-target');
+      el.style.transition = 'background-color 0.4s ease';
+      el.style.backgroundColor = 'rgba(245, 158, 11, 0.28)';
+      setTimeout(() => { el.style.backgroundColor = ''; }, 2400);
+    };
+    if (container && container !== document.scrollingElement) {
+      const rect = target.getBoundingClientRect();
+      const cRect = container.getBoundingClientRect();
+      const relTop = rect.top - cRect.top;
+      const targetTop = container.scrollTop + relTop - 16;
+      container.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+    } else {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    doHighlight(target);
+  },
+
+  /**
    * Navigation Helper: Scroll to specific Article / Clause / Point inside Main Viewport
    * @param {string} fullRef - Chuỗi tham chiếu (vd: "Điều 54", "Khoản 1 Điều 5", "54", "Điểm b Khoản 2 Điều 7")
    * @param {object} opts  - Tham số tường minh (ưu tiên cao hơn parse từ fullRef)
    */
   scrollToNode(fullRef, opts = {}) {
+    // ======= PRIORITY 0 (HIGHEST): Dùng UNIQUE PK ID nếu có (100% chính xác, ko regex) =======
+    if (opts && opts.nodeId !== undefined && opts.nodeId !== null && String(opts.nodeId).length > 0) {
+      this.scrollToNodeById(opts.nodeId);
+      return;
+    }
     if (!fullRef && !opts.articleNum && !opts.clauseNum && !opts.pointChar) return;
     const cleanRef = String(fullRef || '').trim();
 
