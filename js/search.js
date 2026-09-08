@@ -13,8 +13,8 @@ const LegalSearch = {
    */
   async buildIndex() {
     try {
-      const docs = await db.documents.toArray();
-      const nodes = await db.document_nodes.toArray();
+      const docs = await (LegalDB?.db?.documents || db.documents).toArray();
+      const nodes = await (LegalDB?.db?.document_nodes || db.document_nodes).toArray();
 
       // Create a doc lookup map
       const docMap = new Map();

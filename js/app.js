@@ -797,6 +797,80 @@ const LegalApp = {
     }, 200);
   },
 
+  /**
+   * Được gọi từ AI Copilot khi user click [🔗 Điều 5, Luật 135/2025] trong Chat
+   * @param {string} docCodeHint - Số hiệu văn bản (vd: 135/2025/QH15, hoặc phần đầu 135/2025)
+   * @param {string} articleNum  - Số Điều (vd: 5, 10a, 107)
+   */
+  async selectArticleFromExternal(docCodeHint, articleNum) {
+    try {
+      if (typeof LegalDB === 'undefined' || !LegalDB.db) return;
+      docCodeHint = String(docCodeHint || '').trim();
+      articleNum = String(articleNum || '').trim();
+      if (!docCodeHint && !articleNum) return;
+
+      // Bước 1: Tìm document theo docCode
+      let targetDoc = null;
+      if (docCodeHint) {
+        const allDocs = await LegalDB.db.documents.toArray();
+        // Chuẩn hóa: bỏ QH15, ND-CP, TT-BXD để tìm prefix
+        const norm = (s) => String(s || '').toUpperCase().replace(/[\/\-_]/g, '/');
+        const normHint = norm(docCodeHint);
+        const shortHint = normHint.match(/^\d{2,4}\/\d{2,4}/);
+        targetDoc = allDocs.find(d => norm(d.code) === normHint)
+          || allDocs.find(d => shortHint && norm(d.code).startsWith(shortHint[0]))
+          || allDocs.find(d => shortHint && norm(d.code).includes(shortHint[0]));
+      }
+
+      // Bước 2: Nếu có lastDocFocus và không tìm thấy doc → dùng văn bản đang mở
+      if (!targetDoc && this.state.activeDocId) {
+        targetDoc = await LegalDB.db.documents.get(this.state.activeDocId);
+      }
+
+      // Bước 3: Nếu vẫn không có doc + có số Điều → search toàn bộ node theo Điều
+      if (!targetDoc && articleNum && typeof LegalSearch !== 'undefined') {
+        const rs = await LegalSearch.search(`Điều ${articleNum}`, 5);
+        if (rs.nodeResults && rs.nodeResults.length > 0) {
+          targetDoc = await LegalDB.db.documents.get(rs.nodeResults[0].docId);
+        }
+      }
+
+      if (!targetDoc) return;
+
+      // Bước 4: Mở văn bản
+      await this.openDocument(targetDoc.id);
+
+      // Bước 5: Scroll đến Điều tương ứng
+      if (articleNum) {
+        setTimeout(() => {
+          const artUp = String(articleNum).toUpperCase();
+          const nodeEl = document.querySelector('[data-full-ref]') || document.getElementById('document-content-area');
+          if (!nodeEl) return;
+          const candidates = Array.from(nodeEl.querySelectorAll('[data-full-ref], [data-node-num]'));
+          const match = candidates.find(el => {
+            const ref = (el.getAttribute('data-full-ref') || '').toUpperCase();
+            const num = (el.getAttribute('data-node-num') || '').toUpperCase();
+            return ref.includes(`ĐIỀU ${artUp}`) || num === artUp || num === artUp.replace(/[A-Z]$/, '');
+          }) || candidates.find(el => {
+            const txt = (el.innerText || '').toUpperCase().slice(0, 60);
+            return txt.startsWith(`ĐIỀU ${artUp}`) || txt.includes(`ĐIỀU ${artUp}\n`);
+          });
+          if (match) {
+            match.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            match.style.transition = 'background .4s ease';
+            match.style.background = 'rgba(59,130,246,0.18)';
+            setTimeout(() => { match.style.background = ''; }, 1600);
+          } else {
+            // Fallback: scroll theo id hoặc nội dung text Điều X trong page
+            this.scrollToNode(`Điều ${articleNum}`);
+          }
+        }, 300);
+      }
+    } catch (e) {
+      console.warn('selectArticleFromExternal lỗi:', e);
+    }
+  },
+
   toggleChatDrawer() {
     this.state.isChatOpen = !this.state.isChatOpen;
     const drawer = document.getElementById('ai-chat-drawer');
