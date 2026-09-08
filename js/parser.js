@@ -671,42 +671,43 @@ const LegalParser = {
     const _RX_NAME_OPT    = '(\\s+(?![Ss]ố\\b|[0-9])[A-Za-zÀ-Ỹà-ỹ\\s]{1,60}?)?';
 
     // =========================================================================
-    // LỚP 1 — FULL CÂU UYỂN NGHIỆM (NHẤT QUYỀN ƯU TIÊN CAO NHẤT)
+    // LỚP 1 — FULL CÂU UYỂN NGHIỆM — ĐÃ VÔ HIỆU HÓA
+    // Lý do: L1 gộp nhiều clause/điều khác VB (cùng VB + VB khác) thành 1 anchor DUY NHẤT
+    // → data-target-doc = VB cuối cùng, data-art/clause RỖNG → link cùng VB bị nhầm sang VB khác.
+    // Thay thế: L3A (VB bắt buộc) + L3 (VB optional) parse TỪNG CỤM clause+article+[VB] riêng biệt 1:1.
     // =========================================================================
-    const L1_SRC =
-      '(tại|theo|quy\\s*định\\s*(?:tại|theo)?|,)\\s*' +
-      '(' +
-        '(?:' +
-          '(?:[Kk]hoản\\s+\\d+[a-zđ]?(?:\\s*[và,]\\s*[Kk]hoản\\s+\\d+[a-zđ]?)*\\s+)?' +
-          '(?:' +
-            '[ĐđD]iều\\s+\\d+[a-z]?(?:\\s*[và,]\\s*(?![Kk]hoản\\b)[ĐđD]iều\\s+\\d+[a-z]?)*' +
-            '|' +
-            '(?=[Kk]hoản\\b|[ĐđD]iều\\b|Luật\\b|Nghị\\s*định\\b)' +
-          ')' +
-          '\\s*[,]?\\s*' +
-        ')+' +
-        '(?:[ĐđD]iều\\s+\\d+[a-zđ]?\\s+)?' +
-        '(Luật|Nghị\\s*định|Thông\\s*tư|Quyết\\s*định|Quy\\s*chuẩn|Tiêu\\s*chuẩn)' +
-        _RX_NAME_OPT +
-        '\\s*(?:số\\s+)?' +
-        _RX_DOCNUM_L1 +
-      ')';
-    const compoundClauseArticleRegex = new RegExp(L1_SRC, 'gi');
+    const COMPOUND_L1_DISABLED = true;
 
-    escaped = escaped.replace(compoundClauseArticleRegex, (fullMatch, prefix, innerBody, docType, docNumWord, docNum) => {
-      const targetDoc = docNum ? String(docNum).replace(/^số\s+/i, '').trim() : '';
-      if (!docType && !targetDoc) return fullMatch;
-      return `${prefix} ` + wrapMatch(`${innerBody}${docType||''}${docNumWord||''}${docNum||''}`, {
-        targetDoc,
-        article: '',
-        clause: '',
-        kind: 'compound'
-      });
+    // Negative lookahead postfix: chỉ chấp nhận 1 ký tự hậu tố a-zđ (Điều 1a, Khoản 2b...) NẾU sau đó KHÔNG còn chữ cái nào (tránh ăn "50v" từ "50và", "51L" từ "51Luật")
+    const _NUM_POSTFIX = '(?:[a-zđ](?![A-Za-zÀ-ỹ]))';
+
+    // =========================================================================
+    // LỚP 3A — UYỀN NGHIỆM CLAUSE + ĐIỀU + VB BẮT BUỘC (ƯU TIÊN CAO NHẤT, 0 whitespace tolerant)
+    // Chạy TRƯỚC L2 standalone VB → đảm bảo VB khi đi kèm Điều/Khoản luôn được gộp chung 1 anchor.
+    // =========================================================================
+    const L3A_SRC =
+      '(?:(Điểm\\s+([a-zđ])(?:\\.\\d+)?)\\s*[,và\\+\\s]*)?' +
+      '(?:(?:[Kk]hoản\\s+(\\d+' + _NUM_POSTFIX + '?)(?:\\s*[,và\\+]\\s*[Kk]hoản\\s+\\d+' + _NUM_POSTFIX + '?)*)\\s*[,và]?\\s*)?' +
+      '([ĐđD]iều\\s+(\\d+' + _NUM_POSTFIX + '?)(?:\\s*[,và\\+]\\s*(?![Kk]hoản\\b|Điểm\\b)[ĐđD]iều\\s+\\d+' + _NUM_POSTFIX + '?)*)' +
+      '(?:\\s*(?:và|,|của|theo|tại|trong)\\s*|\\s*)' +
+      '(Luật|Bộ\\s*Luật|Nghị\\s*định|Thông\\s*tư|Quyết\\s*định|Quy\\s*chuẩn|Tiêu\\s*chuẩn)' +
+      _RX_NAME_OPT +
+      '\\s*(?:số\\s+)?' +
+      _RX_DOCNUM;
+    const deepLinkVbRequiredRegex = new RegExp(L3A_SRC, 'gi');
+
+    escaped = escaped.replace(deepLinkVbRequiredRegex, (fullMatch, pointPart, pointChar, clauseNumPart, articlePart, artNumStr, docTypePart, docNumWordPart, docNumPart) => {
+      if (!articlePart && !clauseNumPart && !pointPart) return fullMatch;
+      const artNum = artNumStr || '';
+      const clauseNum = (clauseNumPart || '').toString();
+      const pChar = (pointChar || '').toString();
+      const targetDoc = docNumPart ? String(docNumPart).replace(/^số\s+/i, '').trim() : '';
+      return wrapMatch(fullMatch, { targetDoc, article: artNum, clause: clauseNum, point: pChar, kind: 'deep-vb' });
     });
     escaped = _mask(escaped);
 
     // =========================================================================
-    // LỚP 2 — VĂN BẢN ĐỘC LẬP CÓ LOẠI + SỐ HIỆU (Ưu tiên 2)
+    // LỚP 2 — VĂN BẢN ĐỘC LẬP CÓ LOẠI + SỐ HIỆU (Ưu tiên 3, SAU L3A)
     // =========================================================================
     const L2_SRC =
       '(Luật|Bộ\\s*Luật|Nghị\\s*định|Nghị\\s*quyết|Thông\\s*tư|Quyết\\s*định|Quy\\s*chuẩn\\s*kỹ\\s*thuật|Tiêu\\s*chuẩn\\s*quốc\\s*gia|Pháp\\s*lệnh|Quy\\s*định)' +
@@ -729,13 +730,14 @@ const LegalParser = {
     escaped = _mask(escaped);
 
     // =========================================================================
-    // LỚP 3 — NỔI CẤP BÊN TRONG (Điểm + Khoản + Điều + [VB])
+    // LỚP 3 — NỔI CẤP BÊN TRONG (Điểm + Khoản + Điều + [VB OPTIONAL])
+    // Sau L3A (VB Bắt buộc) + L2 (VB standalone) đã mask toàn bộ. L3 xử lý các phần CÙNG VĂN BẢN (VB trống / tham chiếu nội bộ)
     // =========================================================================
     const L3_SRC =
       '(?:(Điểm\\s+([a-zđ])(?:\\.\\d+)?)\\s*[,và\\+\\s]*)?' +
-      '(?:(?:[Kk]hoản\\s+(\\d+[a-zđ]?)(?:\\s*[,và\\+]\\s*[Kk]hoản\\s+\\d+[a-zđ]?)*)\\s*[,]?\\s*)?' +
-      '([ĐđD]iều\\s+(\\d+[a-zđ]?)(?:\\s*[,và\\+]\\s*(?![Kk]hoản\\b|Điểm\\b)[ĐđD]iều\\s+\\d+[a-zđ]?)*)' +
-      '(?:\\s+(?:của|theo|tại|trong)\\s+|\\s+)?' +
+      '(?:(?:[Kk]hoản\\s+(\\d+' + _NUM_POSTFIX + '?)(?:\\s*[,và\\+]\\s*[Kk]hoản\\s+\\d+' + _NUM_POSTFIX + '?)*)\\s*[,và]?\\s*)?' +
+      '([ĐđD]iều\\s+(\\d+' + _NUM_POSTFIX + '?)(?:\\s*[,và\\+]\\s*(?![Kk]hoản\\b|Điểm\\b)[ĐđD]iều\\s+\\d+' + _NUM_POSTFIX + '?)*)' +
+      '(?:\\s*(?:và|,|của|theo|tại|trong)\\s*|\\s+)?' +
       '(?:' +
         '(Luật|Bộ\\s*Luật|Nghị\\s*định|Thông\\s*tư|Quyết\\s*định|Quy\\s*chuẩn|Tiêu\\s*chuẩn)' +
         _RX_NAME_OPT +
