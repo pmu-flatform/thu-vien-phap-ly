@@ -888,20 +888,28 @@ const LegalApp = {
     }
   },
 
-  toggleChatDrawer() {
-    this.state.isChatOpen = !this.state.isChatOpen;
+  toggleChatDrawer(forceOpen = null) {
+    if (typeof forceOpen === 'boolean') {
+      this.state.isChatOpen = forceOpen;
+    } else {
+      this.state.isChatOpen = !this.state.isChatOpen;
+    }
     const drawer = document.getElementById('ai-chat-drawer');
+    const backdrop = document.getElementById('ai-drawer-backdrop');
     if (drawer) {
       if (this.state.isChatOpen) {
         drawer.classList.remove('closed');
         drawer.classList.add('open');
+        if (backdrop) backdrop.classList.remove('hidden');
         const input = document.getElementById('chat-input');
-        if (input) input.focus();
+        if (input) setTimeout(() => input.focus(), 220);
       } else {
         drawer.classList.remove('open');
         drawer.classList.add('closed');
+        if (backdrop) backdrop.classList.add('hidden');
       }
     }
+    console.log('[LegalApp] toggleChatDrawer → isChatOpen:', this.state.isChatOpen);
     this.refreshIcons();
   },
 
@@ -1118,6 +1126,7 @@ const LegalApp = {
         this.closeIngestModal();
         this.closeSettingsModal();
         this.closeStatsModal();
+        if (this.state.isChatOpen) this.toggleChatDrawer(false);
       }
     });
 

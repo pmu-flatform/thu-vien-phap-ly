@@ -606,23 +606,80 @@ const LegalParser = {
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
 
-    // Match "Điểm ... Khoản ... Điều ... [của Luật/Nghị định ...]" or "Điều 107"
-    const deepLinkRegex = /(?:(Điểm\s+[a-zđ])\s+)?(?:([Kk]hoản\s+(\d+))\s+)?([Đđ]iều\s+(\d+[a-z]?))(?:\s+(?:của\s+)?(Luật|Nghị định|Thông tư|Quy chuẩn|Tiêu chuẩn)\s+((?:số\s+)?\b[0-9]+(?:\/[0-9]{4})?\/[A-Z0-9\-\_]+|QCVN\s+[0-9]+:[0-9]{4}\/[A-Z0-9\-]+|TCVN\s+[0-9]+(?::[0-9]{4})?))?/gi;
+    // Tránh re-wrap (nếu đã được wrapped trước đó)
+    const alreadyWrapped = new Set();
 
-    escaped = escaped.replace(deepLinkRegex, (fullMatch, point, clause, clauseNumStr, article, artNumStr, docType, docNum) => {
-      const artNum = artNumStr || '';
-      const clauseNum = clauseNumStr || '';
-      const pointChar = point ? point.replace(/Điểm\s+/i, '').trim() : '';
-      let targetDoc = docNum ? docNum.replace(/^số\s+/i, '').trim() : '';
+    function wrapMatch(fullMatch, opts = {}) {
+      const { targetDoc = '', article = '', clause = '', point = '', section = '', kind = 'ref' } = opts;
+      const k = `${kind}|${targetDoc}|${article}|${clause}|${point}|${section}`;
+      if (alreadyWrapped.has(k)) return fullMatch;
+      alreadyWrapped.add(k);
+      const parts = [];
+      if (targetDoc) parts.push(`data-target-doc="${targetDoc.replace(/"/g, '&quot;')}"`);
+      if (article) parts.push(`data-article="${article.replace(/"/g, '&quot;')}"`);
+      if (clause) parts.push(`data-clause="${clause.replace(/"/g, '&quot;')}"`);
+      if (point) parts.push(`data-point="${point.replace(/"/g, '&quot;')}"`);
+      if (section) parts.push(`data-section="${section.replace(/"/g, '&quot;')}"`);
+      const title = `Tra cứu ${fullMatch}`;
+      return `<a class="legal-ref inline-flex items-center gap-0.5 font-semibold text-blue-400 hover:text-blue-300 hover:underline underline-offset-2 decoration-dotted cursor-pointer bg-blue-500/5 px-1 rounded transition" ${parts.join(' ')} title="${title.replace(/"/g, '&quot;')}">${fullMatch}</a>`;
+    }
 
-      return `<a class="legal-ref" data-target-doc="${targetDoc}" data-article="${artNum}" data-clause="${clauseNum}" data-point="${pointChar}" title="Tra cứu ${fullMatch}">${fullMatch}</a>`;
+    // =========================================================================
+    // LỚP 1 — FULL CÂU UYỂN NGHIỆM (NHẤT QUYỀN ƯU TIÊN CAO NHẤT)
+    // Pattern: "tại khoản 3 Điều 49, khoản 2 và khoản 3 Điều 50, Điều 51 Luật Xây dựng số 135/2025/QH15"
+    // Match 1 đoạn chứa nhiều khoản/điều + 1 văn bản cuối cùng.
+    // =========================================================================
+    const compoundClauseArticleRegex = /(tại|theo|quy\s*định\s*(?:tại|theo)?|,)\s*((?:[Kk]hoản\s+\d+[a-zđ]?(?:\s*[và,]\s*[Kk]hoản\s+\d+[a-zđ]?)*\s*[ĐđD]iều\s+\d+[a-z]?(?:\s*[và,]\s*[ĐđD]iều\s+\d+[a-z]?)*\s*,\s*)+(?:[ĐđD]iều\s+\d+[a-zđ]?\s+)?(Luật|Nghị\s*định|Thông\s*tư|Quyết\s*định|Quy\s*chuẩn|Tiêu\s*chuẩn)\s*(số\s*)?([0-9]+(?:[\/\-][0-9]+(?:[\/\-](?:QH\d+|NĐ\-CP|TT[\-A-Z0-9]+|QĐ[\-A-Z0-9]+|UBND[\-A-Z0-9]+|VBHN[\-A-Z0-9]+|QCVN|TCVN|[A-Z0-9\-]+))?|QCVN\s*[0-9]+:[0-9]{4}(?:\/[A-Z0-9\-]+)?|TCVN\s*[0-9]+(?::[0-9]{4})?))/gi;
+
+    escaped = escaped.replace(compoundClauseArticleRegex, (fullMatch, prefix, innerBody, docType, docNumWord, docNum) => {
+      const targetDoc = docNum ? String(docNum).replace(/^số\s+/i, '').trim() : '';
+      return `${prefix} ` + wrapMatch(`${innerBody}${docType||''}${docNumWord||''}${docNum||''}`, {
+        targetDoc,
+        article: '',
+        clause: '',
+        kind: 'compound'
+      });
     });
 
-    // Also match standalone Document Codes
-    const standaloneDocRegex = /(?<!data-target-doc=")\b(\d+[\/\-]\d{4}[\/\-](?:QH\d+|NĐ-CP|TT-[A-Z]+|QĐ-[A-Z]+|UBND|[A-Z0-9\-]+)|QCVN\s+[0-9]+:[0-9]{4}\/[A-Z0-9\-]+|TCVN\s+[0-9]+(?::[0-9]{4})?)\b(?!<\/a>)/gi;
+    // =========================================================================
+    // LỚP 2 — VĂN BẢN ĐỘC LẬP CÓ LOẠI + SỐ HIỆU (Ưu tiên 2)
+    // "Nghị định số 175/2024/NĐ-CP" / "Luật 135/2025/QH15" / "Thông tư số 12/2021/TT-BXD" / "QCVN 18:2021/BXD"
+    // =========================================================================
+    const docTypeStandaloneRegex = /(Luật|Bộ\s*Luật|Nghị\s*định|Nghị\s*quyết|Thông\s*tư|Quyết\s*định|Quy\s*chuẩn\s*kỹ\s*thuật|Tiêu\s*chuẩn\s*quốc\s*gia|Pháp\s*lệnh|Quy\s*định)\s*(số\s*)?([0-9]+(?:[\/\-][0-9]+(?:[\/\-](?:QH\d+|NĐ\-CP|TT[\-A-Z0-9]+|QĐ[\-A-Z0-9]+|UBND[\-A-Z0-9]+|VBHN[\-A-Z0-9]+|[A-Z0-9\-]+))?|QCVN\s*[0-9]+:[0-9]{4}(?:\/[A-Z0-9\-]+)?|TCVN\s*[0-9]+(?::[0-9]{4})?))/gi;
+
+    escaped = escaped.replace(docTypeStandaloneRegex, (fullMatch, docType, numWord, docNum) => {
+      const targetDoc = docNum ? String(docNum).replace(/^số\s+/i, '').trim() : '';
+      if (!targetDoc) return fullMatch;
+      return wrapMatch(fullMatch, { targetDoc, article: '', kind: 'doc-standalone' });
+    });
+
+    // =========================================================================
+    // LỚP 3 — NỔI CẤP BÊN TRONG (Điểm + Khoản + Điều + [VB])
+    // Thứ tự nested match: TỪ LỚN NHẤT → NHỎ NHẤT
+    // Full: Điểm b Khoản 2 Điều 17 Luật Xây dựng số 135/2025/QH15
+    // Mid : Khoản 3 Điều 17 [Luật/Nghị định ...]
+    // Only: Điều 17 (hoặc Điều 17a)
+    // =========================================================================
+    const deepLinkRegex = /(?:(Điểm\s+([a-zđ])(?:\.\d+)?)\s*[,và\+\s]*)?(?:(?:[Kk]hoản\s+(\d+[a-zđ]?)(?:\s*[,và\+]\s*[Kk]hoản\s+\d+[a-zđ]?)*)\s*[,]?\s*)?([ĐđD]iều\s+(\d+[a-zđ]?)(?:\s*[,và\+]\s*[ĐđD]iều\s+\d+[a-zđ]?)*)(?:\s+(?:của|theo|tại|trong)\s+)?(?:(Luật|Bộ\s*Luật|Nghị\s*định|Thông\s*tư|Quyết\s*định|Quy\s*chuẩn|Tiêu\s*chuẩn)\s*(số\s*)?([0-9]+(?:[\/\-][0-9]+(?:[\/\-](?:QH\d+|NĐ\-CP|TT[\-A-Z0-9]+|QĐ[\-A-Z0-9]+|UBND[\-A-Z0-9]+|[A-Z0-9\-]+))?|QCVN\s*[0-9]+:[0-9]{4}(?:\/[A-Z0-9\-]+)?|TCVN\s*[0-9]+(?::[0-9]{4})?))?/gi;
+
+    escaped = escaped.replace(deepLinkRegex, (fullMatch, pointPart, pointChar, clauseNumPart, articlePart, artNumStr, docTypePart, docNumWordPart, docNumPart) => {
+      if (!articlePart && !clauseNumPart && !pointPart) return fullMatch;
+      const artNum = artNumStr || '';
+      const clauseNum = (clauseNumPart || '').toString();
+      const pChar = (pointChar || '').toString();
+      const targetDoc = docNumPart ? String(docNumPart).replace(/^số\s+/i, '').trim() : '';
+      return wrapMatch(fullMatch, { targetDoc, article: artNum, clause: clauseNum, point: pChar, kind: 'deep' });
+    });
+
+    // =========================================================================
+    // LỚP 4 — STANDALONE CODE NHƯNG KHÔNG CÓ DOC TYPE (135/2025/QH15 / NĐ-CP / TT-BXD / 175/2024)
+    // Chỉ trigger nếu chưa được wrap trong lớp 1/2.
+    // =========================================================================
+    const standaloneDocRegex = /(?<![A-Z0-9À-Ỹ])(\d{2,5}[\/\-]\d{4}[\/\-](?:QH\d+|NĐ\-CP|TT[\-A-Z0-9]+|QĐ[\-A-Z0-9]+|UBND[\-A-Z0-9]+|VBHN[\-A-Z0-9]+|[A-Z0-9\-]+)|QCVN\s*[0-9]+:[0-9]{4}(?:\/[A-Z0-9\-]+)?|TCVN\s*[0-9]+(?::[0-9]{4})?)(?![A-Z0-9À-Ỹ_\-])/gi;
 
     escaped = escaped.replace(standaloneDocRegex, (fullMatch, docCode) => {
-      return `<a class="legal-ref" data-target-doc="${docCode}" data-article="" title="Xem văn bản ${docCode}">${docCode}</a>`;
+      if (!docCode) return fullMatch;
+      return wrapMatch(fullMatch, { targetDoc: docCode, article: '', kind: 'code' });
     });
 
     return escaped;

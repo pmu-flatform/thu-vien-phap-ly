@@ -16,6 +16,41 @@
 
   <!-- Mammoth.js (.docx In-Browser Parser) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js" defer></script>
+
+  <!-- Custom Drawer Animations & Overlay -->
+  <style>
+    .chat-drawer {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.25s ease,
+                  box-shadow 0.3s ease;
+      will-change: transform, opacity;
+    }
+    .chat-drawer.closed {
+      transform: translateX(105%);
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+    }
+    .chat-drawer.open {
+      transform: translateX(0);
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+      box-shadow: -12px 0 40px -8px rgba(0, 0, 0, 0.35);
+    }
+    #ai-drawer-backdrop {
+      transition: opacity 0.25s ease;
+      opacity: 1;
+    }
+    #ai-drawer-backdrop.hidden {
+      display: none;
+      opacity: 0;
+    }
+    a.legal-ref {
+      text-decoration: none;
+      word-break: keep-all;
+    }
+  </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex flex-col h-screen overflow-hidden antialiased select-text">
 
@@ -193,8 +228,9 @@
       <!-- Rendered by JS -->
     </main>
 
-    <!-- ==================== AI COPILOT DRAWER (SLIDE-OVER) ==================== -->
-    <div id="ai-chat-drawer" class="chat-drawer closed absolute top-0 right-0 h-full w-96 bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800 shadow-2xl z-30 flex flex-col">
+    <!-- ==================== AI COPILOT DRAWER (SLIDE-OVER OVERLAY) ==================== -->
+    <div id="ai-drawer-backdrop" class="fixed inset-0 bg-black/45 backdrop-blur-[2px] z-40 hidden cursor-pointer" onclick="LegalApp.toggleChatDrawer()" aria-hidden="true"></div>
+    <div id="ai-chat-drawer" class="chat-drawer closed fixed inset-y-0 right-0 w-96 bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800 shadow-2xl z-[45] flex flex-col">
       <!-- Drawer Header -->
       <div class="p-3.5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white flex items-center justify-between shadow-sm">
         <div class="flex items-center gap-2">
