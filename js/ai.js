@@ -180,7 +180,6 @@ const LegalAI = {
             return intent.articleNumbers.some(a => x.includes('ĐIỀU ' + a));
           });
           if (hasActiveMatch) {
-            // Thay ragNodes = IN ACTIVE ONLY (loại bỏ tất cả node từ VB khác)
             console.log(`[LegalAI] 2A-POST lock applied: previous ragNodes had ${ragNodes.length} docs (${[...new Set(ragNodes.map(n=>String(n.docId)))].join(',')}), filtered to in-active only.`);
             ragNodes.length = 0;
             inActive.forEach(n => ragNodes.push(n));
@@ -202,7 +201,6 @@ const LegalAI = {
       if (intent.articleNumbers.length > 0 && typeof LegalDB !== 'undefined' && LegalDB.db) {
         const scopeDoc = intent.focusDocCode || (this.lastDocFocus ? this.lastDocFocus.docCode : null);
         for (const art of intent.articleNumbers) {
-          // Nếu RAG đã trả lại đúng Điều này → bỏ qua
           const already = ragNodes.some(n => {
             const ref = (n.fullRef || '').toUpperCase();
             const title = (n.title || '').toUpperCase();
@@ -225,7 +223,6 @@ const LegalAI = {
           } catch (e2) { console.warn('[LegalAI] Step 2C Dexie query (docCode filter) bị lỗi, fallback RAM nodesIndex tiếp theo:', e2?.message || e2); }
 
           if (!candidates || candidates.length === 0) {
-            // Fallback: quét nodesIndex của LegalSearch
             if (typeof LegalSearch !== 'undefined' && LegalSearch.nodesIndex.length > 0) {
               candidates = LegalSearch.nodesIndex.filter(n => {
                 const ref = ((n.fullRef || '') + ' ' + (n.title || '')).toUpperCase();
@@ -249,7 +246,6 @@ const LegalAI = {
     }
 
     // --- 2E) FORMAT RAG NODES THÀNH CONTEXT NGẮN GỌN, CÓ ĐẦU MỤC
-    // [Bridge Log] In phân bố docId của ragNodes TRƯỚC KHI format → user có thể verify 6 Điều5 bug đã fix chưa
     try {
       const docIds = [...new Set(ragNodes.map(n => `${n.docId}(${n.docCode||''} ${n.fullRef||''})`))];
       console.log(`[LegalAI] 2E ragNodes distribution (${ragNodes.length} nodes, ${docIds.length} docs): ${docIds.slice(0,8).join(' | ')}${docIds.length>8?' | ...('+docIds.length+' total)':''}`);
@@ -314,8 +310,6 @@ const LegalAI = {
     }
 
     // --- 2H) EXTREME DEFENSE (QUAN TRỌNG NHẤT):
-    // Dù 0-2G vẫn 0 ragNodes → Lấy 6 node đầu của VB ĐANG MỞ để đảm bảo LLM LUÔN nhận được ngữ cảnh ≥500 ký tự
-    // → Ngăn chặn tuyệt đối việc LLM chọn mẫu câu "Không tìm thấy Điều phù hợp..." (do template cũ)
     if (ragNodes.length === 0 && typeof LegalSearch !== 'undefined' && LegalSearch.nodesIndex.length > 0) {
       const activeId = (typeof LegalApp !== 'undefined') ? LegalApp.state?.activeDocId : null;
       let backupDocId = activeId;
@@ -327,7 +321,6 @@ const LegalAI = {
         backupDocId = LegalSearch.docsIndex[0].id;
       }
       if (backupDocId) {
-        // Lấy 6 node ĐẦU của VB backupDocId → đảm bảo LLM có đủ 500 ký tự context
         const topNodes = LegalSearch.nodesIndex
           .filter(n => String(n.docId) === String(backupDocId))
           .slice(0, 6);
@@ -371,31 +364,42 @@ const LegalAI = {
     })();
 
     const specificArticlePrompt = `
-Bạn là Trợ lý Pháp lý & Kỹ thuật. Nhiệm vụ hiện tại: TRẢ LỜI CHÍNH XÁC VỀ ĐIỀU / KHOẢN ĐƯỢC HỎI.
+Bạn là Trợ lý Pháp lý & Kỹ thuật. Nhiệm vụ hiện tại: TRẢ LỜI CHÍNH XÁC VỀ ĐIỀU / KHOẢN ĐƯỢC HỎI KÈM NGUỒN GỐC.
 RULES BẮT BUỘC (VI PHẠM SẼ BỊ LOẠI BỎ):
 1. **KHÔNG TÓM TẮT TOÀN BỘ VĂN BẢN**. Chỉ lấy đúng nội dung Điều được hỏi + các Khoản của nó + các Điều liên quan trực tiếp (nếu có trong ngữ cảnh).
 2. **CẤM TUYỆT ĐỐI** cố tình liệt kê 8 Chương + 95 Điều khi người dùng chỉ hỏi 1 Điều. Chỉ nói về Điều họ hỏi.
-3. Nếu người dùng hỏi theo dạng "X được quy định cụ thể ở đâu" (theo dõi câu hỏi trước), bạn PHẢI trả lời:
+3. **BẮT BUỘC - TRÍCH DẪN NGUỒN GỐC + FOOTER THAM CHIẾU** (QUAN TRỌNG NHẤT):
+   a. **MỖI KHOẢN / ĐIỂM bạn trả lời → BẮT BUỘC có blockquote (>) trích dẫn VERBATIM 1:1 nguyên văn nội dung gốc từ block [CTX*] bên dưới (KHÔNG được diễn giải, không tóm tắt, không đổi từ).**
+   b. **NGAY SAU blockquote đó → BẮT BUỘC thêm dòng FOOTER THAM CHIẾU một dòng, đặt trong ngoặc vuông [ ] định dạng CHUẨN bằng dấu →:**
+      \`[SỐ HIỆU VĂN BẢN ĐẦY ĐỦ → Điều X → Khoản Y → Điểm Z]\`
+      - Ví dụ 1 (chỉ có Điều): \`[206/2026/NĐ-CP → Điều 7]\`
+      - Ví dụ 2 (Điều + Khoản): \`[206/2026/NĐ-CP → Điều 2 → Khoản 2]\`
+      - Ví dụ 3 (Điều + Khoản + Điểm): \`[135/2025/QH15 → Điều 51 → Khoản 3 → Điểm b]\`
+      - Bắt buộc dùng **SỐ HIỆU VĂN BẢN ĐẦY ĐỦ** lấy từ block [CTX*] ví dụ: 206/2026/NĐ-CP, 135/2025/QH15, 33/2025/NĐ-CP, 16/2025/TT-BXD. **TUYỆT ĐỐI KHÔNG RÚT GỌN THÀNH MÃ 206/2026/N (không có loại VB).**
+   c. **Nếu bạn tóm tắt 1 ý (ngoài blockquote) → BẮT BUỘC kèm footer [ ] ngay cuối câu ý đó, bám đúng [CTX*] chứa nội dung bạn trích dẫn.** Ví dụ: "Thẩm định chi phí đầu tư do đơn vị tư vấn thực hiện **[206/2026/NĐ-CP → Điều 2 → Khoản 2]**."
+4. Nếu người dùng hỏi theo dạng "X được quy định cụ thể ở đâu" (theo dõi câu hỏi trước), bạn PHẢI trả lời:
    - Trích dẫn chính xác **tên Điều, khoản, con, điểm** có nội dung đó (TỪ DỮ LIỆU BÊN DƯỚI).
-   - Nêu rõ **văn bản nào** (số hiệu, năm)
-   - Trích dẫn nguyên văn nội dung.
-4. Định dạng câu trả lời ngắn gọn, khoa học theo Markdown:
+   - Nêu rõ **văn bản nào** (số hiệu, năm).
+   - blockquote > nguyên văn nội dung đó.
+   - Footer [SỐ HIỆU VB → Điều X → Khoản Y → Điểm Z] ngay sau blockquote.
+5. Định dạng câu trả lời khoa học theo Markdown:
    - Giới thiệu 1 dòng: "Điều X của [Văn bản] quy định về..."
-   - **Nội dung trích dẫn Điều/Khoản:** dùng blockquote (>) hoặc list (1. 2. 3.) theo từng khoản
+   - Từng khoản: Mục (1.), (2.)... → blockquote > nguyên văn → footer [ ] tham chiếu ngay sau.
    - **Liên kết chéo (NGUYÊN TẮC - CHỈ KHI ĐÃ CÓ ĐỦ NỘI DUNG CHÍNH):**
      - ✅ CHO PHÉP: CHỈ liên kết tới các Điều/Khoản **CÙNG MỘT VĂN BẢN** (đang mở) và **LIÊN QUAN TRỰC TIẾP CHỦ ĐỀ** với nội dung Điều được hỏi (ví dụ Điều 5 về Nguyên tắc → liên kết các Điều khác cũng về Nguyên tắc / Quản lý nhà nước / Chủ đầu tư, KHÔNG BAO GIỜ liên kết ngẫu nhiên Điều 1 hay Điều 3).
      - ❌ CẤM: Liên kết tới các văn bản KHÁC (ví dụ hỏi Luật Xây dựng 135 → đừng link Luật Đất đai 31, Luật Đầu tư 143...) khi người dùng KHÔNG yêu cầu so sánh chéo.
      - ❌ CẤM: Liên kết 3 điều ngẫu nhiên không liên quan chỉ để có link. 1-2 link là đủ, ưu tiên không.
-5. (STRICT GUARD - KHÔNG THƯƠNG LƯỢNG)
+6. (STRICT GUARD - KHÔNG THƯƠNG LƯỢNG)
    - TUYỆT ĐỐI CẤM trong mọi trường hợp câu trả lời BẮT ĐẦU BẰNG HOẶC CHỨA CỤM: "Không tìm thấy Điều phù hợp trong kho dữ liệu nạp vào"
    - Nếu bên dưới có [CTX*] / [CTX2G-*] / [CTX2H] (nghĩa là ĐÃ CÓ DỮ LIỆU ĐƯỢC NẠP) → BẮT BUỘC tổng hợp nội dung từ những block đó.
-   - NẾU bên dưới có "Điều X" (người dùng hỏi) → TRẢ LỜI NGUYÊN VĂN ĐIỀU X, KHÔNG ĐƯỢC lảng tránh.
+   - NẾU bên dưới có "Điều X" (người dùng hỏi) → TRẢ LỜI NGUYÊN VĂN ĐIỀU X + blockquote + footer [ ], KHÔNG ĐƯỢC lảng tránh.
    - Nếu ngữ cảnh không đủ → nói "Vui lòng mở văn bản cần tra cứu hoặc chỉ rõ SỐ HIỆU / TÊN Điều, Khoản."
-6. (ACTIVE DOCUMENT LOCK - TUYỆT ĐỐI)
+7. (ACTIVE DOCUMENT LOCK - TUYỆT ĐỐI)
    - **NẾU NGƯỜI DÙNG ĐANG MỞ MỘT VĂN BẢN CỤ THỂ (active document) VÀ HỎI "ĐIỀU X" (không nêu rõ văn bản khác) → BẮT BUỘC CHỈ TRẢ LỜI VỀ ĐIỀU X CỦA VĂN BẢN ĐANG MỞ.**
    - ❌ **TUYỆT ĐỐI CẤM** liệt kê Điều X từ 3-6 văn bản khác nhau khi người dùng chỉ mở 1 văn bản VÀ KHÔNG yêu cầu so sánh.
-   - **Trường hợp đặc biệt:** Nếu trong VB ĐANG MỞ thực sự KHÔNG có Điều X (không tìm thấy trong [CTX*]) → nói rõ 1 câu: "Văn bản [tÊN VĂN BẢN ĐANG MỞ] hiện không chứa Điều X bạn hỏi; bạn có thể mở văn bản phù hợp khác trước khi truy vấn." (KHÔNG BAO GIỜ tự động liệt kê 5 văn bản khác có Điều X).
-7. CẤM tự thêm các điểm không có trong [CTX*] vào câu trả lời (phân biệt với tóm tắt từ chính context).
+   - Trường hợp đặc biệt: Nếu trong VB ĐANG MỞ thực sự KHÔNG có Điều X (không tìm thấy trong [CTX*]) → nói rõ 1 câu: "Văn bản [tên VB đang mở] hiện không chứa Điều X bạn hỏi; bạn có thể mở văn bản phù hợp khác trước khi truy vấn." (KHÔNG BAO GIỜ tự động liệt kê 5 văn bản khác có Điều X).
+8. CẤM tự thêm các điểm không có trong [CTX*] vào câu trả lời (phân biệt với tóm tắt từ chính context).
+9. **[BẢO VỆ MÃ (CTX)]**: Footer [ ] BẮT BUỘC dùng **SỐ HIỆU VB ĐẦY ĐỦ** từ block [CTX*]. Nếu [CTX*] có ghi "(CTX1)", "(CTX2)"... BẠN CÓ THỂ giữ lại CTX làm ghi chú PHÍA SAU SỐ HIỆU, ví dụ: \`[206/2026/NĐ-CP → Điều 2 → Khoản 2 (CTX1)]\`. MÃ (CTX1) KHÔNG BAO GIỜ thay thế số hiệu VB ĐẦY ĐỦ.
 
 ${ctxGuardLine}
 
@@ -404,26 +408,31 @@ ${ctx}
 `.trim();
 
     const crossRefPrompt = `
-Bạn là Trợ lý Pháp lý & Kỹ thuật. Nhiệm vụ: TÌM LIÊN KẾT CHÉO GIỮA CÁC VĂN BẢN / CÁC ĐIỀU.
+Bạn là Trợ lý Pháp lý & Kỹ thuật. Nhiệm vụ: TÌM LIÊN KẾT CHÉO GIỮA CÁC VĂN BẢN / CÁC ĐIỀU, KÈM NGUỒN GỐC MỖI Ý.
 RULES:
 1. Dựa TỐT ĐẾN ngữ cảnh bên dưới, xác định những điểm khớp với từ khóa câu hỏi.
-2. Mỗi liên kết ghi rõ: **Văn bản số hiệu → Điều X → Tóm tắt 1-2 câu → Điểm chung/khác biệt.**
-3. Sắp xếp theo mức độ liên quan (cao nhất lên trên).
-4. Không tóm tắt toàn bộ văn bản. Mỗi điều liên kết CHỈ 1 block ngắn.
-5. Nếu không tìm thấy liên kết, nói rõ.
+2. Mỗi liên kết ghi rõ: **Văn bản số hiệu → Điều X → Khoản Y → Điểm Z.**
+3. **BẮT BUỘC TRÍCH DẪN + FOOTER:**
+   a. Mỗi liên kết phải có **blockquote (>) trích dẫn nguyên văn 1-2 câu gốc** từ [CTX*] thể hiện sự liên quan đó.
+   b. Sau blockquote → BẮT BUỘC một dòng footer định dạng chuẩn: \`[SỐ HIỆU VB ĐẦY ĐỦ → Điều X → Khoản Y → Điểm Z]\`. Số hiệu VB ĐẦY ĐỦ lấy từ [CTX*], không rút gọn.
+4. Sắp xếp theo mức độ liên quan (cao nhất lên trên).
+5. Không tóm tắt toàn bộ văn bản. Mỗi điều liên kết CHỈ 1 block ngắn + quote + footer.
+6. Nếu không tìm thấy liên kết, nói rõ.
 
 [NGỮ CẢNH ĐÃ TRUY XUẤT TỪ CSDL]:
 ${ctx}
 `.trim();
 
     const documentSummaryPrompt = `
-Bạn là Trợ lý Pháp lý & Kỹ thuật. Nhiệm vụ: TÓM TẮT VĂN BẢN PHÁP LUẬT.
+Bạn là Trợ lý Pháp lý & Kỹ thuật. Nhiệm vụ: TÓM TẮT VĂN BẢN PHÁP LUẬT KÈM NGUỒN GỐC ĐIỀU KHÓA.
 RULES:
 1. Bố cục 3 phần:
    - **Thông tin văn bản:** số hiệu, cơ quan ban hành, ngày ban hành, ngày hiệu lực, tổng số Chương/Điều (nếu biết).
-   - **Nội dung quy định chính:** nhóm theo Chương, mỗi Chương tóm tắt 2-4 dòng (không quá chi tiết).
-   - **Điểm mới & cần lưu ý:** 3-7 điểm then chốt ảnh hưởng trực tiếp đến thực thi.
+   - **Nội dung quy định chính:** nhóm theo Chương / nhóm Điều, mỗi điểm tóm tắt 2-4 dòng.
+     > BẮT BUỘC: Từng điểm chính → KÈM footer [SỐ HIỆU VB → Điều X] ngay cuối câu bám Điều đó. Ví dụ: "Điều 5 quy định nguyên tắc xác định tổng mức đầu tư điều chỉnh [206/2026/NĐ-CP → Điều 5]."
+   - **Điểm mới & cần lưu ý:** 3-7 điểm then chốt ảnh hưởng trực tiếp đến thực thi, mỗi điểm kèm footer [ ] tham chiếu Điều gốc.
 2. Nếu ngữ cảnh có quá ít thông tin → nói rõ "Ngữ cảnh hạn chế, tóm tắt dựa trên phần đã nạp".
+3. Đối với các Điều nổi bật / dễ hiểu lầm → thêm blockquote > nguyên văn câu gốc từ [CTX*] + footer [SỐ HIỆU VB → Điều X → Khoản Y].
 
 [NGỮ CẢNH ĐÃ TRUY XUẤT TỪ CSDL]:
 ${ctx}
@@ -434,8 +443,11 @@ Bạn là Trợ lý Pháp lý & Kỹ thuật Xây dựng Việt Nam.
 RULES:
 1. Dựa TỐT ĐẾN dữ liệu bên dưới. Ưu tiên thông tin có trong [CTX*].
 2. Nếu không có → nói rõ "Không tìm thấy trong kho dữ liệu nạp vào", tóm tắt ngắn bằng kiến thức phổ thông và ghi chú nguồn.
-3. Trích dẫn chính xác **[Văn bản → Điều → Khoản]** đối với mỗi ý bạn nêu ra.
-4. Câu trả lời ngắn gọn, cấu trúc từng ý, không lan man.
+3. **BẮT BUỘC KÈM NGUỒN GỐC MỖI Ý:**
+   - Mỗi ý bạn nêu ra → BẮT BUỘC kèm **blockquote (>) trích dẫn nguyên văn câu/đoạn chứa quy định đó từ [CTX*] (nếu có)**.
+   - Sau blockquote → BẮT BUỘC footer \`[SỐ HIỆU VB ĐẦY ĐỦ → Điều X → Khoản Y → Điểm Z]\` (SỐ HIỆU VB lấy từ [CTX*], không rút gọn).
+   - Nếu chỉ tóm tắt (không quote) → kèm footer [ ] ngay cuối câu.
+4. Câu trả lời cấu trúc từng ý, không lan man.
 
 [NGỮ CẢNH ĐÃ TRUY XUẤT TỪ CSDL]:
 ${ctx}
@@ -456,18 +468,14 @@ ${ctx}
     const safeMsg = this.safeString(userMessage);
     if (!safeMsg) throw new Error('Câu hỏi trống.');
 
-    // Parse ý định
     const intent = this.parseQueryIntention(safeMsg);
     console.log('[LegalAI] Intention:', intent);
 
-    // Thu thập ngữ cảnh
     const ctx = await this.collectContext(safeMsg, intent);
     console.log(`[LegalAI] Context nodes=${ctx.usedNodes.length}, chars=${ctx.text.length}`);
 
-    // Build system prompt động
     const systemPrompt = this.buildSystemPrompt(intent.mode, ctx.text);
 
-    // Xây dựng messages (chat-history + user hiện tại)
     const recentHistory = this.chatHistory.slice(-this.MAX_HISTORY);
     const provider = this.config.provider;
     let reply;
@@ -480,7 +488,6 @@ ${ctx}
       reply = await this.callCustomOpenAI(systemPrompt, recentHistory, safeMsg);
     }
 
-    // Lưu lại lịch sử & last nodes
     this._pushHistory('user', safeMsg);
     this._pushHistory('assistant', reply);
     this.lastNodesUsed = ctx.usedNodes.length > 0 ? ctx.usedNodes : this.lastNodesUsed;
@@ -496,7 +503,7 @@ ${ctx}
   },
 
   // ============================================================
-  // GỌI API CÁC PROVIDER (đã hỗ trợ chat history đúng format)
+  // GỌI API CÁC PROVIDER
   // ============================================================
   async callGemini(systemPrompt, history, userMessage) {
     const apiKey = this.safeString(this.config.geminiApiKey);
@@ -505,9 +512,7 @@ ${ctx}
     const model = this.safeString(this.config.geminiModel) || 'gemini-1.5-flash';
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
-    // Build contents[] theo lịch sử, và đặt system prompt vào đầu + cuối (Gemini không có role system)
     const contents = [];
-    // Inject system vào đầu user prompt đầu tiên
     let firstUserText = systemPrompt;
     history.forEach(h => {
       const role = h.role === 'assistant' ? 'model' : 'user';
@@ -518,7 +523,6 @@ ${ctx}
         contents.push({ role, parts: [{ text: h.content }] });
       }
     });
-    // Lượt hiện tại
     if (firstUserText) {
       contents.push({ role: 'user', parts: [{ text: `${firstUserText}\n\n---\n[CÂU HỎI HIỆN TẠI]: ${userMessage}` }] });
     } else {
@@ -587,11 +591,45 @@ ${ctx}
   },
 
   // ============================================================
-  // Markdown Render + NÚT LINK TRỰC TÍNH (Điều 5 → click mở ngay)
+  // Markdown Render + CITATION LINK (tự tạo hyperlink click được)
   // ============================================================
   renderMarkdownWithCitations(markdownText) {
     const text = this.safeString(markdownText);
     if (!text) return '';
+
+    // Helper escape inline để tạo onclick handler an toàn
+    const _q = s => String(s || '').replace(/'/g, "\\'").replace(/\n/g, ' ').trim();
+
+    // Trợ lý parse 1 block tham chiếu thành { docCode, art, clause, point }
+    const _parseParts = (docStr, artStr, clauseStr, pointStr, fallbackDocCode) => {
+      let docCode = '';
+      if (docStr) {
+        docStr = String(docStr).trim();
+        // Thử tìm SỐ HIỆU VB chuẩn có dấu / ví dụ: 206/2026/NĐ-CP, 135/2025/QH15, 16/2025/TT-BXD
+        const m1 = docStr.match(/(\d{2,4}[\/\-_]\d{2,4}(?:[\/\-_][A-Za-zĐđ0-9\-]+)?)/);
+        if (m1) docCode = m1[1].replace(/_/g, '/').toUpperCase();
+        else {
+          // Loại bỏ phần loại VB dư thừa (chỉ giữ các ký tự số, /, -, A-Z)
+          const m2 = docStr.match(/(\d{2,4}[\/\-_]\d{2,4}[\w\/\-]*)/);
+          if (m2) docCode = m2[1].replace(/_/g, '/').toUpperCase();
+        }
+      }
+      if (!docCode && fallbackDocCode) docCode = String(fallbackDocCode);
+      const article = (artStr || '').replace(/[^0-9a-zA-ZĐđ]/g, '').toUpperCase();
+      const clause  = (clauseStr || '').replace(/[^\d]/g, '');
+      const point   = (pointStr || '').replace(/[^a-zA-ZĐđ0-9.]/g, '').toUpperCase();
+      return { docCode, article, clause, point };
+    };
+
+    // Helper tạo onclick gọi navigateToNode
+    const _mkOnclick = (docCode, article, clause, point, titleHint) => {
+      const d = _q(docCode), a = _q(article), c = _q(clause), p = _q(point), t = _q(titleHint);
+      return `try{window.LegalApp&&window.LegalApp.navigateToNode&&window.LegalApp.navigateToNode('${d}','${a}','${c}','${p}');}catch(e){}`;
+    };
+
+    const _safeLabel = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    const lastDocCode = this.lastDocFocus?.docCode || '';
 
     let html = text
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -613,40 +651,56 @@ ${ctx}
 
     html = `<p class="mb-2">${html}</p>`;
 
-    // Regex thông minh hơn: [Điều 5], [Điều 10, Luật 135/2025], [Khoản 2 Điều 7, NĐ 33/2025]
-    // => click navigate
-    const docCodeRegex = /(?:(?:Luật|Nghị\s*định|Thông\s*tư|Quyết\s*định|Quy\s*chế|TCVN|QCVN|TCXDVN)\s+)?\d{2,4}[\/\-_]\d{2,4}(?:[\/\-_][A-Za-zĐđ\-]+)?/i;
-    const citationRegex = /\[((?:Khoản\s+\d+\s+)?Điều\s+\d+[a-z]?|Điểm\s+[a-zđ]+(?:\.\d+)?|Khoản\s+\d+)(?:\s*,\s*([^\]]+))?\]/gi;
+    // ====== PATTERN 1 (NEW): ARROW FOOTER [SỐ HIỆU VB → Điều X → Khoản Y → Điểm Z (CTX...)]
+    // Group 1 = doc (optional), Group 2 = article, Group 3 = clause (optional), Group 4 = point (optional)
+    // => Tương thích: [206/2026/N → Điều 2 → Khoản 2 (CTX4)], [206/2026/NĐ-CP → Điều 7], [135/2025/QH15 → Điều 51 → Khoản 3 → Điểm b]
+    const arrowRegex = /\[((?:[^\]→\n]*?)\s*→\s*)?(?:Điều\s+(\d+[a-zđ]?))(?:\s*→\s*Khoản\s+(\d+))?(?:\s*→\s*Điểm\s+([a-zđ]+(?:\.\d+)?))?(?:\s*\([^)]*\))?\s*\]/gi;
+    html = html.replace(arrowRegex, (match, docPart, artPart, clausePart, pointPart) => {
+      // Trim "Nghị định 206/2026/NĐ-CP" → chỉ lấy số hiệu
+      const docStrRaw = docPart ? docPart.replace(/→\s*$/, '') : '';
+      const p = _parseParts(docStrRaw, artPart || '', clausePart || '', pointPart || '', lastDocCode);
+      if (!p.article && !p.docCode) return match;
+      const onclick = _mkOnclick(p.docCode, p.article, p.clause, p.point, match);
+      const hint = [
+        p.docCode ? `VB: ${p.docCode}` : '(cùng VB hiện tại)',
+        p.article ? `Điều ${p.article}` : '',
+        p.clause  ? `Khoản ${p.clause}` : '',
+        p.point   ? `Điểm ${p.point}`   : ''
+      ].filter(Boolean).join(' - ');
+      return `<button class="ai-citation-link legal-ref inline-flex items-center gap-1 font-semibold text-cyan-300 hover:text-cyan-200 hover:underline cursor-pointer bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/30" onclick="${onclick}" title="Click để đối chiếu trực tiếp: ${hint}">📜 ${_safeLabel(match)}</button>`;
+    });
 
-    const lastDocCode = this.lastDocFocus?.docCode || '';
+    // ====== PATTERN 2 (BACKWARD COMPATIBLE) CŨ: [Điều 5], [Khoản 2 Điều 7 NĐ 33/2025], [Điểm a khoản 1 Điều 6]
+    const docCodeRegex2 = /(?:(?:Luật|Nghị\s*định|Thông\s*tư|Quyết\s*định|Quy\s*chế|TCVN|QCVN|TCXDVN)\s+)?\d{2,4}[\/\-_]\d{2,4}(?:[\/\-_][A-Za-zĐđ\-]+)?/i;
+    const oldCitationRegex = /\[((?:Điểm\s+[a-zđ]+(?:\.\d+)?\s+)?(?:Khoản\s+\d+\s+)?Điều\s+\d+[a-zđ]?|Điểm\s+[a-zđ]+(?:\.\d+)?|Khoản\s+\d+)(?:\s*,\s*([^\]]+))?\]/gi;
+    html = html.replace(oldCitationRegex, (match, entityPart, docPart) => {
+      const artM  = entityPart.match(/Điều\s+(\d+[a-zđ]?)/i);
+      const claM  = entityPart.match(/Khoản\s+(\d+)/i);
+      const poiM  = entityPart.match(/Điểm\s+([a-zđ]+(?:\.\d+)?)/i);
+      const artStr = (artM || [])[1] || '';
+      const claStr = (claM || [])[1] || '';
+      const poiStr = (poiM || [])[1] || '';
 
-    return html.replace(citationRegex, (match, entityPart, docPart) => {
-      // Trích con số bài / điểm
-      const parts = [];
-      const artM = entityPart.match(/Điều\s+(\d+[a-z]?)/i);
-      if (artM) parts.push({ type: 'art', value: artM[1].toUpperCase() });
-
-      const khoanM = entityPart.match(/Khoản\s+(\d+)/i);
-      if (khoanM) parts.push({ type: 'khoan', value: khoanM[1] });
-
-      const diemM = entityPart.match(/Điểm\s+([a-zđ]+(?:\.\d+)?)/i);
-      if (diemM) parts.push({ type: 'diem', value: diemM[1].toUpperCase() });
-
-      const targetArtNum = (artM || [])[1] || '';
-
-      // Ưu tiên docPart trong ngoặc, sau đó lastDocFocus
-      let displayDoc = docPart || lastDocCode || '';
+      let displayDoc = '';
       if (docPart) {
-        const m2 = docPart.match(docCodeRegex);
+        const m2 = docPart.match(docCodeRegex2);
         if (m2) displayDoc = m2[0];
       }
+      if (!displayDoc) displayDoc = lastDocCode || '';
 
-      const docHint = displayDoc ? ` (${displayDoc})` : '';
-      const safeArt = (targetArtNum || '').replace(/'/g, "\\'");
-      const safeDoc = (displayDoc || lastDocCode || '').replace(/'/g, "\\'");
-      const onclick = `try{window.LegalApp&&(window.LegalApp.state.selectedNodeTarget={docCode:'${safeDoc}',art:'${safeArt}'})&&window.LegalApp.openDocument&&window.LegalApp.selectArticleFromExternal&&window.LegalApp.selectArticleFromExternal('${safeDoc}','${safeArt}');}catch(e){}`;
-      return `<button class="legal-ref inline-flex items-center gap-1 font-semibold text-blue-400 hover:text-blue-300 hover:underline cursor-pointer bg-blue-500/5 px-1.5 rounded" onclick="${onclick}" title="Click để mở ${entityPart}${docHint} ngay trong xem">🔗 ${match}</button>`;
+      const p = _parseParts(displayDoc, artStr, claStr, poiStr, lastDocCode);
+      if (!p.article && !p.clause && !p.point) return match;
+      const onclick = _mkOnclick(p.docCode, p.article, p.clause, p.point, match);
+      const hint = [
+        p.docCode ? `VB: ${p.docCode}` : '(cùng VB hiện tại)',
+        p.article ? `Điều ${p.article}` : '',
+        p.clause  ? `Khoản ${p.clause}` : '',
+        p.point   ? `Điểm ${p.point}`   : ''
+      ].filter(Boolean).join(' - ');
+      return `<button class="ai-citation-link legal-ref inline-flex items-center gap-1 font-semibold text-blue-400 hover:text-blue-300 hover:underline cursor-pointer bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-500/30" onclick="${onclick}" title="Click để đối chiếu trực tiếp: ${hint}">🔗 ${_safeLabel(match)}</button>`;
     });
+
+    return html;
   }
 };
 
