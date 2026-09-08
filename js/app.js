@@ -809,20 +809,37 @@ const LegalApp = {
       articleNum = String(articleNum || '').trim();
       if (!docCodeHint && !articleNum) return;
 
-      // Bước 1: Tìm document theo docCode
+      const norm = (s) => String(s || '').toUpperCase().replace(/[\/\-_]/g, '/');
+      const normHint = norm(docCodeHint);
+      const shortHint = normHint.match(/^\d{2,4}\/\d{2,4}/);
+
+      // Bước 0 (ƯU TIÊN CAO NHẤT): Văn bản ĐANG MỞ (activeDocId) nếu trùng prefix hint, hoặc không có hint nào
       let targetDoc = null;
-      if (docCodeHint) {
+      if (this.state.activeDocId) {
+        try {
+          const candidate = await LegalDB.db.documents.get(this.state.activeDocId);
+          if (candidate) {
+            if (!shortHint) {
+              targetDoc = candidate;
+            } else {
+              const candCode = norm(candidate.code);
+              if (candCode.startsWith(shortHint[0]) || candCode.includes(shortHint[0])) {
+                targetDoc = candidate;
+              }
+            }
+          }
+        } catch (e) { /* ignore */ }
+      }
+
+      // Bước 1: Nếu activeDocId không hợp → tìm document theo docCode quét all
+      if (!targetDoc && docCodeHint) {
         const allDocs = await LegalDB.db.documents.toArray();
-        // Chuẩn hóa: bỏ QH15, ND-CP, TT-BXD để tìm prefix
-        const norm = (s) => String(s || '').toUpperCase().replace(/[\/\-_]/g, '/');
-        const normHint = norm(docCodeHint);
-        const shortHint = normHint.match(/^\d{2,4}\/\d{2,4}/);
         targetDoc = allDocs.find(d => norm(d.code) === normHint)
           || allDocs.find(d => shortHint && norm(d.code).startsWith(shortHint[0]))
           || allDocs.find(d => shortHint && norm(d.code).includes(shortHint[0]));
       }
 
-      // Bước 2: Nếu có lastDocFocus và không tìm thấy doc → dùng văn bản đang mở
+      // Bước 2: Vẫn không có doc → dùng văn bản đang mở (fallback cuối)
       if (!targetDoc && this.state.activeDocId) {
         targetDoc = await LegalDB.db.documents.get(this.state.activeDocId);
       }

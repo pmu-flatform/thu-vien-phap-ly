@@ -155,17 +155,16 @@ const LegalAI = {
       if (typeof LegalSearch !== 'undefined') {
         let expandedQuery = userMessage;
         if (intent.focusDocCode) expandedQuery += ` ${intent.focusDocCode}`;
-        // Tăng keywork query: thêm vào các từ khoá last nodes đã dùng (liên kết chéo)
         if (intent.hasFollowUpMarker && this.lastNodesUsed.length > 0) {
           const lastTitles = this.lastNodesUsed.slice(0, 2).map(n => n.title || n.fullRef).join(' ');
           expandedQuery += ` ${lastTitles}`;
         }
-        // topK=5 (default 4) + thêm 2 nếu là chế độ liên kết
         const topK = (intent.mode === 'cross-reference' || intent.mode === 'specific-article') ? 6 : 4;
-        const nodes = await LegalSearch.retrieveContextForRAG(expandedQuery, topK);
+        const activeDocId = (typeof LegalApp !== 'undefined' && LegalApp.state?.activeDocId) || null;
+        const nodes = await LegalSearch.retrieveContextForRAG(expandedQuery, topK, { activeDocId });
         if (nodes && nodes.length > 0) nodes.forEach(n => ragNodes.push(n));
       }
-    } catch (e) { console.warn('RAG retrieve lỗi:', e); }
+    } catch (e) { console.warn('[LegalAI] Step 2A RAG retrieve lỗi:', e); }
 
     // --- 2B) Ưu tiên 2: LAST-CONTEXT NODES (follow-up)
     if (intent.hasFollowUpMarker && this.lastNodesUsed.length > 0) {
@@ -200,7 +199,7 @@ const LegalAI = {
                 }
                 return matchArt && matchDoc;
               }).limit(3).toArray();
-          } catch (e2) { /* có thể schema không có docCode trên document_nodes -> fallback */ }
+          } catch (e2) { console.warn('[LegalAI] Step 2C Dexie query (docCode filter) bị lỗi, fallback RAM nodesIndex tiếp theo:', e2?.message || e2); }
 
           if (!candidates || candidates.length === 0) {
             // Fallback: quét nodesIndex của LegalSearch
@@ -247,6 +246,45 @@ const LegalAI = {
       }
     } catch (e) {}
 
+    // --- 2G) LAST RESORT (ZERO-TOLERANCE): Quét RAM toàn bộ nodesIndex theo Điều + Ưu tiên activeDocId trước
+    if (ragNodes.length === 0 && intent.articleNumbers.length > 0 && typeof LegalSearch !== 'undefined' && LegalSearch.nodesIndex.length > 0) {
+      const activeId = (typeof LegalApp !== 'undefined') ? LegalApp.state?.activeDocId : null;
+      let prioritize;
+      if (activeId) {
+        const inActive = LegalSearch.nodesIndex.filter(n => String(n.docId) === String(activeId));
+        const others = LegalSearch.nodesIndex.filter(n => String(n.docId) !== String(activeId));
+        prioritize = inActive.concat(others);
+      } else {
+        prioritize = LegalSearch.nodesIndex;
+      }
+      for (const n of prioritize) {
+        const x = ((n.fullRef || '') + ' ' + (n.title || '')).toUpperCase();
+        for (const art of intent.articleNumbers) {
+          const pat = 'ĐIỀU ' + art;
+          if (x === pat || x.startsWith(pat + ' ') || x.includes(pat + '.') || x.includes(pat + ':') || x.includes(pat + ' –') || x.includes(pat + '\n')) {
+            if (!ragNodes.some(r => String(r.id) === String(n.id))) {
+              ragNodes.push(n);
+              if (!this.lastDocFocus && (n.docCode || n.docTitle)) {
+                this.lastDocFocus = { docCode: n.docCode || '', docTitle: n.docTitle || '' };
+              }
+            }
+            break;
+          }
+        }
+        if (ragNodes.length >= intent.articleNumbers.length * 2) break;
+      }
+      if (ragNodes.length > 0) {
+        ragNodes.forEach((n, idx) => {
+          const docInfo = [n.docCode, n.docTitle].filter(Boolean).join(' - ');
+          const header = `[CTX2G-${idx + 1}] ${docInfo} | ${n.fullRef || n.title || ''}`;
+          const title = n.title ? `Tiêu đề Điều: ${n.title}` : '';
+          const content = this.safeString(n.content).slice(0, 1800);
+          const block = [header, title, content].filter(Boolean).join('\n').trim();
+          if (block.length > 20) contexts.push(block);
+        });
+      }
+    }
+
     return {
       text: contexts.join('\n\n---\n\n'),
       usedNodes: ragNodes.slice(0, 10)
@@ -257,22 +295,32 @@ const LegalAI = {
   // BƯỚC 3: XÂY DỰNG SYSTEM PROMPT ĐỘNG (THEO CHẾ ĐỘ)
   // ============================================================
   buildSystemPrompt(mode, contextText) {
+    const ctxChars = (contextText || '').length;
+    const ctxEmpty = ctxChars < 500;
     const ctx = contextText || '(Trống. Vui lòng trả lời "Không tìm thấy nội dung phù hợp trong kho dữ liệu, mô tả ngắn gọn nếu bạn biết thông tin này nhưng ghi rõ "Nguồn: kiến thức phổ thông - chưa có trong kho".)';
+
+    const ctxGuardLine = ctxEmpty
+      ? `[BẢO VỆ - NGỮ CẢNH RỖNG (${ctxChars} ký tự < 500)]: Được phép nói "Không tìm thấy".`
+      : `[BẢO VỆ - CÓ NGỮ CẢNH (${ctxChars} ký tự ≥ 500)]: TUYỆT ĐỐI CẤM nói "Không tìm thấy Điều phù hợp...". BẮT BUỘC tổng hợp nội dung từ [CTX*] / [CTX2G-*] BÊN DƯỚI. Nếu người dùng hỏi Điều X và bên dưới có Điều X → TRẢ LỜI ĐÚNG NỘI DUNG ĐIỀU ĐÓ.`;
 
     const specificArticlePrompt = `
 Bạn là Trợ lý Pháp lý & Kỹ thuật. Nhiệm vụ hiện tại: TRẢ LỜI CHÍNH XÁC VỀ ĐIỀU / KHOẢN ĐƯỢC HỎI.
 RULES BẮT BUỘC (VI PHẠM SẼ BỊ LOẠI BỎ):
 1. **KHÔNG TÓM TẮT TOÀN BỘ VĂN BẢN**. Chỉ lấy đúng nội dung Điều được hỏi + các Khoản của nó + các Điều liên quan trực tiếp (nếu có trong ngữ cảnh).
-2. **CẤM** cố tình liệt kê 8 Chương + 95 Điều khi người dùng chỉ hỏi 1 Điều.
+2. **CẤM TUYỆT ĐỐI** cố tình liệt kê 8 Chương + 95 Điều khi người dùng chỉ hỏi 1 Điều. Chỉ nói về Điều họ hỏi.
 3. Nếu người dùng hỏi theo dạng "X được quy định cụ thể ở đâu" (theo dõi câu hỏi trước), bạn PHẢI trả lời:
    - Trích dẫn chính xác **tên Điều, khoản, con, điểm** có nội dung đó (TỪ DỮ LIỆU BÊN DƯỚI).
    - Nêu rõ **văn bản nào** (số hiệu, năm)
    - Trích dẫn nguyên văn nội dung.
 4. Định dạng câu trả lời ngắn gọn, khoa học theo Markdown:
    - Giới thiệu 1 dòng: "Điều X của [Văn bản] quy định về..."
-   - **Nội dung trích dẫn Điều/Khoản:** dùng blockquote hoặc list theo khoản
-   - **Liên kết chéo gợi ý (nếu có):** 1-3 liên kết tới các Điều/các văn bản khác có chủ đề tương tự nằm trong ngữ cảnh.
-5. Nếu ngữ cảnh không có thông tin: nói rõ "Không tìm thấy Điều phù hợp trong kho dữ liệu nạp vào".
+   - **Nội dung trích dẫn Điều/Khoản:** dùng blockquote (>) hoặc list (1. 2. 3.) theo từng khoản
+   - **Liên kết chéo gợi ý (nếu có):** 1-3 liên kết dạng [Điều Y] / [Điều Z, Văn bản ABC] tới các Điều/các văn bản khác cùng chủ đề trong ngữ cảnh.
+5. (STRICT GUARD) Chỉ ĐƯỢC PHÉP nói "Không tìm thấy Điều phù hợp trong kho dữ liệu nạp vào" KHI VÀ CHỈ KHI ngữ cảnh BÊN DƯỚI thực sự RỖNG (ít hơn 500 ký tự).
+   - NẾU ngữ cảnh ≥ 500 ký tự (có [CTX*] / [CTX2G-*] blocks BÊN DƯỚI) → BẮT BUỘC phải tổng hợp TỪ NHỮNG BLOCK [CTX*] ĐÓ, TUYỆT ĐỐI KHÔNG ĐƯỢC lặp lại mẫu câu "Không tìm thấy".
+   - Nếu trong các block [CTX*] có nội dung Điều X người dùng hỏi → TRẢ LỜI NGUYÊN VĂN NỘI DUNG ĐIỀU X ĐÓ, KHÔNG ĐƯỢC lảng tránh.
+
+${ctxGuardLine}
 
 [NGỮ CẢNH ĐÃ TRUY XUẤT TỪ CSDL (CHỈ DỰA VÀO ĐÂY)]:
 ${ctx}

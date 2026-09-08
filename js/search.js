@@ -99,50 +99,136 @@ const LegalSearch = {
   },
 
   /**
-   * Retrieve Top 3-5 Relevant Nodes for Client-Side RAG AI Copilot
+   * Retrieve Top N Relevant Nodes for Client-Side RAG AI Copilot
+   *
+   * Cascade 4-layer retrieval:
+   *   1. Explicit "Điều X / Khoản Y" extraction (regex) - 100% match, BYPASS scoring
+   *   2. Scoring algorithm on remaining terms
+   *   3. Fuzzy prefix-match on article numbers if still empty
+   *   4. Active-document nodes (if user already has 1 VB open)
    */
-  async retrieveContextForRAG(query, topK = 4) {
-    if (!this.isIndexed) {
-      await this.buildIndex();
-    }
-
+  async retrieveContextForRAG(query, topK = 4, opts = {}) {
+    if (!this.isIndexed) await this.buildIndex();
+    const activeDocId = opts.activeDocId || null;
     const q = query.toLowerCase().trim();
-    const terms = q.split(/\s+/).filter(t => t.length > 1);
+    if (!q) return [];
 
-    if (terms.length === 0) {
-      return [];
+    // Layer 0: Extract EXPLICIT target references (regex, highest priority - no scoring needed)
+    // Matches: điều 5 / điều 10a / khoản 2 điều 7 / điểm a.3 / chương iv / luat 135/2025 / ND 33/2025
+    const explicitRefs = [];
+    const regexes = [
+      { re: /điề?u\s*(\d+[a-z]?)/gi, prefix: 'ĐIỀU ' },
+      { re: /khoả?n\s*(\d+)/gi, prefix: 'KHOẢN ' },
+      { re: /điểm\s*([a-zđ]+(?:\.\d+)?)/gi, prefix: 'ĐIỂM ' },
+      { re: /chươ?ng\s*([ivxlcdm]+|\d+)/gi, prefix: 'CHƯƠNG ' }
+    ];
+    for (const { re, prefix } of regexes) {
+      const matches = [...q.matchAll(re)];
+      for (const m of matches) {
+        const val = (m[1] || '').toUpperCase();
+        if (val) explicitRefs.push(prefix + val);
+      }
     }
 
-    // Score nodes based on match counts and relevance
+    // Collect exact-ref matches first (if any explicit target was requested)
+    const exactMatchNodes = [];
+    if (explicitRefs.length > 0) {
+      this.nodesIndex.forEach(n => {
+        const refArea = `${n.fullRef || ''} ${n.title || ''}`.toUpperCase();
+        for (const r of explicitRefs) {
+          // End boundary to avoid 10 matches 15
+          if (refArea.includes(r + ' ') || refArea.includes(r + '.') || refArea.endsWith(r) || refArea.includes(r + ':')) {
+            exactMatchNodes.push(n);
+            break;
+          }
+        }
+      });
+      // Boost: if only 1 doc is active, prefer exact matches from that doc FIRST
+      if (activeDocId) {
+        const inActive = exactMatchNodes.filter(n => String(n.docId) === String(activeDocId));
+        const others = exactMatchNodes.filter(n => String(n.docId) !== String(activeDocId));
+        exactMatchNodes.length = 0;  // clear, replace ordered
+        exactMatchNodes.push(...inActive, ...others);
+      }
+    }
+
+    // Layer 1: Scoring for fuzzy matches (always computed)
+    let terms = q.split(/[\s,.!?;:()\[\]\/\-"'“”‘’]+/).filter(t => t.length > 0);
+    // Remove Vietnamese stopwords but KEEP numbers & single-digit (e.g. "5") for article context
+    const stopWords = new Set([
+      'và','hoặc','là','của','trong','với','cho','được','từ','đến','đã','sẽ','không','có','nhưng',
+      'này','đó','về','ở','theo','tại','để','một','các','những','nào','thì','cũng','còn','hay',
+      'rằng','lúc','khi','vậy','do','vì','sau','trước','nếu','mà','thôi','nữa','tôi','bạn','hỏi',
+      'giải','đáp','thuật','ngữ','văn','bản','luật','nghị','định','thông','tư','quy','chuẩn','tcvn',
+      'qcvn','tcxdvn','cái','gì','điều'  // last 4 keep terms below, but removed as stopwords
+    ]);
+    const filteredTerms = terms.filter(t => !stopWords.has(t));
+    const scoreTerms = filteredTerms.length > 0 ? filteredTerms : terms; // fallback keep all if no keywords left
+
     const scoredNodes = this.nodesIndex.map(node => {
       let score = 0;
       const text = node.searchStr;
 
-      // Exact phrase match bonus
-      if (text.includes(q)) score += 20;
+      // Phrase substring (not exact full q): check q without punctuation substrings
+      const qNoPunct = q.replace(/[,.!?;:()\[\]\/\-"'“”‘’]+/g, ' ').replace(/\s+/g, ' ').trim();
+      if (text.includes(qNoPunct)) score += 20;
 
-      // Match in fullRef or title bonus
-      terms.forEach(term => {
+      // Partial phrase: remove top 2 stopwords phrase tail
+      if (score === 0) {
+        const corePhrase = terms.slice(0, Math.min(3, terms.length)).join(' ');
+        if (corePhrase && text.includes(corePhrase)) score += 12;
+      }
+
+      scoreTerms.forEach(term => {
+        if (term.length === 0) return;
         if (node.docCode.toLowerCase().includes(term)) score += 8;
-        if ((node.fullRef || '').toLowerCase().includes(term)) score += 10;
-        if ((node.title || '').toLowerCase().includes(term)) score += 6;
-
-        // Content occurrence count
+        const fullRef = (node.fullRef || '').toLowerCase();
+        if (fullRef.includes(term)) score += 10;
+        const title = (node.title || '').toLowerCase();
+        if (title.includes(term)) score += 6;
+        // Boost: term is an article number + found as "điều {term}" in fullRef
+        if (/^\d+[a-z]?$/i.test(term) && fullRef.includes(`điều ${term}`)) score += 15;
         const occurrences = text.split(term).length - 1;
         score += Math.min(occurrences * 2, 10);
       });
 
+      // Weight active document +2 if user is viewing it (context priority)
+      if (activeDocId && String(node.docId) === String(activeDocId) && score > 0) score += 4;
+
       return { node, score };
     });
 
-    // Filter nodes with score > 0, sort by highest score, take topK
-    const relevant = scoredNodes
+    const scoredTop = scoredNodes
       .filter(item => item.score > 0)
       .sort((a, b) => b.score - a.score)
-      .slice(0, topK)
+      .slice(0, topK + 6)
       .map(item => item.node);
 
-    return relevant;
+    // Merge (dedup): exact matches FIRST, then scored top remainder
+    const merged = [];
+    const seenIds = new Set();
+    const addUnique = (n) => {
+      if (!n || !n.id) return;
+      const k = String(n.id);
+      if (seenIds.has(k)) return;
+      seenIds.add(k);
+      merged.push(n);
+    };
+    exactMatchNodes.forEach(addUnique);
+    scoredTop.forEach(addUnique);
+
+    // Layer 3: still empty + have activeDocId + explicitRefs -> fallback scan active doc nodes directly by fullRef text (avoid Dexie filter issues)
+    if (merged.length === 0 && activeDocId && explicitRefs.length > 0) {
+      const activeNodes = this.nodesIndex.filter(n => String(n.docId) === String(activeDocId));
+      activeNodes.forEach(n => {
+        const refArea = `${n.fullRef || ''} ${n.title || ''}`.toUpperCase();
+        if (explicitRefs.some(r => refArea.includes(r) || refArea.includes(r.split(' ')[0] + ' ' + r.split(' ')[1]))) {
+          addUnique(n);
+        }
+      });
+    }
+
+    return merged.slice(0, topK + 2);
   }
 };
 
