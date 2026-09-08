@@ -161,10 +161,33 @@ const LegalAI = {
         }
         const topK = (intent.mode === 'cross-reference' || intent.mode === 'specific-article') ? 6 : 4;
         const activeDocId = (typeof LegalApp !== 'undefined' && LegalApp.state?.activeDocId) || null;
-        const nodes = await LegalSearch.retrieveContextForRAG(expandedQuery, topK, { activeDocId });
+        console.log(`[LegalAI] Bridge 2A: mode=${intent.mode} | activeDocId=${activeDocId} | focusDocCode=${intent.focusDocCode || '(none)'} | articleNumbers=[${intent.articleNumbers.join(',')}] | userAskedOtherVB=${/^(luật|nghị định|thông tư|qcvn|tcvn)\s+\d|(luật|nghị định|thông tư|qcvn|tcvn).*điều\s+\d/i.test(userMessage)}`);
+        const nodes = await LegalSearch.retrieveContextForRAG(expandedQuery, topK, { activeDocId, singleDocOnlyWhenActive: intent.mode !== 'cross-reference' });
         if (nodes && nodes.length > 0) nodes.forEach(n => ragNodes.push(n));
       }
     } catch (e) { console.warn('[LegalAI] Step 2A RAG retrieve lỗi:', e); }
+
+    // --- 2A-POST) DEFENSE-IN-DEPTH SINGLE-DOC FILTER (nếu search.js Layer4 rò rỉ):
+    // specific-article VÀ activeDocId VÀ ragNodes có node của VB đang mở MATCH explicit Điều X → lọc CHỈ VB đang mở
+    try {
+      if (intent.mode === 'specific-article' && intent.articleNumbers.length > 0 && typeof LegalApp !== 'undefined' && LegalApp.state?.activeDocId && ragNodes.length > 1) {
+        const activeId = String(LegalApp.state.activeDocId);
+        const userAskedOtherVB = /(luật|nghị định|thông tư|qcvn|tcvn|tcxdvn|qbđ|quyết định)\s*(số)?\s*\d|điều\s+\d+.*(của|tại|trong)\s*(luật|nghị định|thông tư|qcvn|tcvn)/i.test(userMessage);
+        if (!userAskedOtherVB) {
+          const inActive = ragNodes.filter(n => String(n.docId) === activeId);
+          const hasActiveMatch = inActive.some(n => {
+            const x = ((n.fullRef || '') + ' ' + (n.title || '')).toUpperCase();
+            return intent.articleNumbers.some(a => x.includes('ĐIỀU ' + a));
+          });
+          if (hasActiveMatch) {
+            // Thay ragNodes = IN ACTIVE ONLY (loại bỏ tất cả node từ VB khác)
+            console.log(`[LegalAI] 2A-POST lock applied: previous ragNodes had ${ragNodes.length} docs (${[...new Set(ragNodes.map(n=>String(n.docId)))].join(',')}), filtered to in-active only.`);
+            ragNodes.length = 0;
+            inActive.forEach(n => ragNodes.push(n));
+          }
+        }
+      }
+    } catch (e) { console.warn('[LegalAI] 2A-POST defense lỗi:', e); }
 
     // --- 2B) Ưu tiên 2: LAST-CONTEXT NODES (follow-up)
     if (intent.hasFollowUpMarker && this.lastNodesUsed.length > 0) {
@@ -226,6 +249,11 @@ const LegalAI = {
     }
 
     // --- 2E) FORMAT RAG NODES THÀNH CONTEXT NGẮN GỌN, CÓ ĐẦU MỤC
+    // [Bridge Log] In phân bố docId của ragNodes TRƯỚC KHI format → user có thể verify 6 Điều5 bug đã fix chưa
+    try {
+      const docIds = [...new Set(ragNodes.map(n => `${n.docId}(${n.docCode||''} ${n.fullRef||''})`))];
+      console.log(`[LegalAI] 2E ragNodes distribution (${ragNodes.length} nodes, ${docIds.length} docs): ${docIds.slice(0,8).join(' | ')}${docIds.length>8?' | ...('+docIds.length+' total)':''}`);
+    } catch (_) {}
     ragNodes.forEach((n, idx) => {
       const docInfo = [n.docCode, n.docTitle].filter(Boolean).join(' - ');
       const header = `[CTX${idx + 1}] ${docInfo} | ${n.fullRef || n.title || ''}`;
@@ -299,6 +327,7 @@ const LegalAI = {
         backupDocId = LegalSearch.docsIndex[0].id;
       }
       if (backupDocId) {
+        // Lấy 6 node ĐẦU của VB backupDocId → đảm bảo LLM có đủ 500 ký tự context
         const topNodes = LegalSearch.nodesIndex
           .filter(n => String(n.docId) === String(backupDocId))
           .slice(0, 6);
@@ -353,12 +382,20 @@ RULES BẮT BUỘC (VI PHẠM SẼ BỊ LOẠI BỎ):
 4. Định dạng câu trả lời ngắn gọn, khoa học theo Markdown:
    - Giới thiệu 1 dòng: "Điều X của [Văn bản] quy định về..."
    - **Nội dung trích dẫn Điều/Khoản:** dùng blockquote (>) hoặc list (1. 2. 3.) theo từng khoản
-   - **Liên kết chéo gợi ý (nếu có):** 1-3 liên kết dạng [Điều Y] / [Điều Z, Văn bản ABC] tới các Điều/các văn bản khác cùng chủ đề trong ngữ cảnh.
+   - **Liên kết chéo (NGUYÊN TẮC - CHỈ KHI ĐÃ CÓ ĐỦ NỘI DUNG CHÍNH):**
+     - ✅ CHO PHÉP: CHỈ liên kết tới các Điều/Khoản **CÙNG MỘT VĂN BẢN** (đang mở) và **LIÊN QUAN TRỰC TIẾP CHỦ ĐỀ** với nội dung Điều được hỏi (ví dụ Điều 5 về Nguyên tắc → liên kết các Điều khác cũng về Nguyên tắc / Quản lý nhà nước / Chủ đầu tư, KHÔNG BAO GIỜ liên kết ngẫu nhiên Điều 1 hay Điều 3).
+     - ❌ CẤM: Liên kết tới các văn bản KHÁC (ví dụ hỏi Luật Xây dựng 135 → đừng link Luật Đất đai 31, Luật Đầu tư 143...) khi người dùng KHÔNG yêu cầu so sánh chéo.
+     - ❌ CẤM: Liên kết 3 điều ngẫu nhiên không liên quan chỉ để có link. 1-2 link là đủ, ưu tiên không.
 5. (STRICT GUARD - KHÔNG THƯƠNG LƯỢNG)
    - TUYỆT ĐỐI CẤM trong mọi trường hợp câu trả lời BẮT ĐẦU BẰNG HOẶC CHỨA CỤM: "Không tìm thấy Điều phù hợp trong kho dữ liệu nạp vào"
    - Nếu bên dưới có [CTX*] / [CTX2G-*] / [CTX2H] (nghĩa là ĐÃ CÓ DỮ LIỆU ĐƯỢC NẠP) → BẮT BUỘC tổng hợp nội dung từ những block đó.
    - NẾU bên dưới có "Điều X" (người dùng hỏi) → TRẢ LỜI NGUYÊN VĂN ĐIỀU X, KHÔNG ĐƯỢC lảng tránh.
    - Nếu ngữ cảnh không đủ → nói "Vui lòng mở văn bản cần tra cứu hoặc chỉ rõ SỐ HIỆU / TÊN Điều, Khoản."
+6. (ACTIVE DOCUMENT LOCK - TUYỆT ĐỐI)
+   - **NẾU NGƯỜI DÙNG ĐANG MỞ MỘT VĂN BẢN CỤ THỂ (active document) VÀ HỎI "ĐIỀU X" (không nêu rõ văn bản khác) → BẮT BUỘC CHỈ TRẢ LỜI VỀ ĐIỀU X CỦA VĂN BẢN ĐANG MỞ.**
+   - ❌ **TUYỆT ĐỐI CẤM** liệt kê Điều X từ 3-6 văn bản khác nhau khi người dùng chỉ mở 1 văn bản VÀ KHÔNG yêu cầu so sánh.
+   - **Trường hợp đặc biệt:** Nếu trong VB ĐANG MỞ thực sự KHÔNG có Điều X (không tìm thấy trong [CTX*]) → nói rõ 1 câu: "Văn bản [tÊN VĂN BẢN ĐANG MỞ] hiện không chứa Điều X bạn hỏi; bạn có thể mở văn bản phù hợp khác trước khi truy vấn." (KHÔNG BAO GIỜ tự động liệt kê 5 văn bản khác có Điều X).
+7. CẤM tự thêm các điểm không có trong [CTX*] vào câu trả lời (phân biệt với tóm tắt từ chính context).
 
 ${ctxGuardLine}
 

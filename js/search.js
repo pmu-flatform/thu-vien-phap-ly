@@ -146,6 +146,7 @@ const LegalSearch = {
   async retrieveContextForRAG(query, topK = 4, opts = {}) {
     if (!this.isIndexed) await this.buildIndex();
     const activeDocId = opts.activeDocId || null;
+    const singleDocOnlyWhenActive = opts.singleDocOnlyWhenActive !== false; // default TRUE: lock VB đang mở
     const q = query.toLowerCase().trim();
     if (!q) return [];
 
@@ -166,10 +167,17 @@ const LegalSearch = {
       }
     }
 
+    const userMentionedOtherDocCode = /(luật|nd|nđ-cp|thông tư|tt|qcvn|tcvn|tcxdvn|qđ|qbđ|quyết định)\s*(số)?\s*[\d\/]+/i.test(q);
+
     // Collect exact-ref matches first (if any explicit target was requested)
     const exactMatchNodes = [];
     if (explicitRefs.length > 0) {
-      this.nodesIndex.forEach(n => {
+      let pool = this.nodesIndex;
+      // LOCK: Nếu người dùng ĐANG MỞ VB (activeDocId) VÀ KHÔNG NÊU RÕ VB KHÁC trong câu hỏi + có explicit Điều/Khoản → CHỈ tìm trong VB đang mở
+      if (activeDocId && singleDocOnlyWhenActive && !userMentionedOtherDocCode) {
+        pool = this.nodesIndex.filter(n => String(n.docId) === String(activeDocId));
+      }
+      pool.forEach(n => {
         const refArea = `${n.fullRef || ''} ${n.title || ''}`.toUpperCase();
         for (const r of explicitRefs) {
           // End boundary to avoid 10 matches 15
@@ -262,6 +270,22 @@ const LegalSearch = {
           addUnique(n);
         }
       });
+    }
+
+    // Layer 4 (FINAL SINGLE-DOC LOCK - NON-NEGOTIABLE):
+    // Nếu có activeDocId VÀ user KHÔNG hỏi về VB khác VÀ merged có chứa node từ VB đang mở MATCHING explicit Điều X
+    // → THẢI HẾT node từ VB KHÁC (tránh trả lời 6 Điều 5 từ 6 VB khi chỉ mở 1 VB)
+    if (activeDocId && singleDocOnlyWhenActive && !userMentionedOtherDocCode && merged.length > 0 && explicitRefs.length > 0) {
+      const inActive = merged.filter(n => String(n.docId) === String(activeDocId));
+      if (inActive.length > 0) {
+        // còn lại merged = inActive (chỉ VB đang mở) + append tail of others chỉ NẾU inActive ít hơn 2
+        merged.length = 0;
+        merged.push(...inActive);
+        if (merged.length < 2) {
+          const others = (exactMatchNodes.length === 0 ? scoredTop : exactMatchNodes).filter(n => String(n.docId) !== String(activeDocId));
+          others.forEach(addUnique);
+        }
+      }
     }
 
     return merged.slice(0, topK + 2);
