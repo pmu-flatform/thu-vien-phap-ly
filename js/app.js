@@ -430,16 +430,38 @@ const LegalApp = {
         } else {
           const articleNote = docNotes.find(n => n.type === 'note' && n.nodeNum === node.num);
           const noteContent = articleNote ? articleNote.content : '';
+          const displayRef = (node.fullRef || '').endsWith('.') ? node.fullRef : `${node.fullRef}.`;
+          let rawContent = node.content || '';
 
-          // Khôi phục bộ phân tích liên kết pháp lý thông minh
+          // =========================================================================
+          // CHỐNG LẶP LẠI NỘI DUNG (Bug d1 — Khoản/Điều render 2 lần Bold + Normal)
+          // Root cause: parseNodesFromMarkdown lưu TOÀN BỘ dòng đầu vào content (rawLine)
+          // trong khi heading (displayRef + title) render CÙNG nội dung đó. Fix:
+          // Nếu dòng đầu content TRÙNG heading → BỎ DÒNG ĐẦU khỏi content.
+          // =========================================================================
+          (() => {
+            const firstNL = rawContent.indexOf('\n');
+            const firstLine = (firstNL > -1 ? rawContent.substring(0, firstNL) : rawContent).trim().replace(/\s+/g, ' ');
+            const withDot = (displayRef + ' ' + (node.title || '')).trim().replace(/\s+/g, ' ');
+            const noDot   = ((node.fullRef || '').trim() + ' ' + (node.title || '')).trim().replace(/\s+/g, ' ');
+            if (firstLine === withDot || firstLine === noDot) {
+              rawContent = firstNL > -1 ? rawContent.substring(firstNL + 1) : '';
+            }
+            const trim1 = rawContent.trim().replace(/\s+/g, ' ');
+            if (trim1 === withDot || trim1 === noDot) {
+              rawContent = '';
+            } else if (trim1.startsWith(withDot + ' ')) {
+              rawContent = rawContent.substring(withDot.length + rawContent.indexOf(withDot) + withDot.length);
+            }
+          })();
+
           let contentHtml = '';
           if (typeof LegalParser !== 'undefined' && typeof LegalParser.autoLinkLegalText === 'function') {
-            contentHtml = LegalParser.autoLinkLegalText(node.content || '', rawDoc.code);
+            contentHtml = LegalParser.autoLinkLegalText(rawContent, rawDoc.code);
           } else {
-            contentHtml = (node.content || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            contentHtml = (rawContent || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
           }
-
-          const displayRef = (node.fullRef || '').endsWith('.') ? node.fullRef : `${node.fullRef}.`;
+          const hasContentBody = contentHtml.trim().length > 0;
 
           nodesHtml += `
             <div id="${nodeRefId}" data-article-num="${cleanNodeNum}" class="article-node py-1 relative transition-colors duration-200">
@@ -449,7 +471,7 @@ const LegalApp = {
                   <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> ${noteContent ? 'Xem ghi chú' : 'Ghi chú'}
                 </button>
               </div>
-              <div class="text-gray-200 whitespace-pre-line leading-relaxed text-[14px]">${contentHtml}</div>
+              ${hasContentBody ? `<div class="text-gray-200 whitespace-pre-line leading-relaxed text-[14px]">${contentHtml}</div>` : ''}
 
               <div id="note-box-${node.num}" class="${noteContent ? 'block' : 'hidden'} mt-3 p-3 rounded-lg bg-amber-950/30 border border-amber-900/50">
                 <textarea 
@@ -661,10 +683,22 @@ const LegalApp = {
     }
 
     if (targetEl) {
-      targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const container = document.getElementById('document-viewport')
+        || document.getElementById('document-content-area')
+        || targetEl.closest('.overflow-y-auto')
+        || targetEl.closest('[id$="-viewport"]')
+        || targetEl.closest('[id$="-content-area"]')
+        || document.scrollingElement;
+      if (container && container !== document.scrollingElement) {
+        const rect = targetEl.getBoundingClientRect();
+        const cRect = container.getBoundingClientRect();
+        const relTop = rect.top - cRect.top;
+        const targetTop = container.scrollTop + relTop - 16;
+        container.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+      } else {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
       targetEl.classList.add('highlight-target');
-      
-      // Hiệu ứng nhấp nháy màu vàng làm nổi bật Điều được trỏ đến
       targetEl.style.transition = 'background-color 0.4s ease';
       targetEl.style.backgroundColor = 'rgba(245, 158, 11, 0.25)';
       setTimeout(() => {
