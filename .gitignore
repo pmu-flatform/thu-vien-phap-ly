@@ -33,17 +33,12 @@ desktop.ini
 *.db-journal
 
 # ============================================================
-# DU LIEU THO (RAW SOURCE DATA) - KHONG CAN DEPLOY APP
-# NGUYEN NHAN: Lam repository phong to (600MB+), ton tai file >50MB
-# APP VAN CHA Y TOT: da co data/preloaded_data.js (160+ VB) + data/preloaded_data.json
+# DU LIEU THO KHONG SU DUNG NUA (chi dung DATA_MARKDOWN lam nguon duy nhat)
+# APP VAN CHAY TOT: da co data/preloaded_data.js (160+ VB) + data/preloaded_data.json
 # ============================================================
 
-# Du lieu goc (.pdf, .docx, .html, .md) ban dau de xu ly/build
+# Thu muc di/ khong can nua (chi dung DATA_MARKDOWN/ lam nguon)
 di/
-DATA_MARKDOWN/
 
-# Script build & prompt (chi dung khi phat sinh lai du lieu)
-"build_data.js"
-"rebuild_db_from_markdown.js"
-"scripts/"
-"Mega Prompt.md"
+# Script build & prompt (GIU LAI - can de rebuild tu DATA_MARKDOWN/ thanh data/preloaded_data)
+# => khong ignore build_data.js, rebuild_db_from_markdown.js, scripts/, Mega Prompt.md, DATA_MARKDOWN/
