@@ -1,0 +1,207 @@
+/* ==========================================================================
+   Thư viện Văn bản Quy phạm Pháp luật & Tiêu chuẩn Kỹ thuật
+   Dark Mode Law Reader Theme (Matching Reference UI Design)
+   ========================================================================== */
+
+:root {
+  --bg-main: #0b0f19;
+  --bg-sidebar: #111827;
+  --bg-card: #1f2937;
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --accent-gold: #f59e0b;
+  --accent-gold-light: #fbbf24;
+  --accent-blue: #3b82f6;
+  --accent-green: #10b981;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.6);
+}
+
+/* Legal Document Typography */
+.legal-content {
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  line-height: 1.8;
+  color: #e5e7eb;
+}
+
+/* TOC Styling in Sidebar */
+.toc-tree {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.toc-chapter {
+  color: #fbbf24;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.025em;
+}
+
+.toc-article {
+  color: #f59e0b;
+  font-weight: 600;
+  font-size: 11.5px;
+  transition: all 0.15s ease;
+}
+
+.toc-article:hover {
+  color: #fef08a;
+  background-color: rgba(245, 158, 11, 0.1);
+}
+
+.toc-article.active {
+  color: #fbbf24;
+  background-color: rgba(245, 158, 11, 0.18);
+  border-left: 3px solid #f59e0b;
+}
+
+/* Cross-reference inline hyperlinks (matching screenshot) */
+.legal-ref {
+  display: inline;
+  color: #fbbf24 !important;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  padding: 0 2px;
+  border-radius: 2px;
+  transition: all 0.15s ease;
+}
+
+.legal-ref:hover {
+  color: #ffffff !important;
+  background-color: rgba(245, 158, 11, 0.4);
+  text-decoration-style: solid;
+}
+
+/* Callout Banner: Sửa đổi (Blue Banner with Arrow) */
+.banner-amends {
+  background: rgba(30, 58, 138, 0.35);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 12.5px;
+  color: #bfdbfe;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.banner-amends a, .banner-amends button {
+  color: #fbbf24;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.banner-amends a:hover, .banner-amends button:hover {
+  color: #ffffff;
+}
+
+/* Callout Banner: Quy định chi tiết (Green Banner with Tree/Check) */
+.banner-details {
+  background: rgba(6, 78, 59, 0.35);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 12.5px;
+  color: #a7f3d0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.banner-details a, .banner-details button {
+  color: #fcd34d;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.banner-details a:hover, .banner-details button:hover {
+  color: #ffffff;
+}
+
+/* Inline Note Box: Ghi chú riêng (Dashed Box) */
+.note-box-dashed {
+  border: 1px dashed #d97706;
+  background: rgba(245, 158, 11, 0.05);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+}
+
+.note-box-title {
+  color: #d97706;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+}
+
+.note-box-title:hover {
+  color: #fbbf24;
+}
+
+.note-box-content {
+  margin-top: 8px;
+}
+
+.note-textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #fef3c7;
+  font-size: 12px;
+  outline: none;
+  resize: vertical;
+  placeholder-color: #92400e;
+}
+
+/* Highlight Target Animation */
+.article-node.highlight-target {
+  animation: targetPulse 2.5s ease-out;
+}
+
+@keyframes targetPulse {
+  0% {
+    background-color: rgba(245, 158, 11, 0.3);
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.5);
+  }
+  70% {
+    background-color: rgba(245, 158, 11, 0.1);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+
+/* Chat Drawer Transitions */
+.chat-drawer {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.chat-drawer.closed {
+  transform: translateX(100%);
+}
+.chat-drawer.open {
+  transform: translateX(0);
+}

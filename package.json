@@ -1,0 +1,17 @@
+{
+  "name": "thu-vien-vbpl-tieu-chuan-ky-thuat",
+  "version": "2.0.0",
+  "description": "Thư viện Văn bản Quy phạm Pháp luật & Tiêu chuẩn Kỹ thuật - Client-Side Web App",
+  "scripts": {
+    "build:css": "npx tailwindcss -i ./css/input.css -o ./css/style.min.css --minify",
+    "build": "npm run build:css",
+    "serve": "npx serve ."
+  },
+  "dependencies": {
+    "@firecrawl/anydoc": "^0.2.4",
+    "mammoth": "^1.12.1"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}

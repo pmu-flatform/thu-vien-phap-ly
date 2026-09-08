@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+package-lock.json.bak
+
+# Python Virtual Environment
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Build artifacts (auto-generated during build)
+# Note: css/style.min.css is kept for GitHub Actions to regenerate
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Backup and temp files
+*.bak
+*.tmp
+*.log
+
+# Local Ollama / AI Server caches
+*.sqlite
+*.db-journal

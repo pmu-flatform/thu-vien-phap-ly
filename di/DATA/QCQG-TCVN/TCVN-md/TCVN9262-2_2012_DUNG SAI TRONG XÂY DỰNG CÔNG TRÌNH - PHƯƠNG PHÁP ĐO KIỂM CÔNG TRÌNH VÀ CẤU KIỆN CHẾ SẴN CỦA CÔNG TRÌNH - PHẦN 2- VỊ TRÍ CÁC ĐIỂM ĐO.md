@@ -1,0 +1,509 @@
+**TIÊU CHUẨN QUỐC GIA**
+
+**TCVN 9262-2:2012**
+
+**ISO 7976-2:1989**
+
+DUNG SAI TRONG XÂY DỰNG CÔNG TRÌNH - PHƯƠNG PHÁP ĐO KIỂM CÔNG TRÌNH VÀ CẤU KIỆN CHẾ SẴN CỦA CÔNG TRÌNH - PHẦN 2: VỊ TRÍ CÁC ĐIỂM ĐO
+
+*Tolerances for building - Methods of measurement of buildings and building products - Part 2: Position of measuring points*
+
+**Lời nói đầu**
+
+TCVN 9262-2:2012 hoàn toàn tương đương với ISO 7976-2:1989.
+
+TCVN 9262-2:2012 được chuyển đổi từ TCXD 210:1998 (ISO 7976-2:1989) theo quy định tại khoản 1 Điều 69 của Luật Tiêu chuẩn và Quy chuẩn kỹ thuật và điểm a khoản 1 Điều 7 Nghị định số 127/2007/NĐ-CP ngày 01/8/2007 của Chính phủ quy định chi tiết thi hành một số điều của Luật Tiêu chuẩn và Quy chuẩn Kỹ thuật.
+
+Bộ TCVN 9262 với tiêu đề chung " *Dung sai trong xây dựng công trình - Phương pháp đo kiểm công trình và cấu kiện chế sẵn của công trình"* gồm có 2 phần dưới đây:
+
+- TCVN 9262-1:2012, *Phần 1: Phương pháp và dụng cụ đo*
+
+*-* TCVN 9262-2:2012, *Phần 2: Vị trí các điểm đo.*
+
+TCVN 9262-2:2012 do Viện Kiến trúc, Quy hoạch Đô thị và Nông thôn biên soạn, Bộ Xây dựng đề nghị, Tổng cục Tiêu chuẩn Đo lường Chất lượng thẩm định, Bộ Khoa học và Công nghệ công bố.
+
+**DUNG SAI TRONG XÂY DỰNG CÔNG TRÌNH - PHƯƠNG PHÁP ĐO KIỂM CÔNG TRÌNH VÀ CẤU KIỆN CHẾ SẴN CỦA CÔNG TRÌNH - PHẦN 2: VỊ TRÍ CÁC ĐIỂM ĐO**
+
+***Tolerances for building - Methods of measurement of buildings and building products - Part 2: Position of measuring points***
+
+**1. Phạm vi áp dụng**
+
+Tiêu chuẩn này hướng dẫn cách xác định vị trí các điểm cần đo khi tiến hành đo kiểm công trình và cấu kiện chế sẵn. Các vị trí này dùng để kiểm tra, đo nghiệm thu và đo để thu thập các số liệu chính xác. Tiêu chuẩn này được chia làm hai phần:
+
+- Phần một quy định vị trí các điểm đo cho những phép đo có thể tiến hành cả trong nhà máy và trên công trường;
+
+- Phần hai quy định vị trí các điểm đo cho những phép đo chỉ tiến hành tại công trường xây dựng.
+
+CHÚ THÍCH: Các sản phẩm xây dựng như sợi thủy tinh và các vật liệu mềm tương tự không phải là đối tượng áp dụng tiêu chuẩn này.
+
+**2. Tài liệu viện dẫn**
+
+Các tài liệu viện dẫn sau rất cần thiết khi áp dụng tiêu chuẩn này. Đối với các tài liệu viện dẫn ghi năm công bố thì áp dụng phiên bản được nêu. Đối với các tài liệu viện dẫn không ghi năm công bố thì áp dụng phiên bản mới nhất bao gồm cả các sửa đổi, bổ sung (nếu có).
+
+TCVN 9262-1:2012, *Dung sai trong xây dựng công trình - Phương pháp đo kiểm công trình và các cấu kiện chế sẵn của công trình - Phần 1: Phương pháp và dụng cụ đo;*
+
+ISO 4463, *Measurement methods for building - Setting-out and measurement* (Các phương pháp đo trong xây dựng công trình - Cách đo đạc).
+
+**3. Quy định chung**
+
+Trong quá trình đo nghiệm thu và đo thu thập số liệu chính xác sẽ tìm được vị trí thích hợp của các điểm đo. Các phép đo có thể là từ 1 điểm, hướng tới 1 điểm hoặc giữa các điểm.
+
+Vị trí các điểm đo phải được xác định trước trong một bảng thống kê hoặc trong các tài liệu tương tự, nếu không các điểm đo phải lấy cách điểm góc hoặc các cạnh là 100 mm (Xem Hình 1). Ví dụ sau sẽ minh họa một vài trường hợp chung nhất. Nếu không thể được thì vị trí các điểm đo sẽ phải ghi chú lại trong nhật ký hiện trường.
+
+<!-- image -->
+
+**Hình 1 - Xác định vị trí các điểm đo**
+
+Cần tính toán sao cho số vị trí các điểm đo trong những điều kiện sau là ít nhất, cũng có thể tiến hành các phép đo bổ sung để phản ánh chính xác hơn các kích thước cần đo.
+
+Các chi tiết phải đo ở trạng thái như khi chúng được sử dụng trong thực tế, nếu điều này không thực hiện được thì phải chấp nhận đo nó trong điều kiện cụ thể lúc đó.
+
+Trường hợp cho phép, nên đo các sản phẩm vào lúc chúng đang được chuẩn bị bàn giao.
+
+Nếu không có các yêu cầu đặc biệt thì không nên đo các cấu kiện khi còn đang ở trong khuôn hay đang lắp ráp.
+
+Tại công trường, độ sai lệch xây dựng (xem Điều 5) có thể được xác định theo hệ trục tọa độ trên công trường, theo hệ chuẩn trong thiết kế hay (theo) chiều cao khi lắp ráp, theo đường thẳng đứng hoặc theo các cấu kiện khác.
+
+**4. Vị trí các điểm đo tiến hành trong nhà máy và trên công trường**
+
+**4.1. Kích thước của cấu kiện**
+
+**4.1.1.** Chiều dài và chiều rộng
+
+Trên mỗi mặt của cấu kiện chế sẵn, 3 chiều dài phải đo (L 1 đến L 3 ) và 3 chiều rộng phải đo (W 1 tới W 3 ) được mô tả trong Hình 2. Nếu chiều rộng chỉ định nhỏ hơn 1,2 m thì không cần đo L 2 nữa. Nếu chiều dài chỉ định nhỏ hơn 1,2 m thì không cần đo W 2 nữa.
+
+<!-- image -->
+
+**Hình 2 - Chiều dài và rộng cần đo**
+
+**4.1.2.** Khẩu độ danh nghĩa
+
+Các cấu kiện chế sẵn đều phải đo khẩu độ danh nghĩa của nó.
+
+Trong Hình 3 mô tả hai điểm đo áp dụng cho các cấu kiện có bản đáy cố định.
+
+Trường hợp các cấu kiện có đầu hoặc tường dạng bản cố định thì hai điểm đo được mô tả trong Hình 4. Những cấu kiện được sản xuất ở dạng các bộ phận thì chỉ đo sau khi các bộ phận đó đã được lắp ráp chặt chẽ với nhau.
+
+<!-- image -->
+
+**Hình 3 - Hai điểm đo cho cấu kiện có bản đáy cố định**
+
+<!-- image -->
+
+**Hình 4 - Hai điểm đo cho cấu kiện có đầu hoặc tường dạng bản cố định**
+
+**4.1.3.** Chiều dày hoặc (chiều cao) tiết diện
+
+Mỗi cấu kiện cần đo sẽ có 8 phép đo chiều dày hoặc chiều cao tiết diện.
+
+Trong Hình 5 mô tả các điểm đo cho cấu kiện có mặt cắt ngang hình chữ nhật. Những vị trí có chiều rộng chỉ định nhỏ hơn 1,2 m thì không cần đo tại các điểm T 4 và T 8 . Tại những vị trí có chiều dài chỉ định nhỏ hơn 1,2 m thì không cần đo tại các điểm T 2 và T 6 .
+
+<!-- image -->
+
+**Hình 5 - Các điểm đo cho cấu kiện có mặt cắt ngang hình chữ nhật**
+
+Trong Hình 6 mô tả các điểm đo cho các cấu kiện có mặt cắt ngang không phải là hình chữ nhật.
+
+<!-- image -->
+
+**Hình 6 - Các điểm đo cho cấu kiện có mặt cắt ngang không phải là hình chữ nhật**
+
+Trong Hình 7 mô tả các điểm đo độ dày các dầm bêtông đổ tại chỗ.
+
+<!-- image -->
+
+**Hình 7 - Các điểm đo độ dày các dầm bêtông đổ tại chỗ**
+
+**4.1.4.** Độ dày của gạch, khối tường hoặc tường bêtông đổ tại chỗ
+
+Trong Hình 8 mô tả các điểm đo độ dày của tường có chiều dài nhỏ hơn 3 m.
+
+Trong Hình 9 mô tả các điểm đo độ dày của tường có chiều dài lớn hơn 3 m. Các điểm đo trung gian ở đỉnh nên bố trí cách đều (nhưng khoảng cách không lớn hơn 3 m) kể từ 2 điểm ở 2 đầu tường.
+
+<!-- image -->
+
+**Hình 8 - Mô tả các điểm đo độ dày của tường có chiều dài nhỏ hơn 3 m**
+
+<!-- image -->
+
+**Hình 9 - Các điểm đo độ dày tường có chiều dài lớn hơn 3 m**
+
+**4.1.5** Đo kích thước các cấu kiện có mặt cắt ngang không phải là hình chữ nhật.
+
+Khi các cấu kiện chế sẵn đổ tại chỗ có kích thước mặt cắt ngang thiết kế biến đổi thì phải có thêm 2 phép đo bổ trợ như mô tả trong Hình 10.
+
+<!-- image -->
+
+**Hình 10 - Mô tả phép đo bổ trợ cho cấu kiện có mặt cắt ngang không phải là hình chữ nhật**
+
+**4.2. Độ vuông góc của cấu kiện**
+
+**4.2.1. Độ sai lệch góc**
+
+Độ sai lệch góc được xác định ở cả 4 góc của cấu kiện như mô tả trong Hình 11 với mọi trường hợp.
+
+<!-- image -->
+
+**Hình 11- Xác định độ sai lệch ở 4 góc cấu kiện**
+
+Để đo độ sai lệch góc, 2 điểm chuẩn R 1 và R 2 và tạo ra một đường chuẩn và cần phải có 2 điểm đo M 1 và M 2 (xem Hình 12).
+
+<!-- image -->
+
+**Hình 12 - Xác định vị trí hai điểm chuẩn R và điểm đo M**
+
+Chiều cao cột của tầng nhà nên đo ở đỉnh, ở giữa và ở đáy như mô tả trong Hình 13.
+
+<!-- image -->
+
+**Hình 13 - Đo chiều cao cột**
+
+Cả hai độ vuông góc nằm ngang và thẳng đứng đều phải đo (xem Hình 14).
+
+<!-- image -->
+
+**Hình 14 - Đo độ vuông góc theo cả 2 phương ngang và đứng**
+
+Trường hợp các cấu kiện chế sẵn có mặt cắt ngang không phải là hình chữ nhật như dầm có cạnh thì nên đo góc dọc theo hai bề mặt thẳng đứng (Xem Hình 11 và Hình 15).
+
+<!-- image -->
+
+**Hình 15 - Đo góc dọc theo hai bề mặt thẳng đứng**
+
+Nếu xác định độ vuông góc bằng phép đo chéo thì các điểm đo cho mỗi lần đo sẽ là 2 điểm góc tương ứng như mô tả trong Hình 16.
+
+<!-- image -->
+
+**Hình 16 - Các điểm đo khi xác định độ vuông góc bằng phép đo chéo**
+
+CHÚ THÍCH: Trong trường hợp đo chéo phải sử dụng các điểm góc nếu như các góc không xác định được đúng.
+
+**4.2.2.** Độ song song
+
+Độ sai lệch không song song được xác định bằng cách dùng các điểm đo như tại 4.1.1. Các kích thước đo mô tả trong Hình 17 (Xem thêm Hình 2).
+
+<!-- image -->
+
+**Hình 17 - Xác định độ sai lệch không song song**
+
+**4.3. Độ thẳng và độ vồng của cấu kiện**
+
+**4.3.1.** Độ thẳng
+
+Trên mỗi cạnh của cấu kiện chế sẵn (Ví dụ: sàn, tường hay dầm) có kích thước nhỏ hơn 3 m có thể bố trí một dãy gồm 5 điểm đo cách đều nhau (Xem Hình 18).
+
+<!-- image -->
+
+**Hình 18 - Vị trí 5 điểm đo khi đo độ thẳng cấu kiện nhỏ hơn 3 m**
+
+Đối với các cấu kiện có chiều dài lớn hơn 3 m thì cứ trên 1 m chiều dài phải lấy thêm một điểm đo bổ sung.
+
+Khi cần đo tại tiết diện cạnh của cấu kiện (độ thẳng cục bộ) thì cần ít nhất 3 hoặc tốt nhất là 5 điểm đo bố trí cách đều (khoảng cách 0,5 m một điểm). (Xem Hình 19).
+
+<!-- image -->
+
+**Hình 19 - Đo độ thẳng cấu kiện lớn hơn 3 m**
+
+**4.3.2.** Độ vồng tính toán
+
+Một loạt các phép đo để xác định độ vòng tính toán được tiến hành ở mặt dưới khi chiều rộng của cấu kiện không quá 1,2 m. Ngoài ra có thể đo ở những điểm như mô tả trong Hình 20.
+
+Những cấu kiện có mặt cắt ngang không phải là hình chữ nhật, ví dụ: hình chữ T hay dầm chữ T kép thì khi xác định độ vồng tính toán còn đo ở những điểm hai bên sườn (cạnh) của chúng như mô tả trong Hình 21.
+
+<!-- image -->
+
+**Hình 20 - Điểm đo xác định độ vồng cấu kiện có mặt cắt ngang là hình chữ nhật**
+
+<!-- image -->
+
+**Hình 21 - Điểm đo xác định độ vồng cấu kiện có mặt cắt ngang không phải là hình chữ nhật**
+
+**4.4. Độ phẳng và độ vênh của cấu kiện**
+
+**4.4.1.** Các nguyên tắc đo
+
+Các nguyên tắc đo tổng quát được trình bày trong 4.4.1 của TCVN 9262-1:2012. Các phương pháp đo tuân theo những nguyên tắc mô tả trong 4.4.2 đến 4.4.5 và các điểm đo này tương ứng với các quy định của TCVN 9262-1:2012.
+
+**4.4.2.** Độ phẳng tổng thể
+
+Trên mỗi mặt của cấu kiện chế sẵn, các điểm đo được xác định như mô tả trong Hình 22.
+
+Số điểm đo phụ thuộc vào kích thước cấu kiện, ít nhất cũng cần 9 điểm đo và khoảng cách giữa các điểm không lớn hơn 1 m.
+
+<!-- image -->
+
+**Hình 22 - Xác định các điểm đo khi đo độ phẳng tổng thể**
+
+**4.4.3.** Đo phẳng cục bộ
+
+Trên bề mặt cần đo độ phẳng cục bộ, ta có thể lấy một hoặc các dãy điểm đo. Chiều dài tối đa của một dãy là 2 m và khoảng cách lớn nhất giữa các điểm đo là 0,5 m.
+
+Vị trí của dãy này có thể lấy tùy ý nhưng lưu ý sao cho chúng phải phù hợp với cạnh của cấu kiện. Mỗi dãy đo bao gồm 5 điểm đo cách đều nhau theo cự li đo như mô tả trong Hình 23.
+
+**4.4.4.** Độ vênh
+
+Để xác định độ vênh, tùy theo phương pháp đo cần có 4 hoặc 5 điểm đo: hoặc 4 điểm ở 4 góc hoặc 4 điểm đó và thêm 1 điểm nữa ở giao điểm của 2 đường chéo (xem Hình 24).
+
+<!-- image -->
+
+**Hình 23 - Các dãy điểm đo**
+
+<!-- image -->
+
+**Hình 24 - Các điểm đo xác định độ vênh**
+
+**5. Vị trí các điểm đo tiến hành trên công trường**
+
+Trong phần này coi như có những hệ thống chuẩn thích hợp trên công trường hoặc nơi lắp ráp khi đo, ví dụ như các điểm hay các đường phụ trợ, các mạng lưới và các mốc chuẩn, và dĩ nhiên các hệ thống chuẩn này cũng sẽ được kiểm tra theo quy định trong ISO 4463.
+
+**5.1. Vị trí trong mặt phẳng nằm ngang**
+
+Trong TCVN 9262-1:2012 chỉ ra các độ sai lệch khác nhau có thể được xác định trong một hoặc một vài quá trình đo giống nhau, đó là các độ sai lệch xuất hiện từ:
+
+- Vị trí đo trong mặt phẳng nằm ngang;
+
+- Độ thẳng đứng;
+
+- Độ phẳng.
+
+Số lượng lớn nhất các điểm đủ để đo cho mỗi đơn vị diện tích nhằm xác định độ phẳng được mô tả trong Hình 38 của TCVN 9262-1:2012.
+
+Các sơ đồ khác nhau trong Điều 5 này sẽ mô tả vị trí và số lượng các điểm đo để xác định riêng rẽ các loại độ sai lệch khác nhau.
+
+**5.1.1.** Độ lệch so với đường lưới kết cấu
+
+Trong Hình 25 mô tả cách xác định vị trí của các điểm chốt và các cột dẫn trong lưới kết cấu.
+
+<!-- image -->
+
+**Hình 25 - Vị trí các điểm chốt và các cột dẫn trong lưới kết cấu**
+
+**5.1.2.** Độ lệch so với các đường thứ cấp song song với công trình
+
+Số lượng các điểm đo tùy thuộc vào kích thước các bộ phận cần đo của công trình.
+
+Đối với các cấu kiện có dạng tường cao nói chung thì sẽ đo ở những điểm góc. Còn các cấu kiện tường lắp ghép được đúc sẵn hoặc đỗ tại chỗ thì cần có thêm một số phép đo bổ sung, theo hai hướng thẳng đứng và nằm ngang (ví dụ đối với các thang máy) cứ 3 m (hoặc ngắn hơn) một điểm đo.
+
+Trong Hình 26 mô tả các điểm đo xác định độ lệch vị trí so với các đường thứ cấp và các mặt phẳng thẳng đứng qua các đường này.
+
+Các cột luôn được kiểm tra theo hai phương vuông góc.
+
+<!-- image -->
+
+**Hình 26 - Xác định độ lệch so với các đường thứ cấp song song công trình**
+
+**5.1.3.** Độ lệch so với các đường thứ cấp vuông góc với công trình.
+
+Có thể sử dụng các điểm đo như trong 5.1.2 để xác định loại độ sai lệch này. Trong Hình 27 mô tả vị trí các điểm đo để xác định độ lệch vị trí của các cạnh cấu kiện.
+
+<!-- image -->
+
+**Hình 27 - Vị trí các điểm đo để xác định độ lệch vị trí của các cạnh cấu kiện**
+
+**5.2. Sai lệch độ cao**
+
+Sai lệch vị trí trong mặt thẳng đứng và mặt phẳng ngang hoặc độ cao của trần, sàn được xác định tại những điểm đo mô tả trong Hình 28.
+
+Độ cao hoặc độ phẳng tổng thể của sàn và trần được đo theo lưới nằm ngang xác định ở khoảng cách từ 0,5 m đến 3,0 m. Khoảng cách này lựa chọn tùy theo kích thước và chức năng của bề mặt cần đo.
+
+Trong Hình 28 mô tả vị trí các điểm đo ở tại giao điểm các đường lưới.
+
+Các dầm được đo độ cao tại ít nhất 3 điểm như mô tả trong Hình 29 (ở đỉnh hoặc đáy).
+
+<!-- image -->
+
+**Hình 28 - Vị trí các điểm đo tại giao điểm các đường lưới**
+
+<!-- image -->
+
+**Hình 29 - Các điểm đo khi đo độ cao dầm**
+
+**5.3. Độ thẳng đứng**
+
+**5.3.1.** Độ thẳng đứng của tường nhà nhiều tầng và cột
+
+Đối với các tường của nhà nhiều tầng thì mỗi tầng ít nhất phải tiến hành một phép đo thẳng đứng. Trong Hình 30 mô tả các điểm đo đã chọn trên mỗi tầng có vị trí nằm ngang như nhau.
+
+Khi kiểm tra độ thẳng đứng của cột trong nhà nhiều tầng thì các điểm đặt ở vị trí 1 và 2 là tốt nhất (dọc theo đường tâm của cột) (Xem Hình 31). Nếu không được thì các điểm đo nên đặt dọc theo cạnh của cột tại các điểm 3 và 4. Độ thẳng đứng của cột kiểm tra theo hai phương vuông góc.
+
+<!-- image -->
+
+**Hình 30 - Các điểm đo trên tầng có vị trí nằm ngang như nhau**
+
+<!-- image -->
+
+**Hình 31 - Các điểm đo độ thẳng đứng của cột nhà nhiều tầng**
+
+**5.3.2.** Độ thẳng đứng của tường dạng cao và cột.
+
+Số lượng các điểm đo tùy thuộc vào kích thước của bề mặt tường cần đo. Các cấu kiện tường kiểu này sẽ được đo ở những điểm gần các góc (Xem Hình 32), các tường lắp ghép đúc sẵn thì cứ 3 m đo một điểm.
+
+Trong Hình 32 mô tả các đặc điểm cần đo để xác định độ sai lệch vị trí thẳng đứng. Các cột được kiểm tra theo hai hướng vuông góc.
+
+<!-- image -->
+
+**Hình 32 - Các điểm đo độ thẳng đứng của tường dạng cao và cột**
+
+**5.4. Độ lệch tâm**
+
+Độ lệch tâm được xác định ở những điểm đo mô tả trong Hình 33.
+
+Đối với trường hợp này thì
+
+E = x 1 – x 2 +  (1)
+
+Trong đó:
+
+T - độ dày cấu kiện;
+
+x 1 và x 2 - khoảng cách từ đường thẳng đứng mặt phẳng ngang tới cấu kiện;
+
+E - độ lệch tâm.
+
+<!-- image -->
+
+**Hình 33 - Các điểm đo xác định độ lệch tâm**
+
+**5.5. Vị trí tương quan so với cấu kiện khác (khoảng mở và khoảng trống)**
+
+Phần này đưa ra một vài trường hợp ví dụ cần thiết phải có sự chính xác về vị trí và kích thước của các cấu kiện, các phần công trình có liên quan tới những bộ phận khác.
+
+<!-- image -->
+
+**Hình 34 - Đo ô cửa và cửa sổ**
+
+**5.5.1.** Ô cửa sổ và các khoảng mở khác
+
+Kích thước các cửa sổ hoặc các ô cửa giới hạn được đo như mô tả trong Hình 34. Với những ô cửa có kích thước lớn hơn 3 m thì phải có những đặc điểm đo bổ sung theo mỗi mét kéo dài của ô cửa đó.
+
+**5.5.2.** Các không gian
+
+Trong Hình 35 mô tả những đặc điểm dùng để đo chiều dài và chiều rộng của không gian. Nếu H hoặc L lớn hơn 6 m thì phải có những điểm đo bổ sung, tốt nhất là cứ 3 m một điểm đo theo phương kéo dài.
+
+Khoảng cách giữa các cột hoặc giữa các cột và bề mặt tường, được xác định bằng các điểm đo mô tả trong Hình 36.
+
+<!-- image -->
+
+**Hình 35 - Các điểm đo chiều dài, rộng của không gian**
+
+<!-- image -->
+
+**Hình 36 -  Các điểm đo xác định khoảng cách cột với cột hoặc cột với bề mặt tường**
+
+Nếu khoảng cách rộng hơn 6 m thì phải bổ sung theo phương kéo dài, tốt nhất là cứ 3 m có thêm một điểm đo.
+
+Trong Hình 37 mô tả những điểm đo để xác định chiều cao của không gian, nếu L hoặc W lớn hơn 6 m thì cần đo bổ sung theo phương kéo dài, nếu có thể thì cứ 3 m lại thêm một điểm đo.
+
+<!-- image -->
+
+**Hình 37 - Điểm đo xác định chiều cao không gian**
+
+Những nguyên tắc nêu trên được áp dụng khi đo khoảng cách giữa sàn và dầm ở mặt dưới vòm, ví dụ 100 mm từ mỗi trục và ở giữa nhịp.
+
+Các điểm đo để xác định khoảng cách giữa sàn và dầm được mô tả trong Hình 38.
+
+<!-- image -->
+
+**Hình 38 - Điểm đo xác định khoảng cách giữa sàn và dầm**
+
+**5.6. Độ phẳng, độ thẳng, độ vồng thiết kế**
+
+**5.6.1.** Sàn và trần, độ phẳng tổng thể
+
+Các điểm đo cần thiết để xác định sai lệch về độ phẳng tổng thể của sàn và trần được mô tả trong Hình 28.
+
+**5.6.2.** Sàn, độ phẳng cục bộ
+
+Trong Hình 39 mô tả cách xác định độ phẳng cục bộ. Đối với mỗi bề mặt, tiến hành một hay nhiều phép đo. Mỗi phép đo chỉ nên đo trong phạm vi chiều dài không lớn hơn 2 m. Vị trí các phép đo được chọn ngẫu nhiên, nhưng cố gắng chọn vào những nơi đã biết vị trí thì tốt hơn.
+
+Mỗi phép đo bao gồm 5 điểm đo được bố trí cách đều nhau theo chiều dài.
+
+<!-- image -->
+
+**Hình 39 - Các điểm đo xác định độ phẳng cục bộ của sàn**
+
+**5.6.3.** Tường, độ phẳng tổng thể
+
+Trên mỗi mặt phẳng đứng của tường sẽ có nhiều phép đo tùy thuộc vào kích thước của tường, tuy nhiên nên có ít nhất là 9 điểm đo.
+
+Trong Hình 40 mô tả độ phẳng tổng thể của tường được đo theo lưới tọa độ hình chữ nhật xác định có khoảng cách từ 0,5 m đến 3,0 m. Khoảng cách này tùy thuộc vào kích thước cũng như chức năng của bề mặt cần đo.
+
+Chu vi của lưới này nên vào khoảng 100 mm kể từ cạnh của bề mặt.
+
+Cũng có thể dùng quy trình này khi cần xác định đồng thời các độ lệch khác nhau như vị trí (xem 5.1) hay độ thẳng đứng (xem 5.3).
+
+<!-- image -->
+
+**Hình 40 - Điểm đo xác định độ phẳng tổng thể của tường**
+
+**5.6.4.** Tường, độ phẳng cục bộ
+
+Các điểm đo cần thiết để xác định sai lệch về độ phẳng cục bộ của bề mặt tường có thể chọn theo ví dụ mô tả trong Hình 23.
+
+**5.6.5.** Độ vồng tính toán
+
+Xem 4.3
+
+**5.7. Các độ lệch quan trọng khác**
+
+**5.7.1.** Chiều dài của mặt tựa (mặt chịu tải)
+
+Khi đo chiều dài của mặt tựa chọn các điểm đo như mô tả trong Hình 41. Cần chú ý, các điểm đo trên mỗi cấu kiện sàn phải được đánh dấu trước khi lắp ráp ở một khoảng cách C không đổi kể từ cạnh của cấu kiện sàn. Khoảng cách M kể từ điểm đo trên cấu kiện sàn tới bề mặt cấu kiện chịu tải được đo sau khi lắp ráp, chiều dài chịu tải là B = C -M.
+
+<!-- image -->
+
+**Hình 41 - Các điểm đo xác định chiều dài mặt tựa**
+
+Các phép đo được lấy từ hai đầu cấu kiện. Khi chiều rộng W của cấu kiện sàn nhỏ hơn 1,2 m thì chỉ cần đo ở vị trí giữa còn nếu W ở trong khoảng từ 1,2 m đến 3 m thì phải đo như mô tả trong Hình 41. Các cấu kiện có chiều rộng W lớn hơn 3 m thì phải đo bổ sung ở giữa.
+
+**5.7.2.** Chiều rộng mối nối
+
+Chiều rộng mối nối liên kết được đo ở các điểm mô tả trong Hình 42.
+
+Các mối nối thẳng đứng hay nằm ngang quá dài thì khoảng cách giữa các điểm đo có thể chọn từ 1,2 m đến 3 m.
+
+**5.7.3.** Bậc tại khe nối
+
+Bậc tại khe nối được đo ở điểm M (Xem Hình 43), theo khoảng cách từ điểm này tới mặt phẳng của cấu kiện nối kề bên.
+
+<!-- image -->
+
+**Hình 42 - Điểm đo xác định chiều rộng mối nối**
+
+<!-- image -->
+
+**Hình 43 - Điểm đo bậc tại khe nối**
+
+**MỤC LỤC**
+
+1. Phạm vi áp dụng
+
+2. Tài liệu viện dẫn
+
+3. Quy định chung
+
+4. Vị trí các điểm đo tiến hành trong nhà máy và trên công trường
+
+4.1. Kích thước của cấu kiện
+
+4.2. Độ vuông góc của cấu kiện
+
+4.3. Độ thẳng và độ vồng của cấu kiện
+
+4.4. Độ phẳng và độ vênh của cấu kiện
+
+5. Vị trí các điểm đo tiến hành trên công trường
+
+5.1. Vị trí trong mặt phẳng nằm ngang
+
+5.2. Sai lệch độ cao
+
+5.3. Độ thẳng đứng
+
+5.4. Độ lệch tâm
+
+5.5. Vị trí tương quan so với các cấu kiện khác (khoảng mở và khoảng trống)
+
+5.6. Độ phẳng, độ thẳng, độ vồng thiết kế
+
+5.7. Các độ lệch quan trọng

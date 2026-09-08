@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thư viện Văn bản QPPL & Tiêu chuẩn Kỹ thuật</title>
+  
+  <!-- Tailwind CSS (Compiled & Minified) -->
+  <link rel="stylesheet" href="css/style.min.css">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+
+  <!-- Dexie.js (IndexedDB) -->
+  <script src="https://cdn.jsdelivr.net/npm/dexie@3.2.4/dist/dexie.min.js" defer></script>
+
+  <!-- Mammoth.js (.docx In-Browser Parser) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js" defer></script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex flex-col h-screen overflow-hidden antialiased select-text">
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="h-14 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-4 z-20 shrink-0 shadow-sm">
+    <!-- Brand / Logo -->
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm">
+        <i data-lucide="scale" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h1 class="text-sm font-bold tracking-tight text-gray-900 dark:text-white uppercase flex items-center gap-2">
+          THƯ VIỆN VBPL
+          <span class="text-[10px] font-normal text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/80 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-800">QL DỰ ÁN & KỸ THUẬT</span>
+        </h1>
+        <p class="text-[10px] text-gray-500 dark:text-gray-400">Tra cứu thông minh & Đối chiếu văn bản tự động</p>
+      </div>
+    </div>
+
+    <!-- Global Search Trigger Bar (Ctrl + K) -->
+    <div class="flex-1 max-w-md mx-4 hidden md:block">
+      <button onclick="LegalApp.openSearchDialog()" class="w-full flex items-center justify-between px-3.5 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-800/80 hover:bg-gray-200 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700/60 text-xs text-gray-500 dark:text-gray-400 transition cursor-pointer">
+        <div class="flex items-center gap-2">
+          <i data-lucide="search" class="w-4 h-4 text-gray-400"></i>
+          <span>Tìm nhanh số hiệu, trích yếu, điều khoản...</span>
+        </div>
+        <kbd class="px-1.5 py-0.5 bg-white dark:bg-gray-900 rounded border border-gray-300 dark:border-gray-700 font-mono text-[10px]">Ctrl + K</kbd>
+      </button>
+    </div>
+
+    <!-- Action Toolbar -->
+    <div class="flex items-center gap-1.5 sm:gap-2">
+      <!-- Fast Reload DATA Button -->
+      <button onclick="LegalApp.reloadFullDATA()" class="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-lg text-xs font-semibold shadow-sm transition" title="Khôi phục / Nạp toàn bộ kho văn bản nguồn">
+        <i data-lucide="database" class="w-4 h-4"></i>
+        <span id="btn-reload-data-text" class="hidden md:inline">Kho DATA gốc</span>
+      </button>
+
+      <!-- Ingest Document Button -->
+      <button onclick="LegalApp.openIngestModal()" class="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-sm transition">
+        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+        <span class="hidden sm:inline">Nạp văn bản</span>
+      </button>
+
+      <!-- Stats Button -->
+      <button onclick="LegalApp.openStatsModal()" class="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-medium transition flex items-center gap-1" title="Thống kê">
+        <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+        <span class="hidden md:inline">Thống kê</span>
+      </button>
+
+      <!-- Backup JSON -->
+      <button onclick="LegalApp.exportJSON()" class="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-medium transition flex items-center gap-1" title="Xuất dữ liệu JSON">
+        <i data-lucide="download" class="w-4 h-4"></i>
+        <span class="hidden lg:inline">Sao lưu</span>
+      </button>
+
+      <!-- Restore JSON -->
+      <label class="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-medium transition flex items-center gap-1 cursor-pointer" title="Nhập dữ liệu JSON">
+        <i data-lucide="upload" class="w-4 h-4"></i>
+        <span class="hidden lg:inline">Khôi phục</span>
+        <input type="file" accept=".json" onchange="LegalApp.importJSON(this.files[0])" class="hidden">
+      </label>
+
+      <div class="h-4 w-[1px] bg-gray-300 dark:bg-gray-700 mx-1"></div>
+
+      <!-- Font Size Scalers -->
+      <button onclick="LegalApp.adjustFontSize(-1)" class="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 text-xs font-bold font-mono" title="Giảm cỡ chữ">A-</button>
+      <button onclick="LegalApp.adjustFontSize(1)" class="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 text-xs font-bold font-mono" title="Tăng cỡ chữ">A+</button>
+
+      <!-- Dark / Light Toggle -->
+      <button onclick="LegalApp.toggleTheme()" class="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 transition" title="Đổi giao diện Sáng / Tối">
+        <i data-lucide="sun-moon" class="w-4 h-4"></i>
+      </button>
+
+      <!-- Settings Button -->
+      <button onclick="LegalApp.openSettingsModal()" class="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 transition" title="Cài đặt AI & Hệ thống">
+        <i data-lucide="settings" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN 3-COLUMN LAYOUT ==================== -->
+  <div class="flex-1 flex overflow-hidden relative">
+
+    <!-- CỘT 1: CÂY DANH MỤC LĨNH VỰC (260px) -->
+    <aside class="w-64 bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col shrink-0">
+      <div class="p-3 border-b border-gray-200 dark:border-gray-800">
+        <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-2">Lĩnh vực & Loại VB</span>
+      </div>
+
+      <!-- Categories Container -->
+      <div class="flex-1 overflow-y-auto p-2 space-y-1" id="category-list">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Bottom Lookup Button -->
+      <div class="p-3 border-t border-gray-200 dark:border-gray-800">
+        <button onclick="LegalApp.openSearchDialog()" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-xs font-semibold text-gray-700 dark:text-gray-200 transition">
+          <i data-lucide="search" class="w-3.5 h-3.5"></i>
+          <span>Tra cứu toàn thư viện</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- CỘT 2: DANH SÁCH VĂN BẢN & MỤC LỤC CHI TIẾT (320px) -->
+    <aside class="w-80 bg-white dark:bg-gray-900/70 border-r border-gray-200 dark:border-gray-800 flex flex-col shrink-0">
+      <!-- Tabs (Matching Reference Design) -->
+      <div class="flex border-b border-gray-200 dark:border-gray-800 text-xs font-medium bg-gray-50/70 dark:bg-gray-900">
+        <button onclick="LegalApp.setActiveTab('documents')" id="tab-btn-documents" class="flex-1 py-2.5 text-center border-b-2 border-amber-500 text-amber-500 font-semibold flex items-center justify-center gap-1">
+          <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+          <span>Văn bản</span>
+        </button>
+        <button onclick="LegalApp.setActiveTab('search')" id="tab-btn-search" class="flex-1 py-2.5 text-center text-gray-400 hover:text-gray-200 flex items-center justify-center gap-1">
+          <i data-lucide="search" class="w-3.5 h-3.5"></i>
+          <span>Kết quả</span>
+        </button>
+        <button onclick="LegalApp.setActiveTab('bookmarks')" id="tab-btn-bookmarks" class="flex-1 py-2.5 text-center text-gray-400 hover:text-gray-200 flex items-center justify-center gap-1">
+          <i data-lucide="bookmark" class="w-3.5 h-3.5"></i>
+          <span>Đánh dấu</span>
+        </button>
+        <button onclick="LegalApp.setActiveTab('recent')" id="tab-btn-recent" class="flex-1 py-2.5 text-center text-gray-400 hover:text-gray-200 flex items-center justify-center gap-1">
+          <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+          <span>Gần đây</span>
+        </button>
+      </div>
+
+      <!-- Filter Controls (Matching Reference Design) -->
+      <div class="p-2.5 border-b border-gray-200 dark:border-gray-800 space-y-2 bg-gray-50/50 dark:bg-gray-900/50">
+        <div class="relative">
+          <i data-lucide="search" class="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-gray-400"></i>
+          <input type="text" 
+            id="sidebar-search-input"
+            oninput="LegalApp.state.searchQuery = this.value; LegalApp.renderDocumentList();"
+            placeholder="Lọc số hiệu, từ khóa..." 
+            class="w-full pl-8 pr-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-amber-500">
+        </div>
+
+        <div class="flex items-center gap-2 text-xs text-gray-400">
+          <label class="flex items-center gap-1 text-[11px] text-gray-400 cursor-pointer shrink-0">
+            <input type="checkbox" id="match-accent-checkbox" onchange="LegalApp.state.matchAccent = this.checked; LegalApp.renderDocumentList();" class="rounded text-amber-500 focus:ring-amber-500 w-3 h-3">
+            <span>Khớp dấu</span>
+          </label>
+
+          <select onchange="LegalApp.state.docTypeFilter = this.value; LegalApp.renderDocumentList();" class="flex-1 px-1.5 py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded text-[11px] text-gray-300 focus:outline-none">
+            <option value="all">Loại: Tất cả</option>
+            <option value="Luật">Luật</option>
+            <option value="Nghị định">Nghị định</option>
+            <option value="Thông tư">Thông tư</option>
+            <option value="QCVN">QCVN</option>
+            <option value="TCVN">TCVN</option>
+          </select>
+
+          <select onchange="LegalApp.state.statusFilter = this.value; LegalApp.renderDocumentList();" class="flex-1 px-1.5 py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded text-[11px] text-gray-300 focus:outline-none">
+            <option value="all">Hiệu lực: Mọi kỳ</option>
+            <option value="active">Còn hiệu lực</option>
+            <option value="amended">Có SĐ/BS</option>
+            <option value="expired">Hết hiệu lực</option>
+          </select>
+        </div>
+
+        <div class="flex items-center justify-between text-[11px] text-gray-400 px-0.5 pt-0.5">
+          <span id="doc-count-badge" class="font-medium text-gray-400">0 văn bản</span>
+          <span class="text-[10px] text-amber-400/80">Click xem cây mục lục</span>
+        </div>
+      </div>
+
+      <!-- Document List with Expandable TOC -->
+      <div class="flex-1 overflow-y-auto" id="document-list">
+        <!-- Rendered by JS -->
+      </div>
+    </aside>
+
+    <!-- CỘT 3: KHÔNG GIAN ĐỌC & MA TRẬN LIÊN KẾT PHÁP LÝ (VÙNG CHÍNH) -->
+    <main class="flex-1 bg-white dark:bg-gray-950 overflow-y-auto relative flex flex-col" id="document-viewport">
+      <!-- Rendered by JS -->
+    </main>
+
+    <!-- ==================== AI COPILOT DRAWER (SLIDE-OVER) ==================== -->
+    <div id="ai-chat-drawer" class="chat-drawer closed absolute top-0 right-0 h-full w-96 bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800 shadow-2xl z-30 flex flex-col">
+      <!-- Drawer Header -->
+      <div class="p-3.5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
+            <i data-lucide="bot" class="w-4 h-4 text-white"></i>
+          </div>
+          <div>
+            <h3 class="text-xs font-bold">Legal AI Copilot</h3>
+            <p class="text-[10px] text-blue-100 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
+              Client-Side RAG Active
+            </p>
+          </div>
+        </div>
+        <button onclick="LegalApp.toggleChatDrawer()" class="p-1 rounded hover:bg-white/20 text-white transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Messages Area -->
+      <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 text-sm bg-gray-50/50 dark:bg-gray-950/40">
+        <div class="flex gap-2.5 mb-4">
+          <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/60 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 mt-0.5">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+          </div>
+          <div class="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-4 py-3 rounded-2xl rounded-tl-none text-xs leading-relaxed shadow-sm">
+            <p class="font-semibold text-blue-600 dark:text-blue-400 mb-1">Xin chào! Tôi là Trợ lý Pháp lý & Kỹ thuật.</p>
+            <p>Tôi có thể giải đáp các câu hỏi dựa trên chính các văn bản đã nạp vào thư viện của bạn với trích dẫn Điều/Khoản chính xác.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input Form -->
+      <div class="p-3 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <form onsubmit="event.preventDefault(); LegalApp.sendChatMessage();" class="flex gap-2">
+          <input type="text" id="chat-input" placeholder="Hỏi về quy định, điều kiện khởi công, đấu thầu..." class="flex-1 px-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-xs text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500">
+          <button type="submit" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold shadow transition flex items-center justify-center">
+            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ==================== FLOATING AI ACTION BUTTON (FAB) ==================== -->
+  <button onclick="LegalApp.toggleChatDrawer()" class="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl flex items-center justify-center z-20 hover:scale-105 active:scale-95 transition-all group" title="Mở Trợ lý AI Copilot">
+    <i data-lucide="sparkles" class="w-5 h-5 group-hover:rotate-12 transition-transform"></i>
+  </button>
+
+  <!-- ==================== MODAL: INGEST DOCUMENT ==================== -->
+  <div id="ingest-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-gray-900 rounded-2xl max-w-2xl w-full border border-gray-200 dark:border-gray-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between bg-gray-50 dark:bg-gray-800/50">
+        <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <i data-lucide="upload-cloud" class="w-4 h-4 text-blue-600"></i>
+          Nạp văn bản mới (.docx, .html, .txt)
+        </h3>
+        <button onclick="LegalApp.closeIngestModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto flex-1">
+        <!-- Quick Batch DATA Ingest Callout -->
+        <div class="mb-4 p-3.5 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/40 border border-emerald-200 dark:border-emerald-800/60 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center shrink-0">
+              <i data-lucide="database" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <p id="modal-data-count-title" class="text-xs font-bold text-emerald-900 dark:text-emerald-200">Kho dữ liệu văn bản nguồn (DATA)</p>
+              <p id="modal-data-count-sub" class="text-[11px] text-emerald-700 dark:text-emerald-300">Tự động bóc tách toàn bộ Điều khoản và Cây mục lục</p>
+            </div>
+          </div>
+          <button onclick="LegalApp.reloadFullDATA(); LegalApp.closeIngestModal();" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg shadow-sm transition">
+            Nạp toàn bộ
+          </button>
+        </div>
+
+        <!-- File Dropzone -->
+        <div id="ingest-dropzone" class="border-2 border-dashed border-gray-300 dark:border-gray-700 hover:border-blue-500 rounded-xl p-8 text-center cursor-pointer bg-gray-50 dark:bg-gray-800/30 transition">
+          <input type="file" id="ingest-file-input" accept=".docx,.html,.htm,.txt" onchange="LegalApp.handleFileInput(this.files)" class="hidden" multiple>
+          <label for="ingest-file-input" class="cursor-pointer block">
+            <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-950 flex items-center justify-center text-blue-600 mx-auto mb-3">
+              <i data-lucide="file-up" class="w-6 h-6"></i>
+            </div>
+            <p class="text-sm font-bold text-gray-800 dark:text-gray-200 mb-1">Kéo thả hoặc bấm để chọn 1 hoặc nhiều tệp</p>
+            <p class="text-xs text-gray-500">Hỗ trợ chọn cùng lúc hàng chục file Word (.docx), HTML và TXT</p>
+          </label>
+        </div>
+
+        <!-- Preview & Review Container -->
+        <div id="ingest-preview-container" class="hidden space-y-4">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-500 mb-1">Số hiệu văn bản:</label>
+              <input type="text" id="preview-doc-code" class="w-full px-3 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs font-mono font-bold text-blue-600 dark:text-blue-400">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-500 mb-1">Loại văn bản:</label>
+              <select id="preview-doc-type" class="w-full px-3 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs">
+                <option value="Luật">Luật</option>
+                <option value="Nghị định">Nghị định</option>
+                <option value="Thông tư">Thông tư</option>
+                <option value="QCVN">QCVN</option>
+                <option value="TCVN">TCVN</option>
+                <option value="Quyết định">Quyết định</option>
+                <option value="Văn bản khác">Văn bản khác</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-500 mb-1">Tên / Trích yếu:</label>
+            <input type="text" id="preview-doc-title" class="w-full px-3 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs font-medium">
+          </div>
+
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-500 mb-1">Cơ quan ban hành:</label>
+              <input type="text" id="preview-doc-issuer" class="w-full px-3 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-500 mb-1">Ngày ban hành:</label>
+              <input type="date" id="preview-doc-issue-date" class="w-full px-3 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-500 mb-1">Ngày hiệu lực:</label>
+              <input type="date" id="preview-doc-effective-date" class="w-full px-3 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-xs">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-500 mb-1">Gán vào Lĩnh vực:</label>
+            <div id="preview-categories-container" class="grid grid-cols-2 gap-1.5 p-2 bg-gray-50 dark:bg-gray-800/40 rounded-lg border border-gray-200 dark:border-gray-800 max-h-32 overflow-y-auto"></div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-500 mb-1">Cây mục lục bóc tách tự động:</label>
+            <div id="preview-nodes-tree" class="p-2 bg-gray-50 dark:bg-gray-800/40 rounded-lg border border-gray-200 dark:border-gray-800 max-h-36 overflow-y-auto"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-6 py-3 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 flex justify-end gap-2">
+        <button onclick="LegalApp.closeIngestModal()" class="px-4 py-2 rounded-lg text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition">Hủy bỏ</button>
+        <button onclick="LegalApp.confirmSaveIngest()" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow transition flex items-center gap-1.5">
+          <i data-lucide="check" class="w-4 h-4"></i> Lưu vào Thư viện
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: GLOBAL SEARCH DIALOG (CTRL+K) ==================== -->
+  <div id="global-search-dialog" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start justify-center p-4 pt-16 hidden">
+    <div class="bg-white dark:bg-gray-900 rounded-2xl max-w-2xl w-full border border-gray-200 dark:border-gray-800 shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
+      <div class="p-3 border-b border-gray-200 dark:border-gray-800 flex items-center gap-2">
+        <i data-lucide="search" class="w-5 h-5 text-blue-600 ml-2 shrink-0"></i>
+        <input type="text" id="global-search-input" oninput="LegalApp.performGlobalSearch(this.value)" placeholder="Tìm kiếm văn bản, số hiệu, điều khoản hoặc nội dung quy chuẩn..." class="w-full px-2 py-1.5 bg-transparent text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none font-medium">
+        <kbd class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700 font-mono text-[10px] text-gray-500 mr-2">ESC</kbd>
+      </div>
+      <div id="global-search-results" class="p-3 overflow-y-auto max-h-[60vh] space-y-1 divide-y divide-gray-100 dark:divide-gray-800/60">
+        <p class="text-xs text-gray-400 p-4 text-center">Nhập từ khóa để tra cứu...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: SETTINGS (AI & CONFIG) ==================== -->
+  <div id="settings-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-gray-900 rounded-2xl max-w-lg w-full border border-gray-200 dark:border-gray-800 shadow-2xl overflow-hidden flex flex-col">
+      <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between bg-gray-50 dark:bg-gray-800/50">
+        <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <i data-lucide="settings" class="w-4 h-4 text-blue-600"></i> Cấu hình AI Copilot & Hệ thống
+        </h3>
+        <button onclick="LegalApp.closeSettingsModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1.5">Nhà cung cấp AI (Provider):</label>
+          <select id="setting-provider" onchange="LegalApp.updateSettingsVisibility(this.value)" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg font-medium">
+            <option value="openviking">OpenViking Server (Agnes 2.0 Flash / Local RAG)</option>
+            <option value="gemini">Google Gemini API (Miễn phí / Khuyến nghị)</option>
+            <option value="openai">OpenAI API (GPT-4o mini, GPT-4o)</option>
+            <option value="ollama">Local Ollama / Custom OpenAI Endpoint</option>
+          </select>
+        </div>
+
+        <!-- Gemini Settings -->
+        <div id="section-gemini" class="space-y-3">
+          <div>
+            <label class="block font-semibold text-gray-600 dark:text-gray-400 mb-1">Gemini API Key:</label>
+            <input type="password" id="setting-gemini-key" placeholder="AIzaSy..." class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg font-mono">
+            <p class="text-[10px] text-gray-400 mt-1">Lưu trực tiếp trong trình duyệt (LocalStorage). Không gửi về bất kỳ máy chủ nào.</p>
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-600 dark:text-gray-400 mb-1">Gemini Model:</label>
+            <input type="text" id="setting-gemini-model" value="gemini-1.5-flash" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+          </div>
+        </div>
+
+        <!-- OpenAI Settings -->
+        <div id="section-openai" class="space-y-3 hidden">
+          <div>
+            <label class="block font-semibold text-gray-600 dark:text-gray-400 mb-1">OpenAI API Key:</label>
+            <input type="password" id="setting-openai-key" placeholder="sk-..." class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg font-mono">
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-600 dark:text-gray-400 mb-1">OpenAI Model:</label>
+            <input type="text" id="setting-openai-model" value="gpt-4o-mini" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+          </div>
+        </div>
+
+        <!-- Custom / Ollama Settings -->
+        <div id="section-custom" class="space-y-3 hidden">
+          <div>
+            <label class="block font-semibold text-gray-600 dark:text-gray-400 mb-1">Endpoint URL:</label>
+            <input type="text" id="setting-custom-endpoint" value="http://localhost:11434/v1" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg font-mono">
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-600 dark:text-gray-400 mb-1">Model Name:</label>
+            <input type="text" id="setting-custom-model" value="qwen2.5:7b" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+          </div>
+        </div>
+      </div>
+
+      <div class="px-6 py-3 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 flex justify-end gap-2">
+        <button onclick="LegalApp.closeSettingsModal()" class="px-4 py-2 rounded-lg text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition">Đóng</button>
+        <button onclick="LegalApp.saveSettings()" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow transition">Lưu cấu hình</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: STATISTICS ==================== -->
+  <div id="stats-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-gray-900 rounded-2xl max-w-md w-full border border-gray-200 dark:border-gray-800 shadow-2xl p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <i data-lucide="bar-chart-2" class="w-4 h-4 text-blue-600"></i> Thống kê Thư viện
+        </h3>
+        <button onclick="LegalApp.closeStatsModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 text-center">
+        <div class="p-4 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900">
+          <span class="text-2xl font-extrabold text-blue-600 dark:text-blue-400 block" id="stat-total-docs">0</span>
+          <span class="text-xs text-gray-600 dark:text-gray-400 font-medium">Văn bản đã nạp</span>
+        </div>
+        <div class="p-4 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900">
+          <span class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 block" id="stat-total-articles">0</span>
+          <span class="text-xs text-gray-600 dark:text-gray-400 font-medium">Điều luật phân tích</span>
+        </div>
+        <div class="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900">
+          <span class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 block" id="stat-total-relations">0</span>
+          <span class="text-xs text-gray-600 dark:text-gray-400 font-medium">Dẫn chiếu chéo</span>
+        </div>
+        <div class="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-900">
+          <span class="text-2xl font-extrabold text-amber-600 dark:text-amber-400 block" id="stat-total-notes">0</span>
+          <span class="text-xs text-gray-600 dark:text-gray-400 font-medium">Ghi chú riêng</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Logic Scripts -->
+  <script src="data/preloaded_data.js" defer></script>
+  <script src="js/db.js" defer></script>
+  <script src="js/parser.js" defer></script>
+  <script src="js/search.js" defer></script>
+  <script src="js/ai.js" defer></script>
+  <script src="js/app.js" defer></script>
+  <script>
+    window.addEventListener('load', () => {
+      if (window.LegalApp && typeof LegalApp.init === 'function') {
+        LegalApp.init();
+      }
+    });
+  </script>
+</body>
+</html>

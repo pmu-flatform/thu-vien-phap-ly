@@ -1,0 +1,723 @@
+**TIÊU CHUẨN QUỐC GIA**
+
+**TCVN 13684-1:2023**
+
+**ISO 15698-1:2012**
+
+THÉP CỐT BÊ TÔNG - THANH THÉP CỐT CÓ ĐẦU NEO - PHẦN 1: CÁC YÊU CẦU
+
+*Steel for the reinforcement of concrete - Headed bars - Part 1: Requirements*
+
+**Lời nói đầu**
+
+TCVN 13684-1:2023 hoàn toàn tương đương ISO 15698-1:2012.
+
+TCVN 13684-1:2023 do Ban kỹ thuật tiêu chuẩn quốc gia TCVN/TC17 Thép biên soạn, Tổng cục Tiêu chuẩn Đo lường Chất lượng đề nghị, Bộ Khoa học và Công nghệ công bố.
+
+Bộ TCVN 13684 *, Thép cốt bê tông - Thanh thép cốt có đầu neo bao gồm các phần sau:*
+
+*- Phần 1: Các yêu cầu.*
+
+*- Phần 2: Phương pháp thử.*
+
+**THÉP CỐT BÊ TÔNG - THANH THÉP CỐT CÓ ĐẦU NEO - PHẦN 1: CÁC YÊU CẦU**
+
+***Steel for the reinforcement of concrete - Headed bars - Part 1: Requirements***
+
+**1  Phạm vi áp dụng**
+
+Tiêu chuẩn này quy định các yêu cầu cho thanh thép cốt có đầu neo dùng làm cốt trong kết cấu bê tông.
+
+Tiêu chuẩn này là tiêu chuẩn về sản phẩm và quy định phạm vi thay đổi lớn của các sản phẩm đồng thời trợ giúp cho phát triển các sản phẩm mới.
+
+Tiêu chuẩn này quy định các yêu cầu cho các thanh thép cốt có đầu neo với đầu neo được chế tạo bằng thép. Tiêu chuẩn này không áp dụng cho các đầu neo hoặc các mối nối giữa đầu và thân thanh được chế tạo bằng vật liệu khác bao gồm cả mối nối măng sông bằng kim loại.
+
+Tiêu chuẩn này không áp dụng cho thanh giằng ở đầu mút, thanh thép cốt gồm một thanh hoặc chi tiết bằng thép khác được lắp vuông góc tại đầu mút, và thanh có đầu mút được hàn tại hiện trường.
+
+Tiêu chuẩn này bao gồm các sản phẩm chế tạo trong dây chuyền sản xuất liên tục cho phép thử nghiệm kiểm tra sản phẩm phù hợp với chế độ thử nghiệm quy định
+
+Các yêu cầu và thử nghiệm cho thanh thép cốt có đầu neo trong điều kiện chịu tải va đập không thuộc phạm vi của tiêu chuẩn này.
+
+**2  Tài liệu viện dẫn**
+
+Các tài liệu viện dẫn sau rất cần thiết cho việc áp dụng tiêu chuẩn này. Đối với các tài liệu viện dẫn ghi năm công bố thì áp dụng phiên bản được nêu. Đối với các tài liệu viện dẫn không ghi năm công bố thì áp dụng phiên bản mới nhất, bao gồm cả các sửa đổi, bổ sung (nếu có).
+
+TCVN 197-1 (ISO 6892-1), *Vật liệu kim loại - Thử kéo - Phần 1: Phương pháp thử ở nhiệt độ phòng.*
+
+TCVN 1651-1, *Thép cốt bê tông - Phần 1: Thép thanh tròn trơn.*
+
+TCVN 1651-2, *Thép cốt bê tông - Phần 2: Thép thanh vằn.*
+
+TCVN 9986-2 (ISO 630-2), *Thép kết cấu - Phần 2: Điều kiện kỹ thuật khi cung cấp thép kết cấu thông dụng.*
+
+TCVN 11229-2 (ISO 4950-2), *Thép tấm và thép băng rộng giới hạn chảy cao - Phần 2: Thép tấm và thép băng rộng được cung cấp ở trạng thái thường hóa hoặc cán có kiểm soát.*
+
+TCVN 11229-3 (ISO 4950-3), *Thép tấm và thép băng rộng giới hạn chảy cao - Phần 3: Thép tấm và thép băng rộng được cung cấp ở trạng thái xử lý nhiệt (tôi + ram).*
+
+TCVN 13684-2 (ISO 15698-2), *Thép cốt bê tông - Thanh thép cốt có đầu neo - Phần 2: Phương pháp thử.*
+
+ISO 16020, *Steel for reinforcement of concrete and prestressing of concrete - Vocabulary (Thép cốt bê tông và thép cốt bê tông dự ứng lục - Từ vựng).*
+
+ISO 17660-1, *Welding Steel for concrete reinforcement - Part 1: Load-bearing welded joints (Hàn thép cốt bê tông - Phần 1: Mối nối hàn chịu tải).*
+
+ISO 22965-2, *Concrete - Part 2: Specifications of composition materials, concrete production and elastic deformation of concrete (Bê tông - Phần 2: Đặc tính kỹ thuật của các vật liệu hợp thành, bê tông và biến dạng đàn hồi của bê tông)*
+
+**3  Thuật ngữ và định nghĩa**
+
+Tiêu chuẩn này áp dụng các thuật ngữ và định nghĩa được cho trong ISO 16020 và các thuật ngữ định nghĩa sau.
+
+**3.1**
+
+**Đầu neo** (Head)
+
+Chi tiết tách biệt bằng thép có hình dạng bắt kỳ được gắn chặt vững chắc vào đầu mút của một thanh hoặc là một phần lồi của bản thân thanh tại đầu mút được dùng để neo giữ thanh thép cốt trong bê tông.
+
+**3.2**
+
+**Thanh thép cốt có đầu neo** (Headed bar)
+
+Thanh thép cốt bê tông có đầu neo bằng thép trên một hoặc cả hai đầu mút của thanh dùng để neo giữ thanh trong bê tông.
+
+**3.2.1**
+
+**Thanh thép cốt có đầu neo hàn** (Welded headed bar)
+
+Thanh thép cốt có đầu neo được hàn vào đầu mút của thanh.
+
+**3.2.2**
+
+**Thanh thép cốt có đầu neo rèn** (Forged headed bar)
+
+Thanh thép cốt có đầu neo được tạo thành bằng rèn từ bản thân thanh.
+
+**3.2.3**
+
+**Thanh thép cốt có đầu neo lắp ghép ren** (Threaded headed bar)
+
+Thanh thép cốt có đầu neo được kẹp chặt vào đầu mút thanh bằng ren côn hoặc ren trụ bên trong đầu hoặc bằng một đai ốc hoặc ống nối có ren trong tách biệt kẹp chặt đầu vào đầu mút có ren của thanh.
+
+**3.2.4**
+
+**Thanh thép cốt có đầu neo chồn hoặc ép đùn** (Swaged or extruded headed bar)
+
+Thanh thép cốt có đầu neo được gắn chặt vào thân bằng chồn hoặc ép đùn đầu một cách trực tiếp trên thanh hoặc bằng cách sử dụng ống nối.
+
+**3.2.5**
+
+**Thanh thép cốt có đầu neo lắp ghép kiểu ống nối-chốt trượt** (Shear - bolted sleeve-headed bar)
+
+Thanh thép cốt có đầu neo được gắn chặt vào thanh bằng một loại các chốt trượt cắt rãnh vào bề mặt của thanh và đẩy thanh tựa vào từ bề mặt bên trong đối diện của ống nối.
+
+**3.3**
+
+**Đầu neo lắp gá** (Loose head)
+
+Đầu neo không được nhà sản xuất đầu neo gắn chặt cố định vào thanh mà được gắn chặt vào thanh tại hiện trường hoặc trong xưởng chế tạo thanh thép cốt.
+
+**3.4**
+
+**Bề mặt tựa của đầu neo** (Head bearing area)
+
+Bề mặt của đầu neo được chiếu trên một mặt phẳng vuông góc với đường trục dọc của thanh trừ đi diện tích mặt cắt ngang của thanh và trừ đi bất cứ diện tích nào của bề mặt đầu neo mở rộng ra lớn hon một đường kính của thanh tính từ bề mặt chính là bề mặt tiếp xúc giữa đầu neo và bê tông tại đó lực kéo thanh được truyền cho bê tông bằng ứng suất nén.
+
+**3.5**
+
+**Tải trọng neo giữ đầu neo** (Head anchorage capacity)
+
+Lực lớn nhất có thể truyền được từ đầu neo cho bê tông ở xung quanh.
+
+**3.6**
+
+**Lô thanh thép cốt có đầu neo** (Headed bar series)
+
+Tập hợp các thanh thép cốt có đầu neo hình dạng giống nhau và có tỉ số giữa diện tích bề mặt tựa của đầu neo và diện tích mặt cắt ngang của thanh nằm trong phạm vi giữa các giá trị lớn nhất và nhỏ nhất đã quy định, được chế tạo từ các vật liệu giống nhau theo cùng một phương pháp sản xuất nhưng có các đường kính danh nghĩa của thanh khác nhau.
+
+**3.7**
+
+**Kiểm tra chất lượng** (Qualification test)
+
+Phép thử được thiết kế để kiểm tra đánh giá tải trọng neo giữ (loại) của một lô thanh thép cốt có đầu neo.
+
+**3.8**
+
+**Nhà sản xuất** (Manufacturer)
+
+Tổ chức thực hiện việc sản xuất các thanh thép cốt có đầu neo dùng làm cốt bê tông.
+
+**3.9**
+
+**Mẻ thanh thép cốt có đầu neo** (Batch of headed bars)
+
+Số lượng các thanh thép cốt bê tông có đầu neo được đại diện với các mẫu thử đã được thử.
+
+**3.10**
+
+**Vùng chịu ảnh hưởng** (Affected zone)
+
+Một đoạn của thanh thép cốt bê tông ở đó có sự thay đổi về tính chất của thanh bao gồm cả các đặc tính về vật lý, luyện kim hoặc vật liệu do quá trình chế tạo thanh thép cốt có đầu neo như vùng chịu ảnh hưởng nhiệt đối với các thanh thép cốt có đầu neo rèn và hàn, vị trí có ren đối với các thanh thép cốt có đầu neo lắp ghép ren, hoặc vị trí có một ống nối (măng sông).
+
+**4  Ký hiệu**
+
+Tiêu chuẩn này áp dụng các ký hiệu được cho trong Bảng 1.
+
+**Bảng 1 - Các ký hiệu**
+
+| **Ký hiệu**            | **Đơn vị**   | **Tên gọi**                                                                                                                                                                                                                                                    |
+|------------------------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| D  H,max               | mm           | Kích thước lớn của đầu neo (xem 5.2)                                                                                                                                                                                                                           |
+| D  H,min               | mm           | Kích thước nhỏ của đầu neo (xem 5.2)                                                                                                                                                                                                                           |
+| α  A                   | -            | Tỷ lệ bề ngoài giữa kích thước nhỏ và kích thước lớn của đầu neo (xem 5.2)                                                                                                                                                                                     |
+| d                      | mm           | Đường kính danh nghĩa của thanh thép cốt bê tông                                                                                                                                                                                                               |
+| R  eH,spec             | MPa          | Giá trị giới hạn chảy đặc trưng (hoặc danh nghĩa) của thanh thép cốt bê tông. Đối với thép làm cốt bê tông không có đoạn nằm ngang của đồ thị giới hạn chảy rõ rệt có thể sử dụng đặc trưng tính R  p0,2,spec                                                  |
+| R  p0,2,spec           | MPa          | Giới chảy quy ước 0,2 % quy định (hoặc danh nghĩa) của thanh thép cốt bê tông                                                                                                                                                                                  |
+| R  p0,2,act            | MPa          | Giới chảy quy ước 0,2 % thực tế của thanh thép cốt bê tông                                                                                                                                                                                                     |
+| R  m,spec              | MPa          | Giá trị giới hạn bền kéo đặc trưng (hoặc danh nghĩa) của thanh thép cốt bê tông                                                                                                                                                                                |
+| R  m,act               | MPa          | Giá trị giới hạn bền kéo thực của thanh thép cốt bê tông được thử                                                                                                                                                                                              |
+| (R  m  /R  eH  )  spec | -            | Tỷ số giữa giới hạn bền kéo đặc trưng và giới hạn chảy                                                                                                                                                                                                         |
+| A  gt                  | %            | Độ giãn dài tổng tính theo phần trăm của thanh thép cốt bê tông đối với lực lớn nhất                                                                                                                                                                           |
+| A  5                   | %            | Độ giãn dài tổng tính theo phần trăm sau đứt trên chiều dài đo 5d                                                                                                                                                                                              |
+| A  10                  | %            | Độ giãn dài tổng tính theo phần trăm sau đứt trên chiều dài đo 10d                                                                                                                                                                                             |
+| A  B,nom               | mm  2        | Diện tích mặt cắt ngang danh nghĩa của thanh thép cốt bê tông                                                                                                                                                                                                  |
+| A  B,act               | mm  2        | Diện tích mặt cắt ngang thực của thanh thép cốt bê tông                                                                                                                                                                                                        |
+| F  b                   | N            | Phần lực được dùng để neo giữ của thanh thép cốt bê tông bằng mối liên kết (xem 7.2.2, Nhóm B1)                                                                                                                                                                |
+| 2σ  A                  | MPa          | Phạm vi ứng suất để thử nghiệm chịu tải mỏi đàn hồi có chu kỳ cao                                                                                                                                                                                              |
+| σ  max                 | MPa          | Ứng suất lớn nhất trong thử nghiệm mỏi do tải trọng dọc trục                                                                                                                                                                                                   |
+| ε  y,act               | %            | Biến dạng tại giới hạn mỏi thực của thanh thép cốt bê tông. Đối với thép cốt bê tông không có đoạn bằng đồ thị giới hạn chảy một cách rõ rệt, có thể sử dụng đặc tính Giới chảy quy ước 0,2% thực tế được lấy bằng  ε  p0,2,act  = R  p0,2,act  / E + 2x10  -3 |
+| δ                      | mm           | Dịch chuyển của đầu neo giữ                                                                                                                                                                                                                                    |
+| 1 MPa = 1 N/mm  2      |              |                                                                                                                                                                                                                                                                |
+
+**5  Yêu cầu**
+
+**5.1  Vật liệu**
+
+**5.1.1  Thép dùng làm thanh thép cốt bê tông**
+
+Các thanh thép cốt bê tông phải tuân theo TCVN 1651-1 và TCVN 1651-2 hoặc bất cứ tiêu chuẩn sản phẩm nào khác đối với các thanh thép cốt bê tông do khách hàng quy định.
+
+Đối với các thanh thép cốt có đầu neo hàn, các thanh thép cốt bê tông phù hợp với TCVN 1651-1 và TCVN 1651-2 phải là loại dễ hàn (W). Các loại thanh thép cốt bê tông dễ hàn khác phải được phép sử dụng nếu có quy định và được thỏa thuận giữa khách hàng và nhà sản xuất và chỉ khi vật liệu của thanh và đầu neo thích hợp cho quá trình hàn đã quy định và được chứng minh bằng chứng chỉ quy trình hàn theo ISO 17660-1, trừ khi có thỏa thuận khác giữa khách hàng và nhà sản xuất.
+
+Đối với các thanh thép cốt có đầu neo rèn, các thanh thép cốt có đầu neo lắp ghép ren và các thanh thép cốt có đầu neo lắp ghép kiểu ống nối-chốt trượt, có thể sử dụng bất cứ loại thanh thép cốt bê tông nào.
+
+Đối với thanh thép cốt có đầu neo chồn hoặc ép đùn, có thể sử dụng bất cứ loại thanh thép cốt bê tông có gân nào.
+
+**5.1.2  Thép dùng làm dầu neo**
+
+Các đầu neo phải được rèn, gia công cơ hoặc được cắt từ các vật đúc được chứng nhận chất lượng của nhà máy. Thành phần hóa học của thép làm đầu neo đối với các thanh thép cốt có đầu neo hàn phải tuân theo một tiêu chuẩn về thép kết cấu dễ hàn như cấp chất lượng C và D của TCVN 9986-2 (ISO 630-2) hoặc cấp chất lượng DD và E của TCVN 11229 (ISO 4950). Năng lượng thử va đập tối ưu phải là 27J ở 0 °C. Đối với các thanh thép cốt có đầu neo, ở đây có thể xuất hiện mối nguy hiểm là vật liệu đầu neo bị xé rách thành lá mỏng, cần phải lựa chọn vật liệu cơ bản thích hợp để tránh sự tách lớp và xé rách dạng lá mỏng trong tấm thép. Tấm thép phải được kiểm soát bằng thử nghiệm hoặc kiểm tra phù hợp với EN 10164. Độ bền chống xé rách dạng lá mỏng phải được quy định trong báo cáo thử, xem TCVN 13684-2 (ISO 15698-2).
+
+CHÚ THÍCH: Các loại thép cấp Z15, Z25 hoặc Z35 theo EN 10164 là các ví dụ về các loại thép có độ bền chống xé rách dạng lá mỏng.
+
+Quá trình hàn phải được thực hiện theo ISO 17660-1 trừ khi có có thỏa thuận khác giữa khách hàng và nhà sản xuất.
+
+**5.2  Hình dạng và kích thước của đầu neo**
+
+Đầu neo có thể có bất cứ hình dạng nào
+
+Cỡ kích thước của bề mặt tiếp xúc với bê tông được quy định bởi kính thước lớn D H,max , xem Hình 1, và tỷ lệ bề ngoài là tỷ số giữa kích thước nhỏ và kích thước lớn: α A = D H,min /D H,max ≤ 1.
+
+<!-- image -->
+
+**Hình 1 - Xác định các kích thước hình học của đầu neo**
+
+Chiều dày của đầu neo có thể không đổi hoặc thay đổi như đã chỉ ra trên Hình 2. Sự thay đổi chiều dày dọc theo trục chính của đầu neo được xác định bằng profin chiều dày, nghĩa là mặt cắt được tạo ra bởi mặt phẳng trải rộng ra do đường trục chính của đầu neo và đường trục của thanh.
+
+**5.3  Bề mặt tựa của đầu neo**
+
+Nếu một phần của bề mặt tựa đầu neo không nằm trong cùng một mặt phẳng với bề mặt tựa của bản thân đầu neo thì tình trạng này phải được nêu trong báo cáo thử.
+
+Trong một số trường hợp như khi đầu neo được gắn chặt vào thân khi sử dụng dạng măng sông (ống nối) thì một phần của bề mặt tựa sẽ nằm ở chỗ giao nhau của măng sông với thanh và cách bản thân đầu neo một khoảng nào đó. Đặc điểm này của thiết kế kết cấu cần được nêu trong báo cáo thử.
+
+Sự thích hợp của bề mặt tựa đầu neo và chiều dày đầu neo phải được kiểm tra bằng các phép thử đánh giá chất lượng theo TCVN 13684-2 (ISO 15698-2).
+
+**5.4  Tải trọng neo giữ**
+
+Tải trọng neo giữ được quy định cho ba loại chất tải:
+
+- Loại B: tải trọng neo giữ trong điều kiện chất tải tĩnh (cơ bản)
+
+- Loại F: tải trọng neo giữ trong điều kiện chất tải mỏi đàn hồi dẻo có chu kỳ cao (mỏi)
+
+- Loại S: tải trọng neo giữ trong điều kiện chất tải đàn hồi dẻo có chu kỳ thấp (seismic)
+
+CHÚ THÍCH 1: Các loại B và F được phân thành các nhóm (B1, B2 và B3, F1 và F2) xem 7.2.2, 7.2.3 và Phụ lục A.
+
+Phải kiểm tra tải trọng neo giữ bằng thử nghiệm theo TCVN 13684-2 (ISO 15698-2) đối với loại tương ứng. Các loại F và S phải được thử đối với các thanh được dự định sử dụng trong các phần từ kết cấu chịu tác động của mỏi và động đất hoặc theo yêu cầu của khách hàng.
+
+CHÚ THÍCH 2: Tải trọng neo giữ của đầu neo phụ thuộc vào giới hạn bền của mối nối đầu neo với thanh, độ bền chịu nén của bê tông và bề mặt tựa hiệu dụng của đầu neo. Đối với các thanh có gân, mối liên kết giữa thép và bê tông có thể góp phần vào tải trọng neo giữ nhưng sự đóng góp này chi được tính đến trong nhóm B1 (xem 7.2.2). Giới hạn bền của mối nối liên kết đầu neo với thân thanh cũng có thể chịu ảnh hưởng của phương pháp sản xuất các thanh thép cốt bê tông như cán nóng hoặc cán nóng và tôi, tự ram (QST)
+
+CHÚ THÍCH 3: Lớp bê tông bên dưới đầu neo bị hạn chế trong một vùng bởi khối bê tông xung quanh. Phép thử khả năng neo giữ được thực hiện hoặc hiển thị sự hạn chế bởi khối bê tông xung quanh và việc đặt thép cốt gia công theo cách đơn giản hóa. Các mặt bên ngoài của kết cấu bê tông cũng như chiều sâu của các tạp chất lẫn vào, lớp vỏ bê tông, khoảng cách của các thanh thép cốt và các chi tiết về sự hạn chế đều không thuộc vào phạm vi của tiêu chuẩn này.
+
+CHÚ THÍCH 4: Tiêu chuẩn này không bao hàm các yếu tố về an toàn được đưa vào, ví dụ như các hệ số riêng về tải trọng (ví dụ các giá trị *γ* m ) được áp dụng cho các giá trị thử nghiệm, kiểm tra. Các yếu tố về an toàn có liên quan theo các điều khoản trong các tiêu chuẩn thiết kế quốc gia.
+
+<!-- image -->
+
+**Hình 2 - Các ví dụ và sự thay đổi chiều dày đầu neo**
+
+**5.5  Dung sai**
+
+Dung sai kích thước hình học của đầu neo phải nằm trong phạm vi giới hạn đã cho trong Bảng 2. Dung sai cho các thanh thép cốt bê tông và dung sai cho các đặc tính của vật liệu đầu neo được cho trong các tiêu chuẩn sản phẩm.
+
+**Bảng 2 - Dung sai kích thước hình học**
+
+| **Các đặc tính hình học**           | **Sai lệnh lớn nhất được chấp nhận**   |
+|-------------------------------------|----------------------------------------|
+| Kích thước lớn của đầu neo D  H,max | ± 5%                                   |
+| Tỷ lệ dạng bề ngoài α  A            | ± 10%                                  |
+| Protin chiều dày                    | ± 5%                                   |
+
+**6  Phân loại các thanh thép cốt có đầu neo**
+
+**6.1  Quy định chung**
+
+Các thanh thép cốt có đầu neo được phân biệt bằng các đặc tính của ba thành phần chính
+
+- Đầu neo
+
+- Thanh (thân thanh)
+
+- Phương pháp gắn chặt
+
+Các đặc tính chính của 3 thành phần này là:
+
+Đầu:
+
+- Kích thước lớn của đầu neo D H,max tính bằng mm (xem 5.2)
+
+- Tỷ lệ dạng bề ngoài α A = D H,min /D H,max ≤ 1 (xem 5.2)
+
+- Protin chiều dày (xem 6.2)
+
+- Giới hạn chảy danh nghĩa R eH,spec
+
+- Chuyển tiếp hình học của đầu neo với thân thanh
+
+- Phương pháp chế tạo (cắt từ vật liệu tấm, cắt từ vật liệu thanh, rèn hoặc đúc)
+
+Thanh:
+
+- Kích thước danh nghĩa d
+
+- Giới hạn chảy danh nghĩa R eH,spec
+
+- Cấp độ dẻo (theo ISO 6935-1 và ISO 6935-2)
+
+- Diện tích của gân (chỉ dùng cho loại B)
+
+- Phương pháp chế tạo (hợp kim hóa vi lượng, tôi và tự ram)
+
+Phương pháp gắn chặt:
+
+- Rèn
+
+- Hàn
+
+- Lắp ghép ren
+
+- Chồn
+
+- Ống nối - chốt trượt
+
+**6.2  Lô thanh thép cốt có dầu neo**
+
+Một thanh thép cốt có đầu neo có thể biểu thị bất cứ sự tổ hợp nào của các đặc tính được liệt kê trong 6.1. Có thể phân chia các thanh thép cốt có đầu neo thành các lô đại diện cho một tổ hợp riêng của các đặc tính và các thanh thép cốt trong lô chỉ có sự thay đổi của đường kính thanh và Cỡ kích thước đầu neo. Cỡ kích thước đầu neo phải được đặc trưng bằng kích thước lớn của đầu neo D H,max . Trong phạm vi một lô, các thanh thép cốt có đầu neo phải được phân loại theo đường kính danh nghĩa của thanh.
+
+Trong phạm vi một lô giá trị danh nghĩa của các đặc tính phải nằm trong phạm vi các giới hạn cho trong Bảng 3.
+
+Đối với các đầu neo có chiều dày thay đổi, profin chiều dày phải giống nhau đối với tất cả các cỡ kích thước của đầu trong phạm vi một lô theo cách sao cho sai lệch giữa các protin tiêu chuẩn (t/D H,max ) tại bất cứ điểm nào cũng không được lớn hơn các giới hạn cho trong Bảng 3.
+
+**Bảng 3 - Các sai lệch được chấp nhận của các giá trị danh nghĩa trong phạm vi 1 lô**
+
+| **Các đặc tính của đầu neo**                                                                                                                                                                                                                                               |                           |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| Kích thước danh nghĩa của đầu neo, D  H,max                                                                                                                                                                                                                                | ± 5%                      |
+| Tỷ lệ dạng bề ngoài α  A                                                                                                                                                                                                                                                   | ± 5%                      |
+| Profin chiều dày                                                                                                                                                                                                                                                           | ± 5%                      |
+| Giới hạn bền của vật liệu                                                                                                                                                                                                                                                  | Nằm trong phạm vi một cấp |
+| **Các đặc tính của thanh**                                                                                                                                                                                                                                                 |                           |
+| Các thanh trong một lô phải được giới hạn trong một loại thép theo TCVN 1651-1 và TCVN 1651-2 hoặc trong một cấp thép như đã quy định trong các tiêu chuẩn quốc gia.  Đối với nhóm B1 diện tích của gân trong một lô phải lớn hơn hoặc bằng diện tích gân của các mẫu thử. |                           |
+
+**7  Thử khả năng neo giữ**
+
+**7.1  Quy định chung**
+
+Trừ khi có thỏa thuận khác với khách hàng, phải tiến hành thử
+
+a) Tại lúc bắt đầu sản xuất một sản phẩm mới hoặc sản phẩm cải tiến;
+
+b) Tại lúc bắt đầu triển khai một phương pháp chế tạo mới hoặc phương pháp chế tạo cải tiến nếu phương pháp này có ảnh hưởng tới các đặc tính được quy định trong tiêu chuẩn này.
+
+Mục đích của thử nghiệm khả năng neo giữ là kiểm tra sự truyền tải trọng từ thanh thép cốt bê tông cho đầu neo và truyền tải trọng vào bê tông.
+
+CHÚ THÍCH 1: Phép thử được thiết kế cho thanh thép cốt có đầu neo trong điều kiện đơn giản hóa nhưng có thể thực hiện được để tránh các yêu cầu riêng và chi tiết về hình học của đầu neo và mối nối giữa đầu neo và thân thanh. Chủ đích của phép thử là để có thể triển khai được các sản phẩm mới đáp ứng các yêu cầu của tiêu chuẩn này về trạng thái và các đặc tính của thanh thép cốt có đầu neo.
+
+Đối với mỗi lô thanh thép cốt có đầu neo và đối với mỗi loại thanh phải thực hiện số lượng các phép thử khả năng neo giữ như đã quy định trong 7.2 và 7.3. Mỗi phép thử phải được tiến hành với ba mẫu thử.
+
+Thử khả năng neo giữ phải bao gồm hai loại phép thử:
+
+- Thử truyền tải trọng: Một phép thử với đầu neo được đưa vào trong bê tông để kiểm tra về hình học của đầu neo và khả năng truyền tải trọng của đầu thành vào bê tông. Các phép thử khác nhau có liên quan đến các loại thanh thép cốt có đầu neo được sử dụng theo dự định (xem 5.4). Phép thử khả năng neo giữ phải kiểm tra xem hệ thanh thép cốt có đầu neo thực tế thuộc vào loại nào. Trong một số điều kiện, thử nghiệm trong bê tông có thể được thay thế bằng các phép thử đặc biệt trong không khí đối với các nhóm B2, B3, F1 và F2 (xem 7.2.1).
+
+- Các phép thử cứng vững của mối nối đầu neo - thân thanh: Các phép thử trong không khí nhằm mục đích thử nghiệm độ cứng vững của mối nối thanh với đầu neo, ví dụ thử nghiệm về chất tải xiên (nghiêng).
+
+CHÚ THÍCH 2: Có thể tạo ra sự chất tải xiên trong một cấu kiện bê tông, ví dụ nếu đầu neo tựa một phía trên một thanh ngang sẽ tạo ra giá đỡ cứng vững hơn so với bê tông ở xung quanh phía kia của đầu neo.
+
+Nhà sản xuất phải quy định giới hạn bền của bê tông và loại bê tông (ví dụ bê tông có mật độ bình thường, bê tông có cốt liệu nhẹ hoặc bê tông có cốt sợi) của mẫu thử.
+
+Giới hạn bền của bê tông được lựa chọn phải tiêu biểu cho giới hạn bền nhỏ nhất của bê tông để đầu neo có thể đạt được tải trọng neo giữ giới hạn.
+
+CHÚ THÍCH 3: Bê tông có cấp tối thiểu là B30 (ISO 22965-2) được khuyến nghị sử dụng. Có thể cho phép sử dụng các cấp bê tông thấp hơn theo các tiêu chuẩn và quy định của quốc gia.
+
+Thử nghiệm khả năng neo giữ có hiệu lực đối với cấp bê tông của mẫu thử và tất cả các cấp cao hơn. Tuy nhiên, đối với bê tông có cốt liệu nhẹ, bê tông có giới hạn bền rất cao, bê tông có cốt sợi và các loại bê tông đặc biệt khác nên quan tâm đến các phép thử khả năng neo giữ bổ sung. Trong trường hợp này bê tông có cấp cao hơn B90 (ISO 22695-2) nên được xem là bê tông có giới hạn bền rất cao.
+
+CHÚ THÍCH 4: Khách hàng có thể quy định giới hạn cho “bê tông có giới hạn bền rất cao”. Rất ít các phép thử trên các thanh thép cốt có đầu neo với bê tông có cáp trên cấp B60 đã được thực hiện.
+
+Phải thực hiện các phép thử theo TCVN 13684-2 (ISO 15698-2).
+
+Tải trọng và dạng hư hỏng phải được trình bày rõ trong báo cáo thử.
+
+Nhà sản xuất phải cung cấp các tài liệu cho khách hàng ở dạng các chứng chỉ độc lập hoặc các báo cáo thử xác nhận sự phù hợp của hình dạng và các kích thước đầu neo cho ứng dụng theo dự định.
+
+**7.2  Thử truyền tải trọng**
+
+**7.2.1  Quy định chung**
+
+Phải tiến hành thử nghiệm một số đường kính thanh đại diện cho mỗi lô thanh thép cốt có đầu neo. Nếu một lô gồm có hai đường kính thanh thì phải thử cả hai đường kính. Nếu lô có nhiều hơn hai đường kính thì phải thử đường kính nhỏ nhất và đường kính lớn nhất. Thử khả năng neo giữ của các đường kính trung gian phải được tiến hành theo từng nấc không lớn hơn 10 mm.
+
+Có thể bỏ qua phép thử khả năng neo giữ đối với các thanh trong phạm vi một lô và trong phạm vi một nấc không lớn hơn 10 mm.
+
+Đối với các nhóm B2, B3, F1 và F2 có thể thực hiện các phép thử truyền tải trọng cả về thử kéo và thử mỏi trong không khí theo TCVN 13684-2 (ISO 15698-2) nếu các điều kiện sau được đáp ứng:
+
+1) Bề mặt tựa hiệu dụng của đầu neo ít nhất phải bằng 9 lần tiết diện của thanh;
+
+2) Toàn bộ bề mặt tựa của đầu neo nằm trong một mặt phẳng vuông góc với đường trục của thanh cho phép có 10% diện tích bề mặt tựa được định vị trong phạm vi một đường kính của thanh tính từ mặt phẳng tựa chính;
+
+3) Giới hạn chảy lớn nhất được quy định của thanh là 500 MPa;
+
+4) Thanh thép cốt có đầu neo được dự định sử dụng trong bê tông có cấp tối thiểu là B30 (ISO 22965-2);
+
+5) Thanh thép cốt có đầu neo được dự định sử dụng trong bê tông có cấp không lớn hơn cấp B60 (ISO 22695-2);
+
+6) Gối đỡ đầu neo cho thử nghiệm trong không khí theo các điều khoản riêng cho trong TCVN 13684-2 (ISO 15698-2).
+
+CHÚ THÍCH 1: Quy trình truyền tải trọng tĩnh từ đầu neo cho bê tông của các thanh thép cốt có đầu neo đáp ứng các điều kiện nêu trên được xem là có đủ tư liệu về thử nghiệm tương tự như các tư liệu cho trong tiêu chuẩn này và về nghiên cứu thực nghiệm toàn diện trong những năm đã qua.
+
+CHÚ THÍCH 2: Trong một số trường hợp có thể cần đến thông tin về độ cứng vững neo giữ. Nếu có yêu cầu thì cần phải thực hiện các phép thử trong bê tông. Độ cứng vững neo giữ được cho bằng các đường cong tải trọng biến dạng.
+
+CHÚ THÍCH 3: Độ cứng vững uốn của đầu neo ngang qua đường trục của thanh có thể có ảnh hưởng đáng kể đến khả năng tải của mối nối thanh với đầu neo. Các điều khoản về gối đỡ đầu neo cho trong TCVN 13684-2 (ISO 15698-2) bảo đảm sự xấp xỉ như nhau của cùng các ứng suất uốn trong đầu neo, vuông góc với đường trục của thanh khi thử trong không khí (mục 6) như đối với một đầu neo được đưa vào trong bê tông.
+
+Nếu không đáp ứng được các điều kiện từ 1 đến 6, phải thực hiện các phép thử truyền tải trọng cho các nhóm B2, B3, F1 và F2 với mẫu thử được đưa vào trong bê tông.
+
+Các nhóm B1 và S luôn phải được thử trong bê tông.
+
+Thực hiện phép thử trong bê tông để kiểm tra các ứng suất tựa của đầu neo (ứng suất chèn dập) và độ cứng vững neo giữ cũng như sự truyền tải trọng của đầu neo cho thanh.
+
+Các yêu cầu trong 7.2.2 và 7.2.3 có hiệu lực đối với cả hai phép thử trong bê tông và trong không khí. Đối với các phép thử với mẫu thử trong không khí chỉ áp dụng các yêu cầu có liên quan.
+
+**7.2.2  Tải trọng neo giữ trong điều kiện chất tải tĩnh - Loại B**
+
+Đây là phép thử cơ bản và bắt buộc đối với tất cả các loại thanh thép cốt có đầu neo. Ba nhóm của thanh thép cốt có đầu neo thuộc loại B có khả năng tải của đầu neo đạt tới một phần của giới hạn chảy quy định hoặc thực tế của thanh hoặc giới hạn bền kéo quy định hoặc thực tế của thanh các yêu cầu trong mỗi loại như sau:
+
+Nhóm B1: Cùng với lực liên kết của một đoạn thanh thép cốt đã quy định (F b ) đầu neo phải có khả năng neo giữ giới hạn bền kéo nhỏ nhất quy định của thanh thép cốt bê tông, R eH,spec .(R m /R eH ) spec .A B,nom . Đối với loại này chỉ có thể chấp nhận sử dụng các thanh thép cốt có gân.
+
+Trong trường hợp khi chỉ có một giá trị R m,spec được quy định trong tiêu chuẩn thanh thép cốt thì lực neo giữ tối thiểu phải là R m,spec . A B,nom .
+
+Giá trị nhỏ nhất A gt được đo trong thanh thép cốt bê tông ở bên ngoài chiều dài liên kết của thanh tối thiểu phải bằng 0,7 lần giá trị đặc trưng A gt đã quy định của thanh thép cốt bê tông. Khi không quy định A gt cho các thanh thép cốt bê tông thì phải đạt được giá trị nhỏ nhất 3% trong thanh ở bên ngoài chiều dài liên kết trước khi mẫu thử bị phá hủy.
+
+Giá trị F 0 phải do nhà sản xuất xác định và chiều dài phát triển gắn liền được sử dụng trong các phép thử phải được tính toán đối với giới hạn bền của thép cốt bê tông có liên quan và giới hạn bền của bê tông trong một tiêu chuẩn thiết kế bê tông thích hợp. Phép thử khả năng neo giữ có hiệu lực đối với tất cả các diện tích bề mặt của gân lớn hơn hoặc bằng diện tích bề mặt của gân ở mẫu thử.
+
+Nhóm B2: Khi không có bất cứ vật liên kết nào, đầu neo phải có khả năng neo giữ giới hạn bền kéo nhỏ nhất quy định của thanh thép cốt bê tông, R eH,spec (R m /R eH ) spec .A B,nom .
+
+Trong trường hợp khi chỉ một giá trị R m,spec được quy định trong tiêu chuẩn thanh thép cốt bê tông thì lực neo giữ tối thiểu phải là R m,spec . A B,nom .
+
+Giá trị A gt nhỏ nhất đo được trong thanh thép cốt bê tông ở bên ngoài mối nối thanh với đầu neo tối thiểu phải bằng 0,7 lần giá trị đặc trưng A gt được quy định của thanh thép cốt bê tông. Khi không quy định A gt cho các thanh thép cốt bê tông thì phải đạt được giá trị nhỏ nhất 3% trong thanh ở bên ngoài mối nối thanh với đầu neo trước khi mẫu thử bị phá hủy.
+
+Nhóm B3: Khi không có bất cứ lực liên kết nào, đầu neo phải có khả năng neo giữ một lực tương đương với giới hạn bền kéo thực của thanh thép cốt có đầu neo được thử R m,act . A B,nom . Yêu cầu được xem là đáp ứng được nếu ít nhất phải xảy ra một trong các trường hợp sau:
+
+a) Sự phá hủy xảy ra ở bên ngoài vùng chịu ảnh hưởng;
+
+b) Đạt được độ giãn nhỏ nhất quy định được yêu cầu đối với thanh thép cốt bê tông;
+
+c) Tối thiểu phải đạt được 0,95 R m,act bằng so với giới hạn bền kéo thực của một mẫu thử không có đầu neo liền kề từ cùng một mẻ thanh thép cốt hoặc so sánh với thanh thép cốt đã được thử lại của mẫu thử bị đứt gãy, nếu có thể.
+
+Mẫu thử cho loại này phải được chế tạo bằng thép cốt bê tông được lựa chọn đặc biệt từ giới hạn trên 50% của phạm vi giới hạn bền kéo. Việc lựa chọn có thể dựa trên các chứng chỉ về cán.
+
+CHÚ THÍCH 1: Tải trọng neo giữ đầu neo tháp hơn trong nhóm B1 có thể là do các kích thước của đầu neo giảm đi hoặc giới hạn bền trong mối nối đầu neo với thân thanh giảm đi.
+
+CHÚ THÍCH 2: Giá trị A gt quy định cho các thanh thép cốt bê tông thường là một giá trị đặc trưng. Vì trên thực tế không thể quy định một giá trị A gt đặc trưng cho thử nghiệm khả năng neo giữ cho nên giá trị được xem xét là một giá trị nhỏ nhất.
+
+CHÚ THÍCH 3: Dấu hiệu của sự đứt gãy thanh thép cốt bê tông thuộc nhóm B3 cho thấy một tải trọng lớn hơn lực kéo nhỏ nhất một cách đáng kể được truyền bởi đầu neo và có thể đạt được độ biến dạng lớn hơn A gt nhỏ nhất (hoặc A5 hoặc A10) và như vậy độ dẻo của thanh thép cốt bê tông được bảo đảm.
+
+Yêu cầu của thử nghiệm đối với truyền tải trọng trong bê tông phải được xem là được đáp ứng cho B1, B2 và B3 nếu độ dịch chuyển δ của đầu neo giữ (xem TCVN 13684-2 (ISO 15698-2)) nhỏ hơn 0,20 mm; hoặc nếu mẫu thử bị cắt và không quan sát thấy biểu hiện về sự vỡ của bê tông.
+
+**7.2.3  Tải trọng neo giữ trong điều kiện tải mỏi đàn hồi có chu kỳ cao - Loại F**
+
+Xác định hai loại thanh thép cốt có đầu neo chịu tác dụng của tải trọng mỏi đàn hồi có chu kỳ cao. Các yêu cầu đối với mỗi loại như nhau:
+
+Nhóm F1: Một hoặc nhiều mẫu thử có thể nằm trong vùng chịu ảnh hưởng. Phải ghi lại số lượng các chu kỳ tải tới khi mẫu thử bị phá hủy.
+
+Nhóm F2: Tất cả các mẫu thử phải nằm trong thanh cơ bản (gốc) bên ngoài vùng chịu ảnh hưởng. Có thể kết thúc phép thử khi yêu cầu đối với thanh cơ bản được đáp ứng.
+
+Yêu cầu của thử nghiệm đối với truyền tải trọng trong bê tông phải được xem là được đáp ứng cho cả hai nhóm F1 và nhóm F2 nếu độ dịch chuyển δ của đầu neo giữ (xem TCVN 13684-2 (ISO 15698-2)) nhỏ hơn 0,20 mm, hoặc nếu mẫu thử bị cắt qua và không quan sát thấy biểu hiện về sự vỡ vụn của bê tông.
+
+Báo cáo thử phải bao gồm các biểu đồ chỉ ra số lượng các chu kỳ ứng suất tới khi phá hủy ít nhất là tại hai phạm vi ứng suất khác nhau cùng với biểu đồ S-N cũng thanh thép cốt bê tông cơ bản, nếu có
+
+Số lượng các chu kỳ ứng suất quy định, phạm vi ứng suất 2σ A và các ứng suất lớn nhất σ max phải phù hợp với các tiêu chuẩn có liên quan cho thanh thép cốt bê tông được sử dụng hoặc theo thỏa thuận giữa khách hàng và nhà sản xuất tại thời điểm đặt hàng. Đối với mỗi lô thanh thép cốt có đầu neo, phải tiến hành thử ít nhất là ba mẫu thử đối với mỗi phạm vi ứng suất.
+
+**7.2.4  Tải trọng neo giữ trong điều kiện chất tải đàn-dẻo có chu kỳ thấp- Loại S**
+
+Có một loại cho các thanh thép cốt có đầu neo chịu tác dụng của tải trọng đàn hồi - dẻo có chu kỳ thấp. Yêu cầu đối với loại này như sau:
+
+Loại S: mối nối đầu neo với thân thanh phải chịu được các giai đoạn 1 đến 3 của chương trình chất tải quy định mà không bị phá hủy.
+
+Chương trình chất tải
+
+- Giai đoạn 1: 20 chu kỳ tải trọng giữa 0,05 R eH,spec và 0,95 R eH,spec
+
+- Giai đoạn 2:4 chu kỳ tải trọng giữ 0,5 R eH,spec và 2 ε y,act
+
+- Giai đoạn 3: 4 chu kỳ tải trọng giữa 0,5 R eH,spec và 5 ε y,act
+
+- Giai đoạn 4: chất tải tới khi phá hủy
+
+Đối với mỗi phép thử phải thử Ba mẫu thử. Phải thực hiện các phép thử phù hợp với TCVN 13684-2 (ISO 15098-2).
+
+Vị trí bị phá hủy, dạng phá hủy và tải trọng phá hủy phải được ghi lại và đưa vào báo cáo thử.
+
+CHÚ THÍCH: Thử nghiệm với quá trình chất tải đàn hồi - dẻo ngược chiều không được xem là thích hợp vì dạng phá hủy ở trạng thái bị nén sẽ có liên quan tới bê tông và là một vấn đề cần thảo luận về thiết kế bê tông.
+
+Nếu yêu cầu đối với loại B được đáp ứng trong các phép thử loại S thì có thể bỏ qua các phép thử loại B và các thanh thép cốt có đầu neo có thể được phân loại theo các yêu cầu của B1, B2 hoặc B3 tương ứng.
+
+**7.3  Các phép thử độ cứng vững của mối nối đầu neo với thân thanh**
+
+**7.3.1  Quy định chung**
+
+Độ cứng vững của mối nối đầu neo với thân thanh phải được kiểm tra bằng thử kéo bằng nêm hoặc thử uốn.
+
+CHÚ THÍCH: Đối với các mối nối khác với các mối nối hàn hoặc rèn, không áp dụng phép thử uốn. Do đó phép thử kéo bằng nêm được sử dụng cho các sản phẩm này.
+
+Phải thực hiện các phép thử độ cứng vững của mối nối đầu neo với thân thanh cho tất cả các đường kính thanh trong mỗi lô.
+
+Phải thử ba mẫu thử cho mỗi phép thử. Các phép thử phải được thực hiện phù hợp với TCVN 13684-2 (ISO 15698-2) cần tham khảo TCVN 197-1 (ISO 6892-1).
+
+**7.3.2  Thử kéo bằng nêm**
+
+Phải thực hiện phép thử kéo bằng nêm đối với các thanh thép cốt có đầu neo ở góc nêm tối thiểu là 3°. Tuy nhiên, đối với các mối nối hàn và rèn, phép thử phải được thực hiện ở góc nêm tối thiểu là 10°. Góc nêm sử dụng trong thử nghiệm phải được công bố trong báo cáo thử.
+
+CHÚ THÍCH 1: Đối với các thanh thép cốt có đầu neo rèn và hàn, phép thử uốn là phép thử quan trọng nhất để kiểm tra nguy cơ xảy ra giòn cục bộ (các đầu neo rèn) và lộ ra các vết nứt có thể có phải áp dụng góc nêm lớn hơn nếu sử dụng phép thử nêm.
+
+Thanh thép cốt có đầu neo phải chịu tác dụng của lực kéo sau:
+
+Nhóm B1: đầu phải có khả năng neo giữ (R m /R eH ) spec . R eH,spec . A B,nom - F b .
+
+Nhóm B2: đầu phải có khả năng neo giữ (R m /R eH ) spec . R eH,spec . A B,nom . Trong các trường hợp thử chỉ quy định một giá trị R m,spec . Trong tiêu chuẩn thanh thép cốt bê tông thì lực được neo giữ tối thiểu phải là R m,spec - A B,nom .
+
+Nhóm B3: đầu phải có khả năng neo giữ một lực tương đương với giới hạn bền kéo thực tế của thanh thép cốt bê tông có đầu neo được thử R m,act . A B,nom . Yêu cầu được xem là được đáp ứng nếu xảy ra một trong các trường hợp sau:
+
+- Sự phá hủy xảy ra ở bên ngoài vùng chịu ảnh hưởng;
+
+- Đạt được độ giãn dài nhỏ nhất được quy định theo yêu cầu đối với thanh thép cốt bê tông;
+
+- Ít nhất phải đạt được 0,95 R m,act bằng so sánh với giới hạn bền kéo thực tế của một mẫu thử liền kề không có đầu neo từ cùng một mẻ thanh thép cốt bê tông hoặc so sánh với thanh thép cốt bê tông được thử lại có mẫu thử bị đứt gãy nếu có thể.
+
+Đối với các đầu neo có ren thuộc các nhóm B1 và B2, phải thực hiện phép thử kéo bằng nêm với giới hạn chảy của các thanh thép cốt bê tông trong phạm vi cả trên và dưới 50% phạm vi giới hạn chảy của loại (mác) thép được chỉ định để dùng làm đầu neo.
+
+Đối với các đầu neo có ren thuộc nhóm B3, phải thực hiện phép thử kéo bằng nêm với giới hạn chảy của các thanh thép cốt bê tông trong phạm vi cả trên và dưới 50% phạm vi giới hạn chảy của loại (mác) thép được chỉ định để dùng làm đầu neo. Sẽ biểu thị giới hạn chảy thực tế lớn nhất cho phép của thanh R eH,act để đạt được sự đứt gãy. Các số liệu công bố tương ứng phải được đưa vào báo cáo thử.
+
+CHÚ THÍCH 2: Phạm vi giới hạn chảy được quy định trong tiêu chuẩn thép cốt bê tông và hiệu số giữa giới hạn chảy lớn nhất và giới hạn chảy nhỏ nhất hoặc thu được từ nhà sản xuất thép cốt bê tông.
+
+CHÚ THÍCH 3: Đối với nhóm B3, ren của thanh thép cốt thường là mối liên kết yếu hơn, vì thế một giới hạn chảy tháp của thanh thép cốt sẽ tạo ra tải trọng neo giữ thấp nhất. Tuy nhiên, nếu giới hạn chảy của thanh thép cốt có giá trị cao hơn so với giới hạn chảy của vật liệu dầu neo thì mối ghép ren của đầu có thể là mối liên kết yếu nhất. Vì giới hạn bền của vật liệu thanh thép cốt có thể thay đổi rất lớn đối với chính một giới hạn bền danh nghĩa cho nên phải kiểm tra cả hai giới hạn.
+
+Đối với các thanh thép cốt có đầu neo lắp ghép kiểu ống nối - chốt trượt, mỗi phép thử kéo bằng nêm phải được thực hiện với thép cốt ở trong phạm vi cả hai vùng trên và dưới của phạm vi giới hạn bền kẻo thực tế lớn nhất được dự định sử dụng cho các đầu neo. Giới hạn bền kéo vùng phía trên dùng cho thử nghiệm mối nối đầu neo với thân thanh biểu thị giới hạn bền kéo thực tế lớn nhất cho phép của thanh R m,act các số liệu công bố tương ứng phải được đưa vào báo cáo thử.
+
+CHÚ THÍCH 4: Độ ăn sâu của các chốt trượt vào thanh thép cốt phụ thuộc vào độ cứng của các thanh và có liên quan đến giới hạn bền kéo.
+
+**7.3.3  Thử uốn**
+
+Mẫu thử phải được uốn quanh trục gá uốn tới một góc tối thiểu là 60° mà không quan sát thấy vết nứt, gãy một phần hoặc toàn bộ của đầu neo, thân thanh hoặc mối nối đầu neo với thân thanh. Đường kính của trục giá uốn phải nhỏ hơn hoặc bằng các đường kính được quy định cho phép thử uốn trong ISO 17660-1.
+
+Đối với các thanh thép cốt có đầu neo hàn, đương lượng cacbon của vật liệu sử dụng trong thử nghiệm khả năng neo giữ của các vật liệu có một đương lượng cacbon bằng hoặc thấp hơn, nhưng không thử nghiệm các vật liệu có các đương lượng cacbon cao hơn.
+
+CHÚ THÍCH: Tính hàn và khả năng rèn đều phụ thuộc vào thành phần của thép và chúng thay đổi một cách đáng kể từ máy cán này sang máy cán khác.
+
+Đối với mỗi phép thử phải tiến hành thử ba mẫu thử. Phải thực hiện các phép thử phù hợp với TCVN 13684-2 (ISO 15698-2). ở đầu neo, thân thanh hoặc mối đối đầu neo với thân thanh không được có các vết nứt nhìn thấy bằng mắt thường.
+
+**8  Chế tạo**
+
+**8.1  Quy định chung**
+
+Tùy thuộc vào phương pháp gắn chặt đầu neo, yêu cầu sau được đưa ra để bảo đảm một quá trình sản xuất thích hợp, ổn định và để bảo đảm có khả năng theo dõi được sản phẩm.
+
+**8.2  Thanh thép cốt có đầu neo hàn**
+
+Phải sử dụng quy trình hàn tuân theo ISO 17660-1 cho tất cả các quá trình hàn được yêu cầu trong sản xuất của đầu neo với thân thanh bao gồm cả quá trình hàn ma sát. Nhà sản xuất có thể lựa chọn sử dụng các tiêu chuẩn có liên quan khác tùy thuộc vào sự chấp thuận của khách hàng.
+
+**8.3  Thanh thép cốt có đầu neo rèn**
+
+Đầu neo trên các thanh thép cốt có đầu neo được rèn từ nguyên khối phải được chế tạo bằng làm biến dạng các đầu mút của thanh trong một quá trình rèn nóng các nhiệt độ thích hợp do nhà sản xuất đưa ra phải được kiểm tra và duy trì trong suốt quá trình nung nóng và rèn để loại bỏ rủi ro bị gãy giòn tại mối nối đầu neo với thân thanh.
+
+**8.4  Thanh thép cốt có đầu neo lắp ghép ren**
+
+Có thể sử dụng bất cứ dạng ren nào đã được quy định với điều kiện là thỏa mãn các yêu cầu về thử nghiệm, kiểm tra của tiêu chuẩn này và TCVN 13684-2 (ISO 15698-2). Dạng ren quy định phải bao gồm cả dung sai. Phải sử dụng các calip ren lọt - không lọt để kiểm tra ren.
+
+Phải chú ý tính đến độ không tròn ở các thanh thép cốt bê tông đã qua cán trong chế tạo ren sao cho duy trì được các kích thước nhỏ nhất của ren xung quanh toàn bộ chu vi của thanh mà nhà sân xuất sản phẩm yêu cầu.
+
+Nhà sản xuất có thể tùy ý lựa chọn sử dụng ren được cán nóng hoặc cán nguội hoặc được gia công cắt gọt trên bề mặt của thanh và hoạt động thanh với điều kiện là thỏa mãn các yêu cầu về thử nghiệm, kiểm tra của tiêu chuẩn này.
+
+Đầu neo phải được gắn cố định vào thân thanh sao cho không bị lỏng ra do nung của máy đầm rung nền bê tông hoặc phải được gắn cố định vào thân thanh bằng các mối ghép ren thích hợp, bằng các đai ốc hàn hoặc bằng các phương tiện khác.
+
+**8.5  Thanh thép cốt có dầu neo chồn hoặc ép đùn**
+
+Các thanh thép cốt có đầu neo chồn hoặc ép đùn chỉ được chế tạo từ các thanh thép cốt có gân, các ống nổi có thể được ép theo phương hướng tâm hoặc chiều trục. Phải có hướng dẫn lắp ráp rõ ràng, đối với mỗi cỡ kích thước của thanh thép cốt về:
+
+- Mẫu (model) của dụng cụ ép, nếu điều chỉnh được, công suất của dụng cụ;
+
+- Số lượng, vị trí và định hướng của các nguyên công ép.
+
+Có thể sử dụng máy ép thủy lực và các khuôn rèn thích hợp để gắn chặt các ống nối với các đầu neo vào thanh thép cốt bê tông bằng phương pháp chồn nguội. Có thể sử dụng một đầu neo có ren côn trong riêng biệt được cột chặt vào khớp nối có ren bằng chồn nguội.
+
+Khi ống nối được kết nối với đầu neo bằng các mối ghép ren thì phải áp dụng các yêu cầu đối với các thanh thép cốt có đầu neo lắp ghép ren.
+
+**8.6  Thanh thép cốt có đầu neo lắp ghép kiểu ống nối - chốt trượt**
+
+Phải có hướng dẫn lắp ráp rõ ràng về:
+
+- Kiểu dụng cụ dùng để siết chặt các chốt trượt (chèn vặn va đập hoặc dụng cụ chuyển động liên tục);
+
+- Trình tự siết chặt các chốt trượt;
+
+- Lời giới thiệu để bảo đảm rằng các chốt (bulông) trượt không bị hư hỏng do uốn hoặc mỏi.
+
+Khi ống nối được kết nối với đầu neo bằng các mối ghép ren thì phải áp dụng các yêu cầu đối với các thanh thép cốt có đầu neo lắp ghép ren. Khi ống nối được kết nối với đầu neo và bằng hàn thì phải áp dụng các yêu cầu đối với các thanh thép cốt có đầu neo hàn.
+
+**8.7  Ghi nhãn**
+
+Ghi nhãn phải cung cấp đủ thông tin cho theo dõi sản phẩm.
+
+Đối với các đầu neo lắp ghép, nhà sản xuất phải ghi nhãn cho mỗi kiện (gỏi) đầu neo với sự nhận biết thích hợp bảo đảm cho sự theo dõi sản phẩm.
+
+Tất cả các thanh thép cốt có đầu neo được chế tạo theo tiêu chuẩn này phải được nhận biết bằng một bộ các ký hiệu dễ phân biệt được dập sao cho dễ đọc trên đầu neo, ở cách xa thanh để biểu thị:
+
+- Dấu chấm đầu tiên, một chữ cái hoặc ký hiệu để chỉ tên gọi của nhà sản xuất.
+
+- Tên gọi của sản phẩm và loại đầu neo, đối với các đầu neo lắp ghép cần bổ sung thêm loại thanh lớn nhất có thể áp dụng được;
+
+- Số lô đối với các đầu neo riêng biệt được viện dẫn trong các tài liệu kiểm tra.
+
+Tối thiểu phải có các thông tin sau được ghi nhãn trên mỗi lô thanh thép cốt bê tông có đầu neo:
+
+- Nhà máy của nhà sản xuất;
+
+- Nhận biết sản phẩm (loại đầu, giới hạn bền nhỏ nhất có thể áp dụng được của bê tông, loại thanh, cỡ kích thước của thanh, chiều dài thanh);
+
+- Số lượng chi tiết trong một bó;
+
+- Số mẻ hoặc thông tin tương đương dùng cho tham khảo chéo các tài liệu kiểm tra.
+
+**8.8  Thông tin do khách hàng cung cấp**
+
+Khách hàng phải cung cấp các thông tin sau tại thời điểm đặt hàng
+
+- Tên gọi của sản phẩm;
+
+- Tiêu chuẩn cho các thanh thép cốt bê tông;
+
+- Cỡ kích thước của thanh và loại thanh;
+
+- Loại neo giữ;
+
+- Đầu neo có ở một hoặc cả hai đầu mút;
+
+- Chiều dài toàn bộ của thanh thép cốt có đầu neo;
+
+- Số lượng đặt hàng.
+
+**9  Thử nghiệm trong sản xuất**
+
+**9.1  Thử cơ tính và các yêu cầu về đặc tính**
+
+**9.1.1  Quy định chung**
+
+Phép thử các thanh thép cốt có đầu neo phải bảo đảm duy trì được sản xuất ổn định. Thử nghiệm trong sản xuất gồm có các phép thử kéo, xem 9.12, các phép thử uốn, xem 9.13 hoặc các phép thử kéo bằng nêm, xem 9.14 tùy thuộc vào phép thử nào là thích hợp nhất đối với các mối nối thân thanh với đầu neo:
+
+- Đối với các mối nối đầu neo với thân thanh không có một vùng chịu ảnh hưởng gì, phải thực hiện phép thử kéo;
+
+- Đối với các mối nối đầu neo với thân thanh có một vùng chịu ảnh hưởng nhiệt, phải thực hiện phép thử uốn hoặc phép thử nêm.
+
+Các phép thử phải được tiến hành phù hợp với TCVN 13684-2 (ISO 15698-2).
+
+**9.1.2  Thử kéo**
+
+Thanh thép cốt có đầu neo phải chịu tác dụng của lực kéo sau:
+
+Nhóm B1. Đầu neo phải có khả năng neo giữ (R m /R eH ) spec . R eH,spec . A B,nom - F b . Trong đó F b là lực neo giữ bằng liên kết. Mẫu thử phải được chịu tải tới khi bị phá hủy.
+
+Nhóm B2. Đầu neo phải có khả năng neo giữ (R m /R eH ) spec . R eH,spec . A B,nom . Trong các trường hợp khi chỉ có một giá trị R m,spec được quy định trong tiêu chuẩn của thanh thép cốt bê tông thì lực được neo giữ tối thiểu phải là R m,spec . A B,nom . Mẫu thử phải được chịu tải tới khi bị phá hủy và điểm phá hủy phải nằm trong vật liệu cơ bản của thanh và không nằm trong vùng chịu ảnh hưởng hoặc trong vùng kẹp chặt.
+
+Nhóm B3. Đầu neo phải có khả năng neo giữ một lực tương đương với giới hạn bền kéo thực tế của thanh thép cốt có đầu neo được thử R m,act . A B,nom . Yêu cầu được xem là được đáp ứng nếu xảy ra ít nhất là một trong các trường hợp sau:
+
+- Sự phá hủy xảy ra ở ngoài vùng chịu ảnh hưởng;
+
+- Đạt được độ giãn dài nhỏ nhất quy định được yêu cầu đối với thanh;
+
+- Tối thiểu phải đạt được không phải 95 R m,act bằng so sánh với giới hạn bền kéo thực tế của một mẫu thử liền kề không có đầu neo của cùng một mẻ thanh hoặc so sánh với thanh thép cốt được thử lại bị phá hủy, nếu có thể thực hiện được.
+
+Đối với các đầu neo lắp ghép, phải thực hiện các phép thử với các thanh thép cốt bê tông có cùng một đặc tính như đã sử dụng trong phép thử đánh giá chất lượng.
+
+**9.1.3  Thử uốn**
+
+Mẫu thử phải được uống xung quanh trục giá uốn tới một góc tối thiểu là 60°. Các đường kính yêu cầu của trục gá uốn được cho trong 7.3.3. Phép thử phải được tiến hành phù hợp với TCVN 13684-2 (ISO 15698-2).
+
+Không được có các vết nứt mà một người có thì lực bình thường hoặc thị lực được hiệu chỉnh có thể nhìn thấy được ở đầu neo, thân thanh hoặc mối nối đầu neo với thân thanh.
+
+**9.1.4  Thử kéo bằng nêm**
+
+Phải thực hiện các phép thử kéo căng nên với các góc được quy định trong 7.3.2.
+
+**9.2  Tần suất thử**
+
+**9.2.1  Số lượng các phép thử**
+
+Tối thiểu phải tiến hành hai phép thử trong khoảng thời gian sản xuất đợt, cả một thử nghiệm rút bắt đầu vào một thử nghiệm giúp kết thúc mỗi khoảng thời gian sản xuất. Phải tiến hành các thử nghiệm bổ sung với một thử nghiệm trên 1000 chi tiết tại các khoảng thời gian ngẫu nhiên trong khoảng thời gian sản xuất do nhà sản xuất quyết định.
+
+Trong trường hợp khi các vật đúc khác nhau của vật liệu đầu neo hoặc vật liệu thanh hoặc cả hai thuộc phạm vi của cùng một tiêu chuẩn vật liệu, được sử dụng để chế tạo các thanh thép cốt có đầu neo trong tiến trình sản xuất, phải thực hiện ít nhất là hai thử nghiệm trong sản xuất phù hợp với TCVN 13684-2 (ISO 15698-2) trước khi tiếp tục sản xuất.
+
+**9.3  Thử lại**
+
+**9.3.1  Yêu cầu không được đáp ứng tại chỗ giao nhau giữa đầu neo và thân thanh**
+
+Nếu các mẫu thử kéo, thử uốn hoặc thử kéo bằng nêm không đáp ứng các yêu cầu quy định trong 9.1.2, 9.1.3 hoặc 9.1.4 tại mối nối giữa đầu neo và thân thanh thì lô sản phẩm phải được cách ly tới khi phát hiện ra nguyên nhân cơ bản của vấn đề nêu trên và thực hiện công việc sửa chữa, hiệu chỉnh. Nếu các chi tiết có khuyết tật không thể tuân thủ được tiêu chuẩn này thì phải được loại bỏ.
+
+**9.3.2  Yêu cầu không được đáp ứng**
+
+Nếu kết quả của thử kéo, thử uốn hoặc tự kéo căng nêm không đáp ứng được các yêu cầu quy định trong 9.1.2, 9.1.3 hoặc 9.1.4, ngoại trừ mối nối đầu neo với thân thanh, thì cho phép tiến hành thử lại.
+
+Phải thử hai mẫu thử được lấy ngẫu nhiên từ lô sản phẩm trong quá trình thử lại. Cả hai mẫu thử phải đáp ứng được các yêu cầu của thử kéo, thử uốn hoặc thử căng nêm trong 9.1.2, 9.1.3 hoặc 9.1.4 hoặc lô sản phẩm phải được loại bỏ.
+
+Nếu bất cứ mẫu thử nào không đáp ứng yêu cầu vì lý do cơ học như sự hư hỏng của thiết bị thử hoặc có các vết nứt xuất hiện trong quá trình chuẩn bị mẫu thử, chuyền chở hoặc hư hỏng khác không có liên quan đến chế tạo hoặc thử nghiệm phải được loại bỏ và thay thế bằng mẫu thử khác được lấy từ cùng một lô sản phẩm.
+
+Nếu thử kéo, thử uốn hoặc thử căng nêm không đáp ứng yêu cầu vì lý do khác với cơ học hoặc có vết nứt trong mẫu thử như đã mô tả ở trên thì cho phép tiến hành thử lại trên hai mẫu thử được chọn ngẫu nhiên từ cùng một lô sản phẩm. Nếu kết quả của cả hai mẫu thử đáp ứng các yêu cầu quy định thì lô sản phẩm phải được chấp nhận, nếu không, lô sản phẩm phải được loại bỏ.
+
+**Phụ lục A**
+
+(Tham khảo)
+
+**Các loại thanh thép cốt bê tông có đầu neo**
+
+Bảng A.1 giới thiệu các loại thanh thép cốt bê tông có đầu neo quy định trong tiêu chuẩn này cùng với viện dẫn các điều khoản trong đó đưa ra các yêu cầu và phương pháp thử để đánh giá các đặc tính kỹ thuật được thử.
+
+**Bảng A.1 - Các loại thanh thép cốt bê tông có đầu neo**
+
+| **Ký hiệu của loại**   |    | **Đặc tính dược thử**                           | **Các yêu cầu các điều trong TCVN 13684-2 (ISO 15698- 2)**   | **Thử nghiệm các điều trong TCVN 13684-2 (ISO 15698- 2)**   |
+|------------------------|----|-------------------------------------------------|--------------------------------------------------------------|-------------------------------------------------------------|
+| B  (cơ bản)            | B1 | Giới hạn bền                                    | 7.2.2  +  7.3.2 hoặc 7.3.9                                   | 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7  +  6.2 hoặc 6.3          |
+|                        | B2 | Giới hạn bền                                    |                                                              |                                                             |
+|                        | B3 | Giới hạn bền và độ dẻo                          |                                                              |                                                             |
+| F  (mỏi)               | F1 | Như đối với B  +  Mỏi có chu kỳ cao             | Như đối với B  +  7.2.3                                      | Như đối với B  +  5.8                                       |
+|                        | F2 |                                                 |                                                              |                                                             |
+| S  (địa chấn)          |    | Như đối với B  +  Tải trọng mạnh có chu kỳ thấp | Như đối với B  +                                             | Như đối với B  +                                            |
+
+**Thư mục tài liệu tham khảo**
+
+[1] ISO 898-1, *Mechanical properties of fasteners made of carbon steel and alloy steel - Part 1: Bolts, screws and studs with specified property classes - Coarse thread and fine pitch thread (Cơ tính của các chi tiết kẹp chặt được chế tạo bằng thép cacbon và thép hợp kim - Phần 1: Bu lông, vít và vít cấy có các cấp đặc tính quy định - Ren bước lớn và ren bước nhỏ).*
+
+[2] ISO 4850-1, *High yield strength flat steel products - Part 1: General requirements (Các sản phẩm thép tấm có giới hạn chảy cao - Phần 1: Yêu cầu chung).*
+
+[3] EN 10164, *Steel products with improved deformation properties perpendicular to the surface of the product - Technical delivery conditions (Các sản phẩm thép có đặc tính biến dạng vuông góc với bề mặt sản phẩm được nâng cao - Điều kiện kỹ thuật cho cung cấp).*
