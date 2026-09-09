@@ -222,30 +222,30 @@ const LegalApp = {
       const isSelected = String(this.state.activeDocId) === String(doc.id);
       const isExpired = doc.status === 'expired';
 
-      let statusTag = '<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-950/70 text-emerald-300 border border-emerald-800">Còn hiệu lực</span>';
+      let statusTag = '<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">Còn hiệu lực</span>';
       if (doc.status === 'amended') {
-        statusTag = '<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-950/70 text-amber-300 border border-amber-800">Có SĐ/BS</span>';
+        statusTag = '<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-50 text-amber-800 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-200 dark:border-amber-800">Có SĐ/BS</span>';
       } else if (isExpired) {
-        statusTag = '<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-rose-950/70 text-rose-300 border border-rose-800">Hết hiệu lực</span>';
+        statusTag = '<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-rose-50 text-rose-800 dark:bg-rose-950/70 dark:text-rose-300 border border-rose-200 dark:border-rose-800">Hết hiệu lực</span>';
       }
 
       html += `
-        <div class="border-b border-gray-800/80 last:border-0 transition-colors ${isSelected ? 'bg-gray-900/90 border-l-2 border-l-amber-500 shadow-sm' : 'hover:bg-gray-900/40'}">
+        <div class="border-b border-gray-200 dark:border-gray-800/80 last:border-0 transition-colors ${isSelected ? 'bg-blue-50 dark:bg-gray-900/90 border-l-2 border-l-amber-500 shadow-sm' : 'hover:bg-gray-100 dark:hover:bg-gray-900/40'}">
           <div onclick="LegalApp.openDocument('${doc.id}')" class="p-3 cursor-pointer">
             <div class="flex items-center justify-between gap-2 mb-1">
               <div class="flex items-center gap-1.5">
-                <span class="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-900/50 text-blue-300 border border-blue-700/50 font-mono tracking-wider">${doc.docType || 'VB'}</span>
-                <span class="font-bold text-xs font-mono tracking-wide text-gray-200 ${isExpired ? 'line-through opacity-60' : ''}">${doc.code}</span>
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 border border-blue-300 dark:border-blue-700/50 font-mono tracking-wider">${doc.docType || 'VB'}</span>
+                <span class="font-bold text-xs font-mono tracking-wide text-gray-900 dark:text-gray-200 ${isExpired ? 'line-through opacity-60' : ''}">${doc.code}</span>
               </div>
               ${statusTag}
             </div>
-            <h4 class="text-xs font-semibold text-gray-300 line-clamp-2 leading-snug mb-1">${doc.title}</h4>
-            <div class="flex items-center gap-3 text-[10.5px] text-gray-500">
+            <h4 class="text-xs font-semibold text-gray-800 dark:text-gray-300 line-clamp-2 leading-snug mb-1">${doc.title}</h4>
+            <div class="flex items-center gap-3 text-[10.5px] text-gray-600 dark:text-gray-500">
               <span class="flex items-center gap-1"><i data-lucide="building-2" class="w-3 h-3"></i> ${doc.issuer || 'Ban hành'}</span>
               <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i> ${doc.issueDate ? new Date(doc.issueDate).getFullYear() : '—'}</span>
             </div>
           </div>
-          ${isSelected ? `<div id="doc-toc-${doc.id}" class="px-3 pb-3 pt-1 border-t border-gray-800/80 bg-black/40"></div>` : ''}
+          ${isSelected ? `<div id="doc-toc-${doc.id}" class="px-3 pb-3 pt-1 border-t border-gray-200 dark:border-gray-800/80 bg-gray-50 dark:bg-black/40"></div>` : ''}
         </div>
       `;
     }
@@ -316,17 +316,17 @@ const LegalApp = {
       const gTitle = (gNode.title || '').toString();
       if (g.type === 'chapter') {
         tocHtml += `
-          <button onclick="LegalApp.scrollToNodeById(${gNode.id})" class="${_btnCommon} font-bold text-[11px] text-amber-400 hover:text-amber-300 pt-2 pb-1 uppercase tracking-wide">
-            <i data-lucide="bookmark" class="w-3 h-3 text-amber-400 shrink-0"></i>
+          <button onclick="LegalApp.scrollToNodeById(${gNode.id})" class="${_btnCommon} font-bold text-[11px] text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 pt-2 pb-1 uppercase tracking-wide">
+            <i data-lucide="bookmark" class="w-3 h-3 text-amber-700 dark:text-amber-400 shrink-0"></i>
             <span class="truncate">${esc(gFr)}${gTitle ? ': ' + esc(gTitle) : ''}</span>
           </button>`;
       } else if (g.type === 'dieucha' || g.type === 'muccon') {
         const isDieu = g.type === 'dieucha';
         const dispRef = (gFr.endsWith('.') ? gFr : `${gFr}.`);
         tocHtml += `
-          <button onclick="LegalApp.scrollToNodeById(${gNode.id})" class="${_btnCommon} ${isDieu ? 'text-amber-200 hover:text-amber-300 hover:bg-amber-500/10 px-2 py-1.5 text-[11.5px] border-l-2 border-amber-500/60' : 'text-gray-200/80 hover:text-amber-200 hover:bg-amber-500/10 px-2 py-1 text-[11px] border-l-2 border-transparent pl-4'}">
-            <span class="font-bold ${isDieu ? 'text-amber-400' : 'text-amber-300/80'} shrink-0">${esc(dispRef)}</span>
-            <span class="truncate ${isDieu ? 'text-gray-300' : 'text-gray-400'}">${esc(gTitle)}</span>
+          <button onclick="LegalApp.scrollToNodeById(${gNode.id})" class="${_btnCommon} ${isDieu ? 'text-amber-600 dark:text-amber-200 hover:text-amber-700 dark:hover:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-500/10 px-2 py-1.5 text-[11.5px] border-l-2 border-amber-500/60' : 'text-gray-700 dark:text-gray-200/80 hover:text-amber-600 dark:hover:text-amber-200 hover:bg-amber-50 dark:hover:bg-amber-500/10 px-2 py-1 text-[11px] border-l-2 border-transparent pl-4'}">
+            <span class="font-bold ${isDieu ? 'text-amber-600 dark:text-amber-400' : 'text-amber-500 dark:text-amber-300/80'} shrink-0">${esc(dispRef)}</span>
+            <span class="truncate ${isDieu ? 'text-gray-800 dark:text-gray-300' : 'text-gray-600 dark:text-gray-400'}">${esc(gTitle)}</span>
           </button>`;
         if (g.children && g.children.length > 0) {
           g.children.forEach(child => {
@@ -334,9 +334,9 @@ const LegalApp = {
             const cTitle = (child.title || '').toString();
             const cRef = (cFr.endsWith('.') ? cFr : `${cFr}.`);
             tocHtml += `
-          <button onclick="LegalApp.scrollToNodeById(${child.id})" class="${_btnCommon} text-gray-200/70 hover:text-amber-200 hover:bg-amber-500/10 px-2 py-1 text-[11px] ml-5 border-l-2 border-gray-700 pl-4">
-            <span class="font-bold text-amber-400/70 shrink-0">${esc(cRef)}</span>
-            <span class="truncate text-gray-400">${esc(cTitle)}</span>
+          <button onclick="LegalApp.scrollToNodeById(${child.id})" class="${_btnCommon} text-gray-600 dark:text-gray-200/70 hover:text-amber-600 dark:hover:text-amber-200 hover:bg-amber-50 dark:hover:bg-amber-500/10 px-2 py-1 text-[11px] ml-5 border-l-2 border-gray-300 dark:border-gray-700 pl-4">
+            <span class="font-bold text-amber-500 dark:text-amber-400/70 shrink-0">${esc(cRef)}</span>
+            <span class="truncate text-gray-500 dark:text-gray-400">${esc(cTitle)}</span>
           </button>`;
           });
         }
@@ -404,27 +404,27 @@ const LegalApp = {
     const mainNoteContent = mainNote ? mainNote.content : '';
 
     let topBarHtml = `
-      <div class="bg-gray-900 border-b border-gray-800 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 sticky top-0 z-10 shadow-md">
+      <div class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 sticky top-0 z-10 shadow-md">
         <div class="flex items-center gap-2.5 truncate max-w-[70%]">
-          <button onclick="LegalApp.scrollToNode('Căn cứ')" class="px-2.5 py-1 rounded bg-gray-800 hover:bg-gray-700 text-xs text-gray-200 flex items-center gap-1.5 font-semibold shrink-0">
-            <i data-lucide="book-open" class="w-3.5 h-3.5 text-amber-400"></i> Mục lục
+          <button onclick="LegalApp.scrollToNode('Căn cứ')" class="px-2.5 py-1 rounded bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-xs text-gray-800 dark:text-gray-200 flex items-center gap-1.5 font-semibold shrink-0">
+            <i data-lucide="book-open" class="w-3.5 h-3.5 text-amber-500 dark:text-amber-400"></i> Mục lục
           </button>
-          <span class="text-xs font-bold text-amber-400 font-mono tracking-wide truncate">
+          <span class="text-xs font-bold text-amber-600 dark:text-amber-400 font-mono tracking-wide truncate">
             ${(rawDoc.docType || '').toUpperCase()} ${rawDoc.code} — ${rawDoc.title}
           </span>
         </div>
 
         <div class="flex items-center gap-2">
-          <button onclick="LegalApp.toggleNoteBox('main')" class="p-1.5 rounded bg-gray-800 hover:bg-gray-700 text-gray-300 transition" title="Viết ghi chú riêng">
+          <button onclick="LegalApp.toggleNoteBox('main')" class="p-1.5 rounded bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition" title="Viết ghi chú riêng">
             <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
           </button>
-          <button onclick="LegalApp.toggleDocBookmark('${rawDoc.id}')" class="p-1.5 rounded bg-gray-800 hover:bg-gray-700 text-gray-300 transition" title="Đánh dấu văn bản">
-            <i data-lucide="bookmark" class="w-3.5 h-3.5 ${isBookmarked ? 'fill-amber-400 text-amber-400' : ''}"></i>
+          <button onclick="LegalApp.toggleDocBookmark('${rawDoc.id}')" class="p-1.5 rounded bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition" title="Đánh dấu văn bản">
+            <i data-lucide="bookmark" class="w-3.5 h-3.5 ${isBookmarked ? 'fill-amber-500 text-amber-500 dark:fill-amber-400 dark:text-amber-400' : ''}"></i>
           </button>
           <button onclick="LegalApp.askAIAboutDoc('${rawDoc.code}')" class="px-3 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded text-xs font-semibold flex items-center gap-1.5 shadow-sm transition">
             <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Hỏi AI
           </button>
-          <button onclick="window.print()" class="px-2.5 py-1 rounded bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/60 text-emerald-300 text-xs font-medium flex items-center gap-1 transition">
+          <button onclick="window.print()" class="px-2.5 py-1 rounded bg-emerald-50 dark:bg-emerald-950/80 hover:bg-emerald-100 dark:hover:bg-emerald-900 border border-emerald-200 dark:border-emerald-700/60 text-emerald-800 dark:text-emerald-300 text-xs font-medium flex items-center gap-1 transition">
             <i data-lucide="printer" class="w-3.5 h-3.5"></i> Bản in
           </button>
         </div>
@@ -433,11 +433,11 @@ const LegalApp = {
 
     let summaryHtml = `
       <div class="px-8 pt-6 pb-4 max-w-5xl mx-auto">
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-gray-300 bg-gray-900/60 p-3 rounded-lg border border-gray-800/80">
-          <div><span class="font-semibold block text-gray-500">Cơ quan ban hành:</span> ${rawDoc.issuer || 'Đang cập nhật'}</div>
-          <div><span class="font-semibold block text-gray-500">Ngày ban hành:</span> ${rawDoc.issueDate || '—'}</div>
-          <div><span class="font-semibold block text-gray-500">Ngày hiệu lực:</span> ${rawDoc.effectiveDate || '—'}</div>
-          <div><span class="font-semibold block text-gray-500">Quy mô:</span> ${nodesList.filter(n => n.nodeType === 'article').length || nodesList.length} Điều / Mục</div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-gray-800 dark:text-gray-300 bg-gray-50 dark:bg-gray-900/60 p-3 rounded-lg border border-gray-200 dark:border-gray-800/80">
+          <div><span class="font-semibold block text-gray-600 dark:text-gray-500">Cơ quan ban hành:</span> ${rawDoc.issuer || 'Đang cập nhật'}</div>
+          <div><span class="font-semibold block text-gray-600 dark:text-gray-500">Ngày ban hành:</span> ${rawDoc.issueDate || '—'}</div>
+          <div><span class="font-semibold block text-gray-600 dark:text-gray-500">Ngày hiệu lực:</span> ${rawDoc.effectiveDate || '—'}</div>
+          <div><span class="font-semibold block text-gray-600 dark:text-gray-500">Quy mô:</span> ${nodesList.filter(n => n.nodeType === 'article').length || nodesList.length} Điều / Mục</div>
         </div>
       </div>
     `;
@@ -446,14 +446,14 @@ const LegalApp = {
 
     nodesHtml += `
       <div class="note-box-dashed">
-        <div class="note-box-title" onclick="LegalApp.toggleNoteBox('main')">
+        <div class="note-box-title text-amber-700 dark:text-amber-400" onclick="LegalApp.toggleNoteBox('main')">
           <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
           <span>GHI CHÚ RIÊNG (BẤM ĐỂ VIẾT)</span>
         </div>
         <div id="note-box-main" class="note-box-content ${mainNoteContent ? '' : 'hidden'}">
           <textarea 
             oninput="LegalApp.handleNoteChange('${rawDoc.id}', 'main', this.value)" 
-            class="note-textarea w-full p-2 bg-transparent text-amber-100 text-xs focus:outline-none placeholder-amber-700" 
+            class="note-textarea w-full p-2 bg-transparent text-amber-900 dark:text-amber-100 text-xs focus:outline-none placeholder-amber-600/70 dark:placeholder-amber-700" 
             rows="2" 
             placeholder="Ghi chú nghiệp vụ, rủi ro...">${mainNoteContent}</textarea>
         </div>
@@ -473,9 +473,9 @@ const LegalApp = {
 
         if (node.nodeType === 'chapter' || node.nodeType === 'section') {
           nodesHtml += `
-            <div id="${nodeRefId}" ${legacyCompatId && legacyCompatId !== nodeRefId ? `data-legacy-id="${legacyCompatId}"` : ''} data-node-id="${nodePkId}" data-node-type="${node.nodeType || 'chapter'}" class="pt-6 pb-2 border-b border-amber-500/20 text-center">
-              <h3 class="text-xs font-extrabold text-amber-400 uppercase tracking-wider">${node.fullRef}</h3>
-              <h2 class="text-base font-bold text-white mt-1 uppercase">${node.title}</h2>
+            <div id="${nodeRefId}" ${legacyCompatId && legacyCompatId !== nodeRefId ? `data-legacy-id="${legacyCompatId}"` : ''} data-node-id="${nodePkId}" data-node-type="${node.nodeType || 'chapter'}" class="pt-6 pb-2 border-b border-amber-500/30 dark:border-amber-500/20 text-center">
+              <h3 class="text-xs font-extrabold text-amber-600 dark:text-amber-400 uppercase tracking-wider">${node.fullRef}</h3>
+              <h2 class="text-base font-bold text-gray-900 dark:text-white mt-1 uppercase">${node.title}</h2>
             </div>
           `;
         } else {
@@ -485,25 +485,44 @@ const LegalApp = {
           let rawContent = node.content || '';
 
           // =========================================================================
-          // CHỐNG LẶP LẠI NỘI DUNG (Bug d1 — Khoản/Điều render 2 lần Bold + Normal)
-          // Root cause: parseNodesFromMarkdown lưu TOÀN BỘ dòng đầu vào content (rawLine)
-          // trong khi heading (displayRef + title) render CÙNG nội dung đó. Fix:
-          // Nếu dòng đầu content TRÙNG heading → BỎ DÒNG ĐẦU khỏi content.
+          // CHỐNG LẶP LẠI NỘI DUNG (BUG 2: Tiêu đề Điều lặp 2 lần — styled heading + raw markdown `** Điều X . Tên **`)
+          // Root cause: parseNodesFromMarkdown có thể lưu DÒNG TIÊU ĐỀ BỊ BỌC `**...**` markdown bold
+          // vào `node.content` trong khi render lại prepend heading styled cam bên trên.
+          // Fix 3 lớp defense:
+          //   (1) Loại bỏ các dòng STANDALONE chỉ chứa markdown bold tiêu đề pháp lý
+          //       (dạng `** Điều 13 . Tên **` / `**Chương I**` — có khoảng trắng bất kỳ trước/sau `**`)
+          //   (2) Strip markdown bold `**...**` ở DÒNG ĐẦU trước khi normalize + compare == vs heading
+          //       (với cả displayRef+title & fullRef+title, có dấu chấm & không dấu chấm)
+          //   (3) Nếu content BỐN TOÀN BỘ là heading (trim == heading) → empty.
           // =========================================================================
           (() => {
+            // BƯỚC 1: loại bỏ standalone dòng markdown bold tiêu đề (BUG 2 chính)
+            const standaloneMdHeadingRE = /^\s*\*{2,}\s*(?:Điều|Chương|Mục|Khoản|Điểm|Phần)\s+.*?\*{2,}\s*$/gim;
+            rawContent = rawContent.replace(standaloneMdHeadingRE, '');
+            // Helper normalize: strip bold markers + collapse spaces + trim
+            const _normHeading = (s) => String(s || '').replace(/\*{2,}/g, '').replace(/\s+/g, ' ').trim();
+            // BƯỚC 2: so sánh dòng đầu (sau khi strip md) vs expected heading
             const firstNL = rawContent.indexOf('\n');
-            const firstLine = (firstNL > -1 ? rawContent.substring(0, firstNL) : rawContent).trim().replace(/\s+/g, ' ');
-            const withDot = (displayRef + ' ' + (node.title || '')).trim().replace(/\s+/g, ' ');
-            const noDot   = ((node.fullRef || '').trim() + ' ' + (node.title || '')).trim().replace(/\s+/g, ' ');
-            if (firstLine === withDot || firstLine === noDot) {
+            const firstLineRaw = (firstNL > -1 ? rawContent.substring(0, firstNL) : rawContent);
+            const firstLineNorm = _normHeading(firstLineRaw);
+            const withDot = _normHeading(displayRef + ' ' + (node.title || ''));
+            const noDot   = _normHeading((node.fullRef || '').trim() + ' ' + (node.title || ''));
+            if (firstLineNorm === withDot || firstLineNorm === noDot) {
               rawContent = firstNL > -1 ? rawContent.substring(firstNL + 1) : '';
             }
-            const trim1 = rawContent.trim().replace(/\s+/g, ' ');
-            if (trim1 === withDot || trim1 === noDot) {
+            // BƯỚC 3: nếu toàn bộ content chỉ là heading (sau normalize) → xóa
+            const wholeNorm = _normHeading(rawContent);
+            if (wholeNorm === withDot || wholeNorm === noDot) {
               rawContent = '';
-            } else if (trim1.startsWith(withDot + ' ')) {
-              rawContent = rawContent.substring(withDot.length + rawContent.indexOf(withDot) + withDot.length);
+            } else if (wholeNorm.startsWith(withDot + ' ')) {
+              const idx = rawContent.indexOf(withDot);
+              if (idx > -1) rawContent = rawContent.substring(idx + withDot.length).trimStart();
+            } else if (wholeNorm.startsWith(noDot + ' ')) {
+              const idx = rawContent.indexOf(noDot);
+              if (idx > -1) rawContent = rawContent.substring(idx + noDot.length).trimStart();
             }
+            // Loại bỏ các dòng trống thừa ở đầu sau khi cắt tiêu đề
+            rawContent = rawContent.replace(/^\s*\n+/, '');
           })();
 
           let contentHtml = '';
@@ -516,18 +535,18 @@ const LegalApp = {
 
           nodesHtml += `
             <div id="${nodeRefId}" ${legacyCompatId && legacyCompatId !== nodeRefId ? `data-legacy-id="${legacyCompatId}"` : ''} data-node-id="${nodePkId}" data-node-type="article" data-full-ref="${(node.fullRef||'').replace(/"/g,'&quot;')}" data-article-num="${cleanNodeNum}" class="article-node py-1 relative transition-colors duration-200">
-              <div class="text-[15px] font-bold text-amber-400 mt-6 mb-2 flex items-center justify-between group">
+              <div class="text-[15px] font-bold text-amber-600 dark:text-amber-400 mt-6 mb-2 flex items-center justify-between group">
                 <span>${displayRef} ${node.title}</span>
-                <button onclick="LegalApp.toggleNoteBox('${node.num}')" class="opacity-0 group-hover:opacity-100 text-xs font-normal text-amber-400/80 hover:text-amber-300 transition flex items-center gap-1">
+                <button onclick="LegalApp.toggleNoteBox('${node.num}')" class="opacity-0 group-hover:opacity-100 text-xs font-normal text-amber-500/80 dark:text-amber-400/80 hover:text-amber-600 dark:hover:text-amber-300 transition flex items-center gap-1">
                   <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> ${noteContent ? 'Xem ghi chú' : 'Ghi chú'}
                 </button>
               </div>
-              ${hasContentBody ? `<div class="text-gray-200 whitespace-pre-line leading-relaxed text-[14px]">${contentHtml}</div>` : ''}
+              ${hasContentBody ? `<div class="text-gray-900 dark:text-gray-200 whitespace-pre-line leading-relaxed text-[14px]">${contentHtml}</div>` : ''}
 
-              <div id="note-box-${node.num}" class="${noteContent ? 'block' : 'hidden'} mt-3 p-3 rounded-lg bg-amber-950/30 border border-amber-900/50">
+              <div id="note-box-${node.num}" class="${noteContent ? 'block' : 'hidden'} mt-3 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50">
                 <textarea 
                   oninput="LegalApp.handleNoteChange('${rawDoc.id}', '${node.num}', this.value)" 
-                  class="w-full text-xs p-2 rounded bg-gray-900 border border-amber-800/60 text-amber-100 placeholder-gray-500 focus:outline-none" 
+                  class="w-full text-xs p-2 rounded bg-white dark:bg-gray-900 border border-amber-300 dark:border-amber-800/60 text-amber-900 dark:text-amber-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none" 
                   rows="2" 
                   placeholder="Ghi chú nghiệp vụ cho ${node.fullRef}...">${noteContent}</textarea>
               </div>
@@ -536,7 +555,7 @@ const LegalApp = {
         }
       }
     } else if (rawDoc.rawContent) {
-      nodesHtml += `<div class="text-gray-200 whitespace-pre-line leading-relaxed text-[14px] p-4">${rawDoc.rawContent}</div>`;
+      nodesHtml += `<div class="text-gray-900 dark:text-gray-200 whitespace-pre-line leading-relaxed text-[14px] p-4">${rawDoc.rawContent}</div>`;
     }
 
     nodesHtml += '</div>';

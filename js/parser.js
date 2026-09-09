@@ -661,7 +661,7 @@ const LegalParser = {
       if (point) parts.push(`data-point="${esc(point)}"`);
       if (section) parts.push(`data-section="${esc(section)}"`);
       const title = `Tra cứu ${fullMatch}`;
-      return `<a class="legal-ref inline-flex items-center gap-0.5 font-semibold text-blue-400 hover:text-blue-300 hover:underline underline-offset-2 decoration-dotted cursor-pointer bg-blue-500/5 px-1 rounded transition" ${parts.join(' ')} title="${esc(title)}">${fullMatch}</a>`;
+      return `<a class="legal-ref inline-flex items-center gap-0.5 font-semibold text-blue-700 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline underline-offset-2 decoration-dotted cursor-pointer bg-blue-50 dark:bg-blue-500/5 px-1 rounded border border-blue-200/60 dark:border-transparent transition" ${parts.join(' ')} title="${esc(title)}">${fullMatch}</a>`;
     }
 
     const _RX_CODE_SUF_L1 = '(?:QH\\d+|NĐ\\-CP|TT[\\-A-Z0-9]+|QĐ[\\-A-Z0-9]+|UBND[\\-A-Z0-9]+|VBHN[\\-A-Z0-9]+|QCVN|TCVN|[A-Z0-9\\-]+)';
